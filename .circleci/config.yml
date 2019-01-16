@@ -34,7 +34,7 @@ jobs:
             cd /tmp/src/templateflow
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
-            python setup.py check -r -s
+            twine check
 
   deploy_pypi:
     machine:
@@ -51,7 +51,7 @@ jobs:
             pip install "setuptools>=27.0" twine
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
-            python setup.py check -r -s
+            twine check
             python setup.py sdist
             twine upload dist/*
 
