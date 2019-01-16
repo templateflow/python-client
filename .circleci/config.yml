@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  tests:
+    machine:
+      image: circleci/classic:201711-01
+    working_directory: /tmp/src/templateflow
+    steps:
+      - checkout:
+          path: /tmp/src/templateflow
+      - run:
+          name: Deploy to PyPi
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install -r requirements.txt
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+
+  deploy_pypi:
+    machine:
+      image: circleci/classic:201711-01
+    working_directory: /tmp/src/templateflow
+    steps:
+      - checkout:
+          path: /tmp/src/templateflow
+      - run:
+          name: Deploy to PyPi
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install "setuptools>=27.0" twine
+            echo "${CIRCLE_TAG}" > templateflow/VERSION
+            echo "include templateflow/VERSION" >> MANIFEST.in
+            python setup.py check -r -s
+            python setup.py sdist
+            twine upload dist/*
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - tests:
+          filters:
+            tags:
+              only: /.*/
+      - deploy_pypi:
+          requires:
+            - tests
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
