@@ -1,0 +1,8 @@
+# data
+
+# misc
+include requirements.txt
+include CHANGES.rst
+include LICENSE
+include versioneer.py
+include templateflow/_version.py
