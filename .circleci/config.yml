@@ -8,6 +8,9 @@ jobs:
       - checkout:
           path: /tmp/src/templateflow
 
+      - restore_cache:
+          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+
       - run:
           name: Install git and git-annex
           command: |
@@ -36,6 +39,11 @@ jobs:
             echo "include templateflow/VERSION" >> MANIFEST.in
             twine check
 
+      - save_cache:
+          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+          paths:
+            - "/tmp/tests/venv"
+
   deploy_pypi:
     machine:
       image: circleci/classic:201711-01
@@ -43,6 +51,10 @@ jobs:
     steps:
       - checkout:
           path: /tmp/src/templateflow
+
+      - restore_cache:
+          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+          
       - run:
           name: Deploy to PyPi
           command: |
