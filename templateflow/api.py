@@ -1,7 +1,6 @@
 """
 TemplateFlow's Python Client
 """
-
 from datalad import api
 from datalad.support.exceptions import IncompleteResultsError
 from .conf import TF_HOME
@@ -34,3 +33,21 @@ def get(template_id, suffix):
     if len(out_file) == 1:
         return out_file[0]
     return out_file
+
+
+def templates():
+    """
+    Returns a list of available templates
+
+    >>> templates()
+    ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs', \
+'PNC', 'fMRIPrep', 'fsLR', 'fsaverage']
+
+    """
+    templates = [str(p.name)[4:] for p in TF_HOME.glob('tpl-*')]
+    if not templates:
+        from .conf import TF_GITHUB_SOURCE
+        api.install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
+        templates = [str(p.name)[4:] for p in TF_HOME.glob('tpl-*')]
+
+    return sorted(templates)
