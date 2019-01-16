@@ -37,7 +37,8 @@ jobs:
             cd /tmp/src/templateflow
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
-            twine check
+            python setup.py sdist
+            twine check dist/*
 
       - save_cache:
           key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
@@ -54,7 +55,7 @@ jobs:
 
       - restore_cache:
           key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
-          
+
       - run:
           name: Deploy to PyPi
           command: |
@@ -63,8 +64,8 @@ jobs:
             pip install "setuptools>=27.0" twine
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
-            twine check
             python setup.py sdist
+            twine check dist/*
             twine upload dist/*
 
 workflows:
