@@ -11,9 +11,9 @@ jobs:
       - run:
           name: Install git and git-annex
           command: |
-            curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca.full" | sudo tee -a /etc/apt/sources.list.d/neurodebian.sources.list
-            sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0x4E6910DFCB68C9CD
-            sudo apt update && sudo apt -y --no-install-recommends git-annex-standalone
+            wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+            sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+            sudo apt update && sudo apt-get -y --no-install-recommends git-annex-standalone
             git config --global user.name "First Last"
             git config --global user.email "email@domain.com"
 
