@@ -9,7 +9,7 @@ jobs:
           path: /tmp/src/templateflow
 
       - restore_cache:
-          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
 
       - run:
           name: Install git and git-annex
@@ -41,9 +41,9 @@ jobs:
             twine check dist/*
 
       - save_cache:
-          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
           paths:
-            - "/tmp/tests/venv"
+            - "/opt/circleci/.pyenv/versions/3.5.2"
 
   deploy_pypi:
     machine:
