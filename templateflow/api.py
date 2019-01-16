@@ -6,8 +6,14 @@ from datalad import api
 from datalad.support.exceptions import IncompleteResultsError
 from .conf import TF_HOME
 
+
 def get(template_id, suffix):
-    """Fetch one file from one template"""
+    """
+    Fetch one file from one template
+
+    >>> get('MNI152Lin', 'res-01_T1w.nii.gz')  # doctest: +ELLIPSIS
+    '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
+    """
     if suffix.startswith('_'):
         suffix = suffix[1:]
 
