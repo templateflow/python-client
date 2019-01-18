@@ -1,6 +1,7 @@
 """
 TemplateFlow's Python Client
 """
+from json import loads
 from datalad import api
 from datalad.support.exceptions import IncompleteResultsError
 from .conf import TF_HOME
@@ -51,3 +52,28 @@ def templates():
         templates = [str(p.name)[4:] for p in TF_HOME.glob('tpl-*')]
 
     return sorted(templates)
+
+
+def get_metadata(template_id):
+    """
+    Fetch one file from one template
+
+    >>> get_metadata('MNI152Lin')['Name']
+    'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
+
+    """
+
+    filepath = TF_HOME / ('tpl-%s' % template_id) / 'template_description.json'
+
+    # Ensure that template is installed and file is available
+    try:
+        api.get(str(filepath))
+    except IncompleteResultsError as exc:
+        if exc.failed[0]['message'] == 'path not associated with any dataset':
+            from .conf import TF_GITHUB_SOURCE
+            api.install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
+            api.get(str(filepath))
+        else:
+            raise
+
+    return loads(filepath.read_text())
