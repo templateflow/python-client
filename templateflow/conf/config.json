@@ -7,6 +7,13 @@
             "directory": "{{root}}{template}"
         },
         {
+            "name": "age",
+            "pattern": "[_/\\\\]age-([a-zA-Z0-9]+)",
+            "mandatory": false,
+            "directory": "{{root}}{template}{age}",
+            "missing_value": "age-1"
+        },
+        {
             "name": "resolution",
             "pattern": "[_/\\\\]+res-0*(\\d+)",
             "dtype": "int"
@@ -63,6 +70,6 @@
     ],
     "default_path_patterns": [
         "tpl-{template}/template_description.json",
-        "tpl-{template}/tpl-{template}_res-{resolution}[_space-{space}][_hemi-{hemi}][_desc-{desc}]_{suffix<T1w|T2w|T1rho|T1map|T2map|T2star|FLAIR|FLASH|PDmap|PD|PDT2|inplaneT[12]|angio>}.{extension<nii|nii\\.gz>}"
+        "tpl-{template}[/age-{age}]/tpl-{template}[_age-{age}]_res-{resolution}[_space-{space}][_hemi-{hemi}][_desc-{desc}]_{suffix<T1w|T2w|T1rho|T1map|T2map|T2star|FLAIR|FLASH|PDmap|PD|PDT2|inplaneT[12]|angio>}.{extension<nii|nii\\.gz>}"
     ]
 }
