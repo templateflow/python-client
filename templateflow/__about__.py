@@ -59,7 +59,7 @@ TESTS_REQUIRES = [
 EXTRA_REQUIRES = {
     'doc': [],
     'tests': TESTS_REQUIRES,
-    'datalad': 'datalad',
+    'datalad': ['datalad'],
 }
 
 # Enable a handle to install all extra dependencies at once
