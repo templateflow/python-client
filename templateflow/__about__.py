@@ -44,7 +44,7 @@ CLASSIFIERS = [
 ]
 
 REQUIRES = [
-    'datalad',
+    'pybids>=0.7.0,<0.8.0a0',
 ]
 
 SETUP_REQUIRES = []
@@ -59,6 +59,7 @@ TESTS_REQUIRES = [
 EXTRA_REQUIRES = {
     'doc': [],
     'tests': TESTS_REQUIRES,
+    'datalad': 'datalad',
 }
 
 # Enable a handle to install all extra dependencies at once

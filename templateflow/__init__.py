@@ -8,6 +8,7 @@ from .__about__ import (
     __version__, __packagename__, __author__, __copyright__,
     __credits__, __license__, __maintainer__, __email__, __status__,
     __description__, __longdesc__)
+from .conf import TF_LAYOUT
 
 __all__ = [
     '__version__',
@@ -21,4 +22,5 @@ __all__ = [
     '__status__',
     '__description__',
     '__longdesc__',
+    'TF_LAYOUT',
 ]

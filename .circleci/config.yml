@@ -25,7 +25,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pip install -r /tmp/src/templateflow/requirements.txt
+            pip install pytest
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
