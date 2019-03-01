@@ -12,6 +12,11 @@
             "dtype": "int"
         },
         {
+            "name": "density",
+            "pattern": "[_/\\\\]+den-(\\d+)k+",
+            "dtype": "int"
+        },
+        {
             "name": "atlas",
             "pattern": "[_/\\\\]atlas-([a-zA-Z0-9]+)"
         },
