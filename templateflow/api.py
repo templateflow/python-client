@@ -70,11 +70,8 @@ def _datalad_get(filepath):
     if not filepath:
         return
 
-    try:
-        from datalad import api
-        from datalad.support.exceptions import IncompleteResultsError
-    except ImportError:
-        pass
+    from datalad import api
+    from datalad.support.exceptions import IncompleteResultsError
 
     try:
         api.get(str(filepath))
