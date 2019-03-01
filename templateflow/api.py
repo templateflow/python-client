@@ -33,7 +33,7 @@ def get(template, **kwargs):
     return out_file
 
 
-def templates():
+def templates(**kwargs):
     """
     Returns a list of available templates
 
@@ -41,8 +41,11 @@ def templates():
     ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs', \
 'PNC', 'fsLR', 'fsaverage']
 
+    >>> templates(suffix='PD')
+    ['MNI152Lin', 'MNI152NLin2009cAsym']
+
     """
-    return sorted(TF_LAYOUT.get_templates())
+    return sorted(TF_LAYOUT.get_templates(**kwargs))
 
 
 def get_metadata(template):
