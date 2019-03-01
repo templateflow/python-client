@@ -37,9 +37,10 @@ def templates(**kwargs):
     """
     Returns a list of available templates
 
-    >>> templates()
-    ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs', \
-'PNC', 'fsLR', 'fsaverage']
+    >>> base = ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs']
+    >>> tpls = templates()
+    >>> all([t in tpls for t in base])
+    True
 
     >>> templates(suffix='PD')
     ['MNI152Lin', 'MNI152NLin2009cAsym']
