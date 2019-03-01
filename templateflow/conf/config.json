@@ -1,0 +1,75 @@
+{
+    "name": "templateflow",
+    "entities": [
+        {
+            "name": "template",
+            "pattern": "[/\\\\]tpl-([a-zA-Z0-9]+)",
+            "directory": "{{root}}{template}"
+        },
+        {
+            "name": "age",
+            "pattern": "[_/\\\\]age-([a-zA-Z0-9]+)",
+            "mandatory": false,
+            "directory": "{{root}}{template}{age}",
+            "missing_value": "age-1"
+        },
+        {
+            "name": "resolution",
+            "pattern": "[_/\\\\]+res-0*(\\d+)",
+            "dtype": "int"
+        },
+        {
+            "name": "density",
+            "pattern": "[_/\\\\]+den-(\\d+)k+",
+            "dtype": "int"
+        },
+        {
+            "name": "atlas",
+            "pattern": "[_/\\\\]atlas-([a-zA-Z0-9]+)"
+        },
+        {
+            "name": "roi",
+            "pattern": "[_/\\\\]roi-([a-zA-Z0-9]+)"
+        },
+        {
+            "name": "label",
+            "pattern": "[_/\\\\]label-([a-zA-Z0-9]+)"
+        },
+        {
+            "name": "desc",
+            "pattern": "[_/\\\\]desc-([a-zA-Z0-9]+)"
+        },
+        {
+            "name": "space",
+            "pattern": "[_/\\\\]space-([a-zA-Z0-9]+)"
+        },
+        {
+            "name": "from",
+            "pattern": "(?:^|_)from-([a-zA-Z0-9]+).*xfm"
+        },
+        {
+            "name": "to",
+            "pattern": "(?:^|_)to-([a-zA-Z0-9]+).*xfm"
+        },
+        {
+            "name": "mode",
+            "pattern": "(?:^|_)mode-([a-zA-Z0-9]+).*xfm"
+        },
+        {
+            "name": "hemi",
+            "pattern": "[_/\\\\]hemi-(L|R)"
+        },
+        {
+            "name": "suffix",
+            "pattern": "[._]*([a-zA-Z0-9]*?)\\.[^/\\\\]+$"
+        },
+        {
+            "name": "description",
+            "pattern": "(.*\\template_description.json)$"
+        }
+    ],
+    "default_path_patterns": [
+        "tpl-{template}/template_description.json",
+        "tpl-{template}[/age-{age}]/tpl-{template}[_age-{age}]_res-{resolution}[_space-{space}][_hemi-{hemi}][_desc-{desc}]_{suffix<T1w|T2w|T1rho|T1map|T2map|T2star|FLAIR|FLASH|PDmap|PD|PDT2|inplaneT[12]|angio>}.{extension<nii|nii\\.gz>}"
+    ]
+}
