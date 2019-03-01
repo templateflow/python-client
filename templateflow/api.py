@@ -39,7 +39,7 @@ def templates():
 
     >>> templates()
     ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs', \
-'PNC', 'fMRIPrep', 'fsLR', 'fsaverage']
+'PNC', 'fsLR', 'fsaverage']
 
     """
     return sorted(TF_LAYOUT.get_templates())
