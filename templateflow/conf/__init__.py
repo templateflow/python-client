@@ -2,23 +2,32 @@
 Settings
 """
 from os import getenv
+from warnings import warn
 from pathlib import Path
+from pkg_resources import resource_filename
 from .bids import Layout
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
 TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
 TF_GITHUB_SOURCE = 'https://github.com/templateflow/templateflow.git'
+TF_S3_ROOT = 'https://templateflow.s3.amazonaws.com'
 
-if not TF_HOME.exists():
+_msg = """\
+TemplateFlow: repository not found at %s. Populating a TemplateFlow stub.
+If the path reported above is not the desired location for Templateflow, \
+please set the TEMPLATEFLOW_HOME environment variable.
+""" % TF_HOME
+
+if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
+    warn(_msg, ResourceWarning)
     try:
         from datalad.api import install
     except ImportError:
-        raise RuntimeError("""\
-'TemplateFlow repository not found at path %s, and DataLad/git-annex are not \
-installed.
-Please download TemplateFlow manually from \
-https://files.osf.io/v1/resources/ue5gx/providers/osfstorage/?zip= \
-and place all templates under the path indicated above.""" % TF_HOME)
+        from zipfile import ZipFile
+        TF_HOME.mkdir(exist_ok=True, parents=True)
+        with ZipFile(resource_filename('templateflow',
+                                       'conf/templateflow-skel.zip'), 'r') as zipref:
+            zipref.extractall(str(TF_HOME))
     else:
         TF_HOME.parent.mkdir(exist_ok=True, parents=True)
         install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)

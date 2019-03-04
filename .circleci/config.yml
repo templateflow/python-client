@@ -61,17 +61,38 @@ jobs:
             python setup.py sdist
             twine check dist/*
 
+      - run:
+          name: Update TemplateFlow skeleton
+          command: |
+            cd $HOME/.cache/templateflow/
+            find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
+            for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
+            find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
+            cd /tmp/skel
+            zip -r /tmp/templateflow-skell.zip */
+
       - save_cache:
           key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
 
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - /tmp/templateflow-skell.zip
+
+      - store_artifacts:
+          path: /tmp/templateflow-skell.zip
+
   deploy_pypi:
     machine:
       image: circleci/classic:201711-01
     working_directory: /tmp/src/templateflow
     steps:
+      - attach_workspace:
+          at: /tmp
+
       - checkout:
           path: /tmp/src/templateflow
 
@@ -84,6 +105,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install "setuptools>=27.0" twine
+            cp /tmp/templateflow-skell.zip templateflow/conf/
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
             python setup.py sdist

@@ -3,7 +3,7 @@ TemplateFlow's Python Client
 """
 from pathlib import Path
 from json import loads
-from .conf import TF_LAYOUT
+from .conf import TF_LAYOUT, TF_S3_ROOT
 
 
 def get(template, **kwargs):
@@ -24,6 +24,9 @@ def get(template, **kwargs):
     """
     out_file = [Path(p) for p in TF_LAYOUT.get(
         template=template, return_type='file', **kwargs)]
+
+    for filepath in [p for p in out_file if p.stat().st_size == 0]:
+        _s3_get(filepath)
 
     for filepath in [p for p in out_file if not p.is_file()]:
         _datalad_get(filepath)
@@ -83,3 +86,29 @@ def _datalad_get(filepath):
             api.get(str(filepath))
         else:
             raise
+
+
+def _s3_get(filepath):
+    from math import ceil
+    from tqdm import tqdm
+    import requests
+
+    path = str(filepath.relative_to(TF_LAYOUT.root))
+    url = '%s/%s' % (TF_S3_ROOT, path)
+
+    print('Downloading %s' % url)
+    # Streaming, so we can iterate over the response.
+    r = requests.get(url, stream=True)
+
+    # Total size in bytes.
+    total_size = int(r.headers.get('content-length', 0))
+    block_size = 1024
+    wrote = 0
+    with filepath.open('wb') as f:
+        for data in tqdm(r.iter_content(block_size),
+                         total=ceil(total_size // block_size),
+                         unit='KB', unit_scale=True):
+            wrote = wrote + len(data)
+            f.write(data)
+    if total_size != 0 and wrote != total_size:
+        raise RuntimeError("ERROR, something went wrong")
