@@ -9,7 +9,10 @@ jobs:
           path: /tmp/src/templateflow
 
       - restore_cache:
-          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          keys:
+            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v2-
 
       - run:
           name: Get TemplateFlow Zip package
@@ -112,8 +115,12 @@ jobs:
       - checkout:
           path: /tmp/src/templateflow
 
+
       - restore_cache:
-          key: deps-v1-{{ .Branch }}-{{ checksum "/tmp/src/templateflow/requirements.txt"}}
+          keys:
+            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v2-
 
       - run:
           name: Deploy to PyPi
