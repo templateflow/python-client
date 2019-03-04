@@ -25,7 +25,8 @@ def get(template, **kwargs):
     out_file = [Path(p) for p in TF_LAYOUT.get(
         template=template, return_type='file', **kwargs)]
 
-    for filepath in [p for p in out_file if p.stat().st_size == 0]:
+    for filepath in [p for p in out_file
+                     if p.is_file() and p.stat().st_size == 0]:
         _s3_get(filepath)
 
     for filepath in [p for p in out_file if not p.is_file()]:

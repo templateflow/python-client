@@ -20,6 +20,7 @@ jobs:
             git config --global user.name "First Last"
             git config --global user.email "email@domain.com"
 
+
       - run:
           name: Get TemplateFlow Zip package
           command: |
@@ -48,6 +49,14 @@ jobs:
             pip install datalad
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
+      - run:
+          name: Run tests (pulling from S3)
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install -r /tmp/src/templateflow/requirements.txt
+            export TEMPLATEFLOW_HOME="/tmp/data/templateflow-S3"
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
           name: Test packaging

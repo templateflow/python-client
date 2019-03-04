@@ -1,2 +1,4 @@
 pybids>=0.7.0,<0.8.0a0
 pytest
+requests
+tqdm
