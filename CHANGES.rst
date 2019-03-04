@@ -1,3 +1,14 @@
+Version 0.0.5 (March 04, 2019)
+==============================
+
+* [ENH] Datalad-free alternative for TemplateFlow (#7)
+* [ENH] Use a BIDSLayout to index TemplateFlow (#6)
+
+Version 0.0.4 (January 18, 2019)
+================================
+
+* Add a ``get_metadata`` utility
+
 Version 0.0.3 (January 16, 2019)
 ================================
 
