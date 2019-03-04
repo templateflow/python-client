@@ -69,7 +69,8 @@ jobs:
             for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
             find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
             cd /tmp/skel
-            zip -r /tmp/templateflow-skell.zip */
+            mkdir -p /tmp/resources
+            zip -r /tmp/resources/templateflow-skel.zip */
 
       - save_cache:
           key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
@@ -80,10 +81,10 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-            - /tmp/templateflow-skell.zip
+            - resources
 
       - store_artifacts:
-          path: /tmp/templateflow-skell.zip
+          path: /tmp/resources/templateflow-skel.zip
 
   deploy_pypi:
     machine:
@@ -105,7 +106,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install "setuptools>=27.0" twine
-            cp /tmp/templateflow-skell.zip templateflow/conf/
+            cp /tmp/resources/templateflow-skel.zip templateflow/conf/
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
             python setup.py sdist
