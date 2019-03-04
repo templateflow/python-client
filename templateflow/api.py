@@ -90,6 +90,7 @@ def _datalad_get(filepath):
 
 
 def _s3_get(filepath):
+    from sys import stderr
     from math import ceil
     from tqdm import tqdm
     import requests
@@ -97,7 +98,7 @@ def _s3_get(filepath):
     path = str(filepath.relative_to(TF_LAYOUT.root))
     url = '%s/%s' % (TF_S3_ROOT, path)
 
-    print('Downloading %s' % url)
+    print('Downloading %s' % url, file=stderr)
     # Streaming, so we can iterate over the response.
     r = requests.get(url, stream=True)
 
@@ -108,7 +109,7 @@ def _s3_get(filepath):
     with filepath.open('wb') as f:
         for data in tqdm(r.iter_content(block_size),
                          total=ceil(total_size // block_size),
-                         unit='KB', unit_scale=True):
+                         unit='B', unit_scale=True):
             wrote = wrote + len(data)
             f.write(data)
     if total_size != 0 and wrote != total_size:
