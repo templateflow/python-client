@@ -1,4 +1,6 @@
 # data
+include templateflow/conf/config.json
+include templateflow/conf/templateflow-skel.zip
 
 # misc
 include requirements.txt

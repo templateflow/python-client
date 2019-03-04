@@ -26,7 +26,10 @@ def main():
         EXTRA_REQUIRES,
     )
 
-    pkg_data = {'templateflow': ['conf/config.json']}
+    pkg_data = {'templateflow': [
+        'conf/config.json',
+        'conf/templateflow-skel.zip'
+    ]}
 
     root_dir = op.dirname(op.abspath(getfile(currentframe())))
     version = None

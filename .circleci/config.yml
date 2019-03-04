@@ -12,15 +12,6 @@ jobs:
           key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
 
       - run:
-          name: Install git and git-annex
-          command: |
-            wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-            sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
-            sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
-            git config --global user.name "First Last"
-            git config --global user.email "email@domain.com"
-
-      - run:
           name: Get TemplateFlow Zip package
           command: |
             if [[ ! -d "/tmp/data/templateflow" ]]; then
@@ -28,6 +19,28 @@ jobs:
               curl "https://files.osf.io/v1/resources/ue5gx/providers/osfstorage/?zip=" -o templateflow.zip
               unzip templateflow.zip -d /tmp/data/templateflow
             fi
+
+      - run:
+          name: Prepare environment
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install -r /tmp/src/templateflow/requirements.txt
+
+      - save_cache:
+          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          paths:
+            - "/opt/circleci/.pyenv/versions/3.5.2"
+            - "/tmp/data/templateflow"
+
+      - run:
+          name: Install git and git-annex
+          command: |
+            wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+            sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+            sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
+            git config --global user.name "First Last"
+            git config --global user.email "email@domain.com"
 
       - run:
           name: Run tests (w/o datalad)
@@ -39,6 +52,15 @@ jobs:
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
+          name: Run tests (pulling from S3)
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install -r /tmp/src/templateflow/requirements.txt
+            export TEMPLATEFLOW_HOME="/tmp/data/templateflow-S3"
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
           name: Run tests (w/ datalad)
           command: |
             unset TEMPLATEFLOW_HOME
@@ -47,7 +69,6 @@ jobs:
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
-
 
       - run:
           name: Test packaging
@@ -61,17 +82,33 @@ jobs:
             python setup.py sdist
             twine check dist/*
 
-      - save_cache:
-          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+      - run:
+          name: Update TemplateFlow skeleton
+          command: |
+            cd $HOME/.cache/templateflow/
+            find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
+            for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
+            find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
+            cd /tmp/skel
+            mkdir -p /tmp/resources
+            zip -r /tmp/resources/templateflow-skel.zip */
+
+      - persist_to_workspace:
+          root: /tmp
           paths:
-            - "/opt/circleci/.pyenv/versions/3.5.2"
-            - "/tmp/data/templateflow"
+            - resources
+
+      - store_artifacts:
+          path: /tmp/resources/templateflow-skel.zip
 
   deploy_pypi:
     machine:
       image: circleci/classic:201711-01
     working_directory: /tmp/src/templateflow
     steps:
+      - attach_workspace:
+          at: /tmp
+
       - checkout:
           path: /tmp/src/templateflow
 
@@ -84,6 +121,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install "setuptools>=27.0" twine
+            cp /tmp/resources/templateflow-skel.zip templateflow/conf/
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
             python setup.py sdist
