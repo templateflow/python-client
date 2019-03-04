@@ -29,6 +29,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install -r /tmp/src/templateflow/requirements.txt
+            pip install "setuptools>=27.0" twine
 
       - save_cache:
           key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
@@ -50,7 +51,6 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pip install -r /tmp/src/templateflow/requirements.txt
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -59,7 +59,6 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pip install -r /tmp/src/templateflow/requirements.txt
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow-S3"
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -69,7 +68,6 @@ jobs:
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
-            pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -78,7 +76,6 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pip install "setuptools>=27.0" twine
             cd /tmp/src/templateflow
             echo "${CIRCLE_TAG}" > templateflow/VERSION
             echo "include templateflow/VERSION" >> MANIFEST.in
@@ -114,7 +111,6 @@ jobs:
 
       - checkout:
           path: /tmp/src/templateflow
-
 
       - restore_cache:
           keys:
