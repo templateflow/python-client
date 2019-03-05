@@ -1,4 +1,6 @@
 {
+  "title": "TemplateFlow Client: Accessing the library of standardized neuroimaging standard spaces",
+  "description": "<p>A python client to query TemplateFlow via pyBIDS.</p>",
   "creators": [
     {
       "affiliation": "Department of Psychology, Stanford University",
@@ -16,6 +18,18 @@
       "orcid": "0000-0002-6533-164X"
     },
     {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Poldrack, Russell A.",
+      "orcid": "0000-0001-6755-0259"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Gorgolewski, Krzysztof J.",
+      "orcid": "0000-0003-3321-7583"
+    }
+  ],
+  "contributors": [
+    {
       "affiliation": "Dartmouth College: Hanover, NH, United States",
       "name": "Halchenko, Yaroslav O.",
       "orcid": "0000-0003-3456-2493"
@@ -29,16 +43,6 @@
       "affiliation": "MIT, HMS",
       "name": "Ghosh, Satrajit",
       "orcid": "0000-0002-5312-6729"
-    },
-    {
-      "affiliation": "Department of Psychology, Stanford University",
-      "name": "Poldrack, Russell A.",
-      "orcid": "0000-0001-6755-0259"
-    },
-    {
-      "affiliation": "Department of Psychology, Stanford University",
-      "name": "Gorgolewski, Krzysztof J.",
-      "orcid": "0000-0003-3321-7583"
     }
   ],
   "keywords": [
