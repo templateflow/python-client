@@ -1,0 +1,54 @@
+{
+  "creators": [
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Esteban, Oscar",
+      "orcid": "0000-0001-8435-6191"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Ciric, Rastko",
+      "orcid": "0000-0001-6347-7939"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Markiewicz, Christopher J.",
+      "orcid": "0000-0002-6533-164X"
+    },
+    {
+      "affiliation": "Dartmouth College: Hanover, NH, United States",
+      "name": "Halchenko, Yaroslav O.",
+      "orcid": "0000-0003-3456-2493"
+    },
+    {
+      "affiliation": "MIT",
+      "name": "Goncalves, Mathias",
+      "orcid": "0000-0002-7252-7771"
+    },
+    {
+      "affiliation": "MIT, HMS",
+      "name": "Ghosh, Satrajit",
+      "orcid": "0000-0002-5312-6729"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Poldrack, Russell A.",
+      "orcid": "0000-0001-6755-0259"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
+      "name": "Gorgolewski, Krzysztof J.",
+      "orcid": "0000-0003-3321-7583"
+    }
+  ],
+  "keywords": [
+    "neuroimaging",
+    "workflow",
+    "pipeline",
+    "preprocessing",
+    "fMRI",
+    "BIDS"
+  ],
+  "license": "BSD-3-Clause",
+  "upload_type": "software"
+}
