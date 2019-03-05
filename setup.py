@@ -26,7 +26,7 @@ def main():
         EXTRA_REQUIRES,
     )
 
-    pkg_data = {'templateflow': [
+    pkg_data = {__packagename__: [
         'conf/config.json',
         'conf/templateflow-skel.zip'
     ]}
