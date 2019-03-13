@@ -1,3 +1,8 @@
+Version 0.0.6 (March 12, 2019)
+==============================
+
+* FIX: Require environment variable to use DataLad (#8)
+
 Version 0.0.5 (March 04, 2019)
 ==============================
 
