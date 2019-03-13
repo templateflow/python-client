@@ -1,3 +1,8 @@
+Version 0.1.2 (March 12, 2019)
+==============================
+
+* FIX: ``api.get`` - robuster fetcher algorithm (allows S3 download on DL repos) and better error messages (#10)
+
 Version 0.1.1 (March 12, 2019)
 ==============================
 
