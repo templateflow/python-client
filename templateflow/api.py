@@ -25,22 +25,23 @@ def get(template, **kwargs):
     out_file = [Path(p) for p in TF_LAYOUT.get(
         template=template, return_type='file', **kwargs)]
 
-    # Try plain URL fetch first
-    s3_missing = [p for p in out_file
-                  if p.is_file() and p.stat().st_size == 0]
-    for filepath in s3_missing:
-        _s3_get(filepath)
-
-    dl_missing = None
-    if TF_USE_DATALAD:
-        dl_missing = [p for p in out_file if not p.is_file()]
+    # Try DataLad first
+    dl_missing = [p for p in out_file if not p.is_file()]
+    if TF_USE_DATALAD and dl_missing:
         for filepath in dl_missing:
             _datalad_get(filepath)
+            dl_missing.remove(filepath)
 
-    not_fetched = [p for p in out_file
+    # Fall-back to S3 if some files are still missing
+    s3_missing = [p for p in out_file
+                  if p.is_file() and p.stat().st_size == 0]
+    for filepath in s3_missing + dl_missing:
+        _s3_get(filepath)
+
+    not_fetched = [str(p) for p in out_file
                    if not p.is_file() or p.stat().st_size == 0]
 
-    if any(not_fetched):
+    if not_fetched:
         msg = "Could not fetch template files: %s." % ', '.join(not_fetched)
         if dl_missing and not TF_USE_DATALAD:
             msg += """\
@@ -132,6 +133,9 @@ def _s3_get(filepath):
     total_size = int(r.headers.get('content-length', 0))
     block_size = 1024
     wrote = 0
+    if not filepath.is_file():
+        filepath.unlink()
+
     with filepath.open('wb') as f:
         for data in tqdm(r.iter_content(block_size),
                          total=ceil(total_size // block_size),
