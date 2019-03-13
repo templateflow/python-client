@@ -32,17 +32,20 @@
     {
       "affiliation": "Dartmouth College: Hanover, NH, United States",
       "name": "Halchenko, Yaroslav O.",
-      "orcid": "0000-0003-3456-2493"
+      "orcid": "0000-0003-3456-2493",
+      "type": "Researcher"
     },
     {
       "affiliation": "MIT",
       "name": "Goncalves, Mathias",
-      "orcid": "0000-0002-7252-7771"
+      "orcid": "0000-0002-7252-7771",
+      "type": "Researcher"
     },
     {
       "affiliation": "MIT, HMS",
       "name": "Ghosh, Satrajit",
-      "orcid": "0000-0002-5312-6729"
+      "orcid": "0000-0002-5312-6729",
+      "type": "Researcher"
     }
   ],
   "keywords": [
@@ -53,6 +56,6 @@
     "fMRI",
     "BIDS"
   ],
-  "license": "BSD-3-Clause",
+  "license": "Apache-2",
   "upload_type": "software"
 }
