@@ -25,21 +25,39 @@ def get(template, **kwargs):
     out_file = [Path(p) for p in TF_LAYOUT.get(
         template=template, return_type='file', **kwargs)]
 
-    # Try plain URL fetch first
-    for filepath in [p for p in out_file
-                     if p.is_file() and p.stat().st_size == 0]:
+    # Try DataLad first
+    dl_missing = [p for p in out_file if not p.is_file()]
+    if TF_USE_DATALAD and dl_missing:
+        for filepath in dl_missing:
+            _datalad_get(filepath)
+            dl_missing.remove(filepath)
+
+    # Fall-back to S3 if some files are still missing
+    s3_missing = [p for p in out_file
+                  if p.is_file() and p.stat().st_size == 0]
+    for filepath in s3_missing + dl_missing:
         _s3_get(filepath)
 
-    if TF_USE_DATALAD:
-        for filepath in [p for p in out_file if not p.is_file()]:
-            _datalad_get(filepath)
-
-    not_fetched = [p for p in out_file
+    not_fetched = [str(p) for p in out_file
                    if not p.is_file() or p.stat().st_size == 0]
 
-    if any(not_fetched):
-        raise RuntimeError(
-            "Could not fetch template files: %s" % ', '.join(not_fetched))
+    if not_fetched:
+        msg = "Could not fetch template files: %s." % ', '.join(not_fetched)
+        if dl_missing and not TF_USE_DATALAD:
+            msg += """\
+The $TEMPLATEFLOW_HOME folder %s seems to contain an initiated DataLad \
+dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is not \
+set or set to one of (false, off, 0). Please set $TEMPLATEFLOW_USE_DATALAD \
+on (possible values: true, on, 1).""" % TF_LAYOUT.root
+
+        if s3_missing and TF_USE_DATALAD:
+            msg += """\
+The $TEMPLATEFLOW_HOME folder %s seems to contain an plain \
+dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is \
+set to one of (true, on, 1). Please set $TEMPLATEFLOW_USE_DATALAD \
+off (possible values: false, off, 0).""" % TF_LAYOUT.root
+
+        raise RuntimeError(msg)
 
     if len(out_file) == 1:
         return out_file[0]
@@ -115,6 +133,9 @@ def _s3_get(filepath):
     total_size = int(r.headers.get('content-length', 0))
     block_size = 1024
     wrote = 0
+    if not filepath.is_file():
+        filepath.unlink()
+
     with filepath.open('wb') as f:
         for data in tqdm(r.iter_content(block_size),
                          total=ceil(total_size // block_size),

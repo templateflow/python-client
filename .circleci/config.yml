@@ -48,7 +48,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - run:
-          name: Run tests (w/o datalad)
+          name: Run tests (w/o DataLad)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 0
             TEMPLATEFLOW_HOME: "/tmp/data/templateflow"
@@ -69,13 +69,27 @@ jobs:
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
-          name: Run tests (w/ datalad)
+          name: Run tests (w/ DataLad)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 1
           command: |
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Run tests (w/ DataLad, bypassed via S3)
+          environment:
+            TEMPLATEFLOW_USE_DATALAD: 1
+            TEMPLATEFLOW_HOME: /home/circleci/.cache/templateflow-init
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            cd /tmp/src/templateflow
+            pip install -e .
+            python -c "from templateflow import api"
+            export TEMPLATEFLOW_USE_DATALAD=0
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
