@@ -56,6 +56,6 @@
     "fMRI",
     "BIDS"
   ],
-  "license": "Apache-2",
+  "license": "apache-2.0",
   "upload_type": "software"
 }
