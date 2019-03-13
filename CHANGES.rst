@@ -1,7 +1,22 @@
-Version 0.0.6 (March 12, 2019)
+Version 0.1.1 (March 12, 2019)
 ==============================
 
 * FIX: Require environment variable to use DataLad (#8)
+
+Version 0.1.0 (March 05, 2019)
+==============================
+
+Testing a better ``.zenodo.json`` settings.
+
+Version 0.1.0 (March 05, 2019)
+==============================
+
+First minimally functional TemplateFlow client release.
+
+Version 0.0.5.post1 (March 04, 2019)
+====================================
+
+Hotfix release to retrieve correct version when pip installed. Adds .zenodo.json file.
 
 Version 0.0.5 (March 04, 2019)
 ==============================
