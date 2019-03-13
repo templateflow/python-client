@@ -3,8 +3,8 @@ Version 0.1.1 (March 12, 2019)
 
 * FIX: Require environment variable to use DataLad (#8)
 
-Version 0.1.0 (March 05, 2019)
-==============================
+Version 0.1.0.post1 (March 05, 2019)
+====================================
 
 Testing a better ``.zenodo.json`` settings.
 
