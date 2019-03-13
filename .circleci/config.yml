@@ -29,6 +29,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install -r /tmp/src/templateflow/requirements.txt
+            pip install datalad
             pip install "setuptools>=27.0" twine
 
       - save_cache:
@@ -48,6 +49,9 @@ jobs:
 
       - run:
           name: Run tests (w/o datalad)
+          environment:
+            TEMPLATEFLOW_USE_DATALAD: 0
+            TEMPLATEFLOW_HOME: "/tmp/data/templateflow"
           command: |
             pyenv global 3.5.2
             virtualenv venv
@@ -56,19 +60,22 @@ jobs:
 
       - run:
           name: Run tests (pulling from S3)
+          environment:
+            TEMPLATEFLOW_USE_DATALAD: 0
+            TEMPLATEFLOW_HOME: "/tmp/data/templateflow-S3"
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            export TEMPLATEFLOW_HOME="/tmp/data/templateflow-S3"
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
           name: Run tests (w/ datalad)
+          environment:
+            TEMPLATEFLOW_USE_DATALAD: 1
           command: |
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
-            pip install datalad
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
