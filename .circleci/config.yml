@@ -66,6 +66,7 @@ jobs:
           name: Run tests (w/ datalad)
           command: |
             unset TEMPLATEFLOW_HOME
+            export TEMPLATEFLOW_USE_DATALAD=true
             pyenv global 3.5.2
             virtualenv venv
             pip install datalad

@@ -3,7 +3,7 @@ TemplateFlow's Python Client
 """
 from pathlib import Path
 from json import loads
-from .conf import TF_LAYOUT, TF_S3_ROOT
+from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
 
 def get(template, **kwargs):
@@ -25,12 +25,21 @@ def get(template, **kwargs):
     out_file = [Path(p) for p in TF_LAYOUT.get(
         template=template, return_type='file', **kwargs)]
 
+    # Try plain URL fetch first
     for filepath in [p for p in out_file
                      if p.is_file() and p.stat().st_size == 0]:
         _s3_get(filepath)
 
-    for filepath in [p for p in out_file if not p.is_file()]:
-        _datalad_get(filepath)
+    if TF_USE_DATALAD:
+        for filepath in [p for p in out_file if not p.is_file()]:
+            _datalad_get(filepath)
+
+    not_fetched = [p for p in out_file
+                   if not p.is_file() or p.stat().st_size == 0]
+
+    if any(not_fetched):
+        raise RuntimeError(
+            "Could not fetch template files: %s" % ', '.join(not_fetched))
 
     if len(out_file) == 1:
         return out_file[0]
