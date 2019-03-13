@@ -27,6 +27,7 @@ if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
             from datalad.api import install
         except ImportError:
             TF_USE_DATALAD = False
+        else:
             TF_HOME.parent.mkdir(exist_ok=True, parents=True)
             install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
 
