@@ -1,3 +1,8 @@
+Version 0.1.3 (March 14, 2019)
+==============================
+
+Update TemplateFlow skeleton to include ``tpl-fsaverage/tpl-fsaverage_dseg.tsv``, after TemplateFlow update.
+
 Version 0.1.2 (March 12, 2019)
 ==============================
 
