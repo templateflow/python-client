@@ -35,10 +35,14 @@ jobs:
       - run:
           name: Install git and git-annex
           command: |
-            if [[ ! -d "/usr/lib/git-annex.linux" || ! -e "/usr/bin/git-annex-shell" ]]; then
+            if [[ ! -e "/tmp/cache/git-annex-standalone.tar.gz" ]]; then
               wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
               sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
               sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
+              mkdir -p /tmp/cache
+              tar czvf /tmp/cache/git-annex-standalone.tar.gz /usr/bin/git-annex /usr/bin/git-annex-shell /usr/lib/git-annex.linux
+            else
+              sudo tar xzfv /tmp/cache/git-annex-standalone.tar.gz
             fi
             git config --global user.name "First Last"
             git config --global user.email "email@domain.com"
@@ -48,9 +52,7 @@ jobs:
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
-            - "/usr/lib/git-annex.linux"
-            - "/usr/bin/git-annex"
-            - "/usr/bin/git-annex-shell"
+            - "/tmp/cache"
 
       - run:
           name: Run tests (w/o DataLad)
