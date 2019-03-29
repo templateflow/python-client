@@ -1,3 +1,13 @@
+Version 0.1.5 (March 29, 2019)
+==============================
+
+Add volumetric data to the `fsLR` template, and rename the segmentation of subcortical structures to be consistent with the new files.
+
+Version 0.1.4 (March 28, 2019)
+==============================
+
+New release to include the new `MNI152NLin6Asym` template (the default FSL "MNI" template).
+
 Version 0.1.3 (March 14, 2019)
 ==============================
 
