@@ -11,7 +11,7 @@ Add volumetric data to the ``fsLR`` template, and rename the segmentation of sub
 Version 0.1.4 (March 28, 2019)
 ==============================
 
-New release to include the new ``MNI152NLin6Asym`` template (the default FSL "MNI" template).
+New release to include the new ``MNI152NLin6Asym`` template (the default MNI template of FSL).
 
 Version 0.1.3 (March 14, 2019)
 ==============================
