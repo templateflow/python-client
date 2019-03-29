@@ -42,7 +42,7 @@ jobs:
               mkdir -p /tmp/cache
               tar czvf /tmp/cache/git-annex-standalone.tar.gz /usr/bin/git-annex /usr/bin/git-annex-shell /usr/lib/git-annex.linux
             else
-              sudo tar xzfv /tmp/cache/git-annex-standalone.tar.gz
+              sudo tar xzfv /tmp/cache/git-annex-standalone.tar.gz -C /
             fi
             git config --global user.name "First Last"
             git config --global user.email "email@domain.com"
