@@ -32,20 +32,25 @@ jobs:
             pip install datalad
             pip install "setuptools>=27.0" twine
 
+      - run:
+          name: Install git and git-annex
+          command: |
+            if [[ ! -d "/usr/lib/git-annex.linux" || ! -e "/usr/bin/git-annex-shell" ]]; then
+              wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+              sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+              sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
+            fi
+            git config --global user.name "First Last"
+            git config --global user.email "email@domain.com"
+
       - save_cache:
           key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
-
-      - run:
-          name: Install git and git-annex
-          command: |
-            wget -O- http://neuro.debian.net/lists/trusty.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-            sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
-            sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
-            git config --global user.name "First Last"
-            git config --global user.email "email@domain.com"
+            - "/usr/lib/git-annex.linux"
+            - "/usr/bin/git-annex"
+            - "/usr/bin/git-annex-shell"
 
       - run:
           name: Run tests (w/o DataLad)
