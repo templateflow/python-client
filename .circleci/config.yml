@@ -10,9 +10,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v2-
+            - deps-v3-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v3-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v3-
 
       - run:
           name: Get TemplateFlow Zip package
@@ -48,7 +48,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v3-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
@@ -142,9 +142,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v2-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v2-
+            - deps-v3-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v3-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v3-
 
       - run:
           name: Deploy to PyPi
