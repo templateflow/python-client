@@ -7,11 +7,12 @@
             "directory": "{{root}}{template}"
         },
         {
-            "name": "age",
-            "pattern": "[_/\\\\]age-([a-zA-Z0-9]+)",
+            "name": "cohort",
+            "pattern": "[_/\\\\]cohort-(\\d+)",
             "mandatory": false,
-            "directory": "{{root}}{template}{age}",
-            "missing_value": "age-1"
+            "directory": "{{root}}{template}{cohort}",
+            "missing_value": "cohort-1",
+            "dtype": "int"
         },
         {
             "name": "resolution",
@@ -70,6 +71,6 @@
     ],
     "default_path_patterns": [
         "tpl-{template}/template_description.json",
-        "tpl-{template}[/age-{age}]/tpl-{template}[_age-{age}]_res-{resolution}[_space-{space}][_hemi-{hemi}][_desc-{desc}]_{suffix<T1w|T2w|T1rho|T1map|T2map|T2star|FLAIR|FLASH|PDmap|PD|PDT2|inplaneT[12]|angio>}.{extension<nii|nii\\.gz>}"
+        "tpl-{template}[/cohort-{cohort}]/tpl-{template}[_cohort-{cohort}]_res-{resolution}[_space-{space}][_hemi-{hemi}][_desc-{desc}]_{suffix<T1w|T2w|T1rho|T1map|T2map|T2star|FLAIR|FLASH|PDmap|PD|PDT2|inplaneT[12]|angio>}.{extension<nii|nii\\.gz>}"
     ]
 }
