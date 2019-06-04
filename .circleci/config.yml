@@ -56,6 +56,30 @@ jobs:
             - "/tmp/cache"
 
       - run:
+          name: Run tests (w/ DataLad)
+          environment:
+            TEMPLATEFLOW_USE_DATALAD: 1
+          command: |
+            unset TEMPLATEFLOW_HOME
+            pyenv global 3.5.2
+            virtualenv venv
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Update TemplateFlow skeleton
+          command: |
+            cd $HOME/.cache/templateflow/
+            find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
+            for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
+            find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
+            cd /tmp/skel
+            mkdir -p /tmp/resources
+            zip -r /tmp/resources/templateflow-skel.zip */
+
+      - store_artifacts:
+          path: /tmp/resources/templateflow-skel.zip
+
+      - run:
           name: Run tests (w/o DataLad)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 0
@@ -72,16 +96,6 @@ jobs:
             TEMPLATEFLOW_USE_DATALAD: 0
             TEMPLATEFLOW_HOME: "/tmp/data/templateflow-S3"
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
-            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
-
-      - run:
-          name: Run tests (w/ DataLad)
-          environment:
-            TEMPLATEFLOW_USE_DATALAD: 1
-          command: |
-            unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
             pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
@@ -111,24 +125,10 @@ jobs:
             python setup.py sdist
             twine check dist/*
 
-      - run:
-          name: Update TemplateFlow skeleton
-          command: |
-            cd $HOME/.cache/templateflow/
-            find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
-            for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
-            find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
-            cd /tmp/skel
-            mkdir -p /tmp/resources
-            zip -r /tmp/resources/templateflow-skel.zip */
-
       - persist_to_workspace:
           root: /tmp
           paths:
             - resources
-
-      - store_artifacts:
-          path: /tmp/resources/templateflow-skel.zip
 
   deploy_pypi:
     machine:
