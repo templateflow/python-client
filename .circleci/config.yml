@@ -94,7 +94,7 @@ jobs:
           name: Run tests (pulling from S3)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 0
-            TEMPLATEFLOW_HOME: "/tmp/data/templateflow-S3"
+            TEMPLATEFLOW_HOME: "/tmp/skel"
           command: |
             pyenv global 3.5.2
             virtualenv venv
