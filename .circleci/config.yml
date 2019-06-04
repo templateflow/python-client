@@ -28,6 +28,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
+            pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
             pip install "setuptools>=27.0" twine
