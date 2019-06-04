@@ -74,7 +74,7 @@ def templates(**kwargs):
     True
 
     >>> templates(suffix='PD')
-    ['MNI152Lin', 'MNI152NLin2009cAsym', 'MNIPediatricAsym']
+    ['MNI152Lin', 'MNI152NLin2009cAsym', 'MNIInfant', 'MNIPediatricAsym']
 
     """
     return sorted(TF_LAYOUT.get_templates(**kwargs))
