@@ -1,3 +1,41 @@
+Version 0.4.0 (July 9, 2019)
+============================
+
+* MAINT: Use PyBIDS 0.9.x (#15) @effigies
+
+
+Version 0.3.0 (June 4, 2019)
+============================
+
+* ENH: Add ``MNIInfant`` template
+
+
+Version 0.2.0 (June 4, 2019)
+============================
+
+* ENH: Added ``MNIPediatricAsym`` template.
+* ENH: Updated spec to allow ``cohort``s.
+
+
+Version 0.1.9 (May 28, 2019)
+============================
+
+* ENH: Added the `Schaefer 2018 atlas <https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI>`__) to ``MNI152NLin6Asym``
+* ENH: Mapped the Schaefer atlas and the Harvard-Oxford atlas into ``MNI152NLin2009cAsym``
+
+
+Version 0.1.8 (May 9, 2019)
+===========================
+
+* ENH: Added FSL's Harvard-Oxford template to ``MNI152NLin6Asym``
+
+
+Version 0.1.7 (April 3, 2019)
+=============================
+
+* ENH: New release including bugfixes for `MNI152NLin2009cAsym` (particularly https://github.com/templateflow/tpl-MNI152NLin2009cAsym/commit/6e6d5915c7d8055d4af5efbf5e5457a0ab3246b9)
+
+
 Version 0.1.6 (March 29, 2019)
 ==============================
 
