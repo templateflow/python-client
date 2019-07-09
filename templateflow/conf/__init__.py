@@ -40,4 +40,4 @@ if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
 
 TF_LAYOUT = Layout(
     TF_HOME, validate=False, config='templateflow',
-    exclude=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
+    ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
