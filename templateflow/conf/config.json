@@ -11,7 +11,6 @@
             "pattern": "[_/\\\\]cohort-(\\d+)",
             "mandatory": false,
             "directory": "{{root}}{template}{cohort}",
-            "missing_value": "cohort-1",
             "dtype": "int"
         },
         {
