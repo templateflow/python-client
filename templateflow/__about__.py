@@ -44,7 +44,7 @@ CLASSIFIERS = [
 ]
 
 REQUIRES = [
-    'pybids>=0.7.0,<0.8.0a0',
+    'pybids>=0.9.0,<0.10.0a0',
     'requests',
     'tqdm',
 ]
