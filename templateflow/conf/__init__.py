@@ -39,5 +39,5 @@ if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
             zipref.extractall(str(TF_HOME))
 
 TF_LAYOUT = Layout(
-    TF_HOME, validate=False, config='templateflow',
+    str(TF_HOME), validate=False, config='templateflow',
     ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
