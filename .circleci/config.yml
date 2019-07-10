@@ -169,7 +169,8 @@ jobs:
           command: |
             git config user.email "${GITHUB_EMAIL}"
             git config user.name "CircleCI Deploy"
-            git checkout -f master
+            git fetch origin
+            git checkout -f origin/master
             cp /tmp/resources/templateflow-skel.zip templateflow/conf/
             git add templateflow/conf/templateflow-skel.zip
             git commit -m "rel(${CIRCLE_TAG}): Update S3 skeleton file [skip ci]"
