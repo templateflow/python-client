@@ -66,6 +66,10 @@
         {
             "name": "description",
             "pattern": "(.*\\template_description.json)$"
+        },
+        {
+            "name": "extension",
+            "pattern": "[._]*[a-zA-Z0-9]*?\\.([^/\\\\]+)$"
         }
     ],
     "default_path_patterns": [
