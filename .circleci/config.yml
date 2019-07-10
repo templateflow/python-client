@@ -160,6 +160,19 @@ jobs:
             twine check dist/*
             twine upload dist/*
 
+      - add_ssh_keys:
+          fingerprints:
+            - "ae:95:0c:cc:09:84:64:99:92:82:b7:b5:f4:a7:e9:23"
+
+      - run:
+          name: Push skeleton back to TemplateFlow's client repo
+          command: |
+            git config user.email "${GITHUB_EMAIL}"
+            git config user.name "CircleCI Deploy"
+            git add templateflow/conf/templateflow-skel.zip
+            git commit -m "rel(${CIRCLE_TAG}): Update S3 skeleton file [skip ci]"
+            git push origin master
+
 workflows:
   version: 2
   build_test_deploy:
