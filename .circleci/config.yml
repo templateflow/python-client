@@ -171,7 +171,7 @@ jobs:
             git config user.name "CircleCI Deploy"
             git add templateflow/conf/templateflow-skel.zip
             git commit -m "rel(${CIRCLE_TAG}): Update S3 skeleton file [skip ci]"
-            git push origin master
+            git push origin HEAD:master
 
 workflows:
   version: 2
