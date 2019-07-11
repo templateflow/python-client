@@ -2,12 +2,27 @@
 # -*- coding: utf-8 -*-
 """ templateflow setup script """
 
+def make_cmdclass(basecmd):
+    """A decorator for setuptools commands"""
+    base_run = basecmd.run
+
+    def new_run(self):
+        from templateflow.conf import update_home
+        update_home()
+        base_run(self)
+
+    basecmd.run = new_run
+    return basecmd
+
 
 def main():
     """ Install entry-point """
     from os import path as op
     from inspect import getfile, currentframe
     from setuptools import setup, find_packages
+    from setuptools.command.install import install
+    from setuptools.command.develop import develop
+
     from templateflow.__about__ import (
         __packagename__,
         __author__,
@@ -31,9 +46,21 @@ def main():
         'conf/templateflow-skel.zip'
     ]}
 
+    @make_cmdclass
+    class CheckHomeDevCommand(develop):
+        pass
+
+    @make_cmdclass
+    class CheckHomeProdCommand(install):
+        pass
+
     root_dir = op.dirname(op.abspath(getfile(currentframe())))
     version = None
-    cmdclass = {}
+    cmdclass = {
+        'develop': CheckHomeDevCommand,
+        'install': CheckHomeProdCommand,
+    }
+
     if op.isfile(op.join(root_dir, __packagename__, 'VERSION')):
         with open(op.join(root_dir, __packagename__, 'VERSION')) as vfile:
             version = vfile.readline().strip()
@@ -42,7 +69,7 @@ def main():
     if version is None:
         import versioneer
         version = versioneer.get_version()
-        cmdclass = versioneer.get_cmdclass()
+        # cmdclass['version'] = versioneer.get_cmdclass()
 
     setup(
         name=__packagename__,
