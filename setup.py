@@ -1,8 +1,17 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """ templateflow setup script """
+import sys
+from setuptools import setup
+import versioneer
 from setuptools.command.install import install
 from setuptools.command.develop import develop
+
+# Give setuptools a hint to complain if it's too old a version
+# 30.3.0 allows us to put most metadata in setup.cfg
+# Should match pyproject.toml
+SETUP_REQUIRES = ['setuptools >= 30.3.0']
+# This enables setuptools to install wheel on-the-fly
+SETUP_REQUIRES += ['wheel'] if 'bdist_wheel' in sys.argv else []
 
 
 def make_cmdclass(basecmd):
@@ -29,55 +38,11 @@ class CheckHomeProdCommand(install):
 
 if __name__ == '__main__':
     """ Install entry-point """
-    from setuptools import setup, find_packages
-    from versioneer import get_cmdclass, get_version
-
-    from templateflow.__about__ import (
-        __packagename__,
-        __author__,
-        __email__,
-        __maintainer__,
-        __license__,
-        __description__,
-        __longdesc__,
-        __url__,
-        DOWNLOAD_URL,
-        CLASSIFIERS,
-        REQUIRES,
-        SETUP_REQUIRES,
-        LINKS_REQUIRES,
-        TESTS_REQUIRES,
-        EXTRA_REQUIRES,
-    )
-
     setup(
-        name=__packagename__,
-        version=get_version(),
-        description=__description__,
-        long_description=__longdesc__,
-        author=__author__,
-        author_email=__email__,
-        maintainer=__maintainer__,
-        maintainer_email=__email__,
-        license=__license__,
-        url=__url__,
-        download_url=DOWNLOAD_URL,
-        classifiers=CLASSIFIERS,
-        packages=find_packages(exclude=['*.tests']),
-        zip_safe=False,
-        # Dependencies handling
+        name='templateflow',
+        version=versioneer.get_version(),
         setup_requires=SETUP_REQUIRES,
-        install_requires=list(set(REQUIRES)),
-        dependency_links=LINKS_REQUIRES,
-        tests_require=TESTS_REQUIRES,
-        extras_require=EXTRA_REQUIRES,
-        # Data
-        include_package_data=True,
-        package_data={__packagename__: [
-            'conf/config.json',
-            'conf/templateflow-skel.zip'
-        ]},
-        cmdclass=get_cmdclass(cmdclass={
+        cmdclass=versioneer.get_cmdclass(cmdclass={
             'develop': CheckHomeDevCommand,
             'install': CheckHomeProdCommand,
         }),
