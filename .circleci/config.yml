@@ -120,8 +120,6 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             cd /tmp/src/templateflow
-            echo "${CIRCLE_TAG}" > templateflow/VERSION
-            echo "include templateflow/VERSION" >> MANIFEST.in
             python setup.py sdist
             twine check dist/*
 
@@ -154,8 +152,6 @@ jobs:
             virtualenv venv
             pip install "setuptools>=27.0" twine
             cp /tmp/resources/templateflow-skel.zip templateflow/conf/
-            echo "${CIRCLE_TAG}" > templateflow/VERSION
-            echo "include templateflow/VERSION" >> MANIFEST.in
             python setup.py sdist
             twine check dist/*
             twine upload dist/*
