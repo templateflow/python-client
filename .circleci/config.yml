@@ -56,6 +56,13 @@ jobs:
             - "/tmp/cache"
 
       - run:
+          name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pytest -vsx /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
+
+      - run:
           name: Run tests (w/ DataLad)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 1
@@ -63,7 +70,7 @@ jobs:
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
-            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
 
       - run:
           name: Update TemplateFlow skeleton
@@ -88,7 +95,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
-            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
 
       - run:
           name: Run tests (pulling from S3)
@@ -98,7 +105,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
@@ -112,7 +119,7 @@ jobs:
             pip install -e .
             python -c "from templateflow import api"
             export TEMPLATEFLOW_USE_DATALAD=0
-            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow
+            pytest -vsx --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
 
       - run:
           name: Test packaging

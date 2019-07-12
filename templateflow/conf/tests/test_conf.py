@@ -54,7 +54,7 @@ def test_update_home(monkeypatch, tmp_path, capsys, use_datalad):
         assert out.startswith("TemplateFlow's HOME directory (S3 type) was up-to-date.")
 
         # Let's force an update
-        rmtree(home / 'tpl-MNI152NLin2009cAsym')
+        rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.update_home(force=True)
         out = capsys.readouterr()[0]
         assert updated is True
@@ -76,7 +76,7 @@ def test_update_home(monkeypatch, tmp_path, capsys, use_datalad):
         assert out.startswith("TemplateFlow's HOME directory (S3 type) was up-to-date.")
 
         # Let's force an update
-        rmtree(home / 'tpl-MNI152NLin2009cAsym')
+        rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.update_home()
         out = capsys.readouterr()[0]
         assert updated is True
