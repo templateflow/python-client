@@ -5,7 +5,6 @@ from os import getenv
 from warnings import warn
 from pathlib import Path
 from pkg_resources import resource_filename
-from .bids import Layout
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
 TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
@@ -76,6 +75,11 @@ a fresh initialization was done.""" % TF_HOME)
     return False
 
 
-TF_LAYOUT = Layout(
-    str(TF_HOME), validate=False, config='templateflow',
-    ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
+TF_LAYOUT = None
+try:
+    from .bids import Layout
+    TF_LAYOUT = Layout(
+        str(TF_HOME), validate=False, config='templateflow',
+        ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
+except ImportError:
+    pass
