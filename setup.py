@@ -1,13 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """ templateflow setup script """
+from setuptools.command.install import install
+from setuptools.command.develop import develop
 
 
-def main():
+def make_cmdclass(basecmd):
+    """Decorate setuptools commands."""
+    base_run = basecmd.run
+
+    def new_run(self):
+        from templateflow.conf import update_home
+        update_home()
+        base_run(self)
+
+    basecmd.run = new_run
+    return basecmd
+
+
+@make_cmdclass
+class CheckHomeDevCommand(develop):
+    pass
+
+@make_cmdclass
+class CheckHomeProdCommand(install):
+    pass
+
+
+if __name__ == '__main__':
     """ Install entry-point """
-    from os import path as op
-    from inspect import getfile, currentframe
     from setuptools import setup, find_packages
+    from versioneer import get_cmdclass, get_version
+
     from templateflow.__about__ import (
         __packagename__,
         __author__,
@@ -26,27 +50,9 @@ def main():
         EXTRA_REQUIRES,
     )
 
-    pkg_data = {__packagename__: [
-        'conf/config.json',
-        'conf/templateflow-skel.zip'
-    ]}
-
-    root_dir = op.dirname(op.abspath(getfile(currentframe())))
-    version = None
-    cmdclass = {}
-    if op.isfile(op.join(root_dir, __packagename__, 'VERSION')):
-        with open(op.join(root_dir, __packagename__, 'VERSION')) as vfile:
-            version = vfile.readline().strip()
-        pkg_data[__packagename__].insert(0, 'VERSION')
-
-    if version is None:
-        import versioneer
-        version = versioneer.get_version()
-        cmdclass = versioneer.get_cmdclass()
-
     setup(
         name=__packagename__,
-        version=version,
+        version=get_version(),
         description=__description__,
         long_description=__longdesc__,
         author=__author__,
@@ -66,11 +72,13 @@ def main():
         tests_require=TESTS_REQUIRES,
         extras_require=EXTRA_REQUIRES,
         # Data
-        package_data=pkg_data,
         include_package_data=True,
-        cmdclass=cmdclass,
+        package_data={__packagename__: [
+            'conf/config.json',
+            'conf/templateflow-skel.zip'
+        ]},
+        cmdclass=get_cmdclass(cmdclass={
+            'develop': CheckHomeDevCommand,
+            'install': CheckHomeProdCommand,
+        }),
     )
-
-
-if __name__ == '__main__':
-    main()
