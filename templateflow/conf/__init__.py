@@ -41,13 +41,15 @@ please set the TEMPLATEFLOW_HOME environment variable.\
 
 def update_home(force=False):
     """Update an existing DataLad or S3 home."""
-    if not TF_CACHED and not force:
-        print('TemplateFlow was not cached, a fresh initialization was done.')
+    if not force and not TF_CACHED:
+        print("""\
+TemplateFlow was not cached (TEMPLATEFLOW_HOME=%s), \
+a fresh initialization was done.""" % TF_HOME)
         return False
 
     if TF_USE_DATALAD:
         from datalad.api import update
-        warn("Updating TemplateFlow's HOME using DataLad")
+        print("Updating TemplateFlow's HOME using DataLad ...")
         try:
             update(str(TF_HOME), recursive=True, merge=True)
         except Exception as e:
@@ -65,8 +67,8 @@ def update_home(force=False):
             [str(s) for s in current_files]
         newfiles = sorted(set(allfiles) - set(existing))
         if newfiles:
-            warn("Updating TemplateFlow's HOME using S3. "
-                 "Adding: \n%s" % "\n".join(newfiles))
+            print("Updating TemplateFlow's HOME using S3. "
+                  "Adding: \n%s" % "\n".join(newfiles))
             zipref.extractall(str(TF_HOME), members=newfiles)
             return True
 
