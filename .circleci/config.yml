@@ -28,10 +28,10 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pip install -U pip
-            pip install -r /tmp/src/templateflow/requirements.txt
-            pip install datalad
-            pip install "setuptools>=27.0" twine
+            python -m pip install -U pip
+            python -m pip install -r /tmp/src/templateflow/requirements.txt
+            python -m pip install datalad
+            python -m pip install "setuptools>=27.0" twine codecov
 
       - run:
           name: Install git and git-annex
@@ -60,7 +60,14 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pytest /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
+            pytest --junit-xml=/tmp/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
+                   /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
+
+      - run:
+          name: Submit config test coverage
+          command: |
+            python -m codecov --file cov_config.xml --root /tmp/src/templateflow \
+                --flags config -e CIRCLE_JOB
 
       - run:
           name: Run tests (w/ DataLad)
@@ -70,7 +77,15 @@ jobs:
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
-            pytest --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
+            pytest --junit-xml=/tmp/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
+                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
+                   --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Submit api test coverage
+          command: |
+            python -m codecov --file cov_api_dl.xml --root /tmp/src/templateflow \
+                --flags api -e CIRCLE_JOB
 
       - run:
           name: Update TemplateFlow skeleton
@@ -95,7 +110,15 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
-            pytest --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
+            pytest --junit-xml=/tmp/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_nodl.xml \
+                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
+                   --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Submit api test coverage
+          command: |
+            python -m codecov --file cov_api_dl.xml --root /tmp/src/templateflow \
+                --flags api -e CIRCLE_JOB
 
       - run:
           name: Run tests (pulling from S3)
@@ -105,7 +128,15 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pytest --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
+            pytest --junit-xml=/tmp/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
+                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
+                   --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Submit api test coverage
+          command: |
+            python -m codecov --file cov_api_s3.xml --root /tmp/src/templateflow \
+                --flags api -e CIRCLE_JOB
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
@@ -119,7 +150,15 @@ jobs:
             pip install -e .
             python -c "from templateflow import api"
             export TEMPLATEFLOW_USE_DATALAD=0
-            pytest --doctest-modules /tmp/src/templateflow/templateflow --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py
+            pytest --junit-xml=/tmp/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl+s3.xml \
+                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
+                   --doctest-modules /tmp/src/templateflow/templateflow
+
+      - run:
+          name: Submit api test coverage
+          command: |
+            python -m codecov --file cov_api_dl+s3.xml --root /tmp/src/templateflow \
+                --flags api -e CIRCLE_JOB
 
       - run:
           name: Test packaging
