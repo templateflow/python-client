@@ -28,10 +28,10 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            python -m pip install -U pip
-            python -m pip install -r /tmp/src/templateflow/requirements.txt
-            python -m pip install datalad
-            python -m pip install "setuptools>=27.0" twine codecov
+            pip install -U pip
+            pip install -r /tmp/src/templateflow/requirements.txt
+            pip install datalad
+            pip install "setuptools>=27.0" twine codecov
 
       - run:
           name: Install git and git-annex
