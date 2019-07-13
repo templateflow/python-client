@@ -60,7 +60,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pytest --junit-xml=/tmp/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
+            pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
                    /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
 
       - run:
@@ -77,7 +77,7 @@ jobs:
             unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
-            pytest --junit-xml=/tmp/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
+            pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
                    --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -110,7 +110,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
-            pytest --junit-xml=/tmp/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_nodl.xml \
+            pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_nodl.xml \
                    --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -128,7 +128,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            pytest --junit-xml=/tmp/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
+            pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
                    --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -150,7 +150,7 @@ jobs:
             pip install -e .
             python -c "from templateflow import api"
             export TEMPLATEFLOW_USE_DATALAD=0
-            pytest --junit-xml=/tmp/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl+s3.xml \
+            pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl+s3.xml \
                    --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
@@ -159,6 +159,9 @@ jobs:
           command: |
             python -m codecov --file cov_api_dl+s3.xml --root /tmp/src/templateflow \
                 --flags api -e CIRCLE_JOB
+
+      - store_test_results:
+          path: /tmp/tests
 
       - run:
           name: Test packaging
