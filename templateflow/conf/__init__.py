@@ -79,7 +79,7 @@ TF_LAYOUT = None
 try:
     from .bids import Layout
     TF_LAYOUT = Layout(
-        str(TF_HOME), validate=False, config='templateflow',
+        TF_HOME, validate=False, config='templateflow',
         ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
 except ImportError:
     pass

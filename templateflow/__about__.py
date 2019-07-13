@@ -7,7 +7,6 @@ from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
-__packagename__ = 'templateflow'
 __copyright__ = 'Copyright 2019, Center for Reproducible Neuroscience, Stanford University'
 __credits__ = ['Oscar Esteban', 'Chris Markiewicz', 'Rastko Ciric', 'Yaroslav O. Halchenko',
                'Chris Gorgolewski', 'Russell Poldrack']
