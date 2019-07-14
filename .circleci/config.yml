@@ -117,7 +117,7 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
-            codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
+            codecov --file /tmp/cov_api_nodl.xml --root /tmp/src/templateflow \
                 --flags api -e CIRCLE_JOB
 
       - run:
@@ -150,14 +150,14 @@ jobs:
             pip install -e .
             python -c "from templateflow import api"
             export TEMPLATEFLOW_USE_DATALAD=0
-            pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl+s3.xml \
-                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
+            pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
+                   --cov-config=/tmp/src/templateflow/tox.ini --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
           name: Submit api test coverage
           command: |
-            codecov --file /tmp/cov_api_dl+s3.xml --root /tmp/src/templateflow \
+            codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
                 --flags api -e CIRCLE_JOB
 
       - store_test_results:
