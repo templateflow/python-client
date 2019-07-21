@@ -71,15 +71,13 @@ jobs:
 
       - run:
           name: Run tests (w/ DataLad)
-          environment:
-            TEMPLATEFLOW_USE_DATALAD: 1
           command: |
-            unset TEMPLATEFLOW_HOME
             pyenv global 3.5.2
             virtualenv venv
+            export TEMPLATEFLOW_USE_DATALAD=on
+            unset TEMPLATEFLOW_HOME
             pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
-                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
-                   --doctest-modules /tmp/src/templateflow/templateflow
+                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
       - run:
           name: Submit api test coverage
@@ -111,8 +109,7 @@ jobs:
             virtualenv venv
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
             pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_nodl.xml \
-                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
-                   --doctest-modules /tmp/src/templateflow/templateflow
+                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
       - run:
           name: Submit api test coverage
@@ -129,8 +126,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
-                   --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
-                   --doctest-modules /tmp/src/templateflow/templateflow
+                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
       - run:
           name: Submit api test coverage
@@ -151,8 +147,7 @@ jobs:
             python -c "from templateflow import api"
             export TEMPLATEFLOW_USE_DATALAD=0
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
-                   --cov-config=/tmp/src/templateflow/tox.ini --ignore=/tmp/src/templateflow/templateflow/conf/test_conf.py \
-                   --doctest-modules /tmp/src/templateflow/templateflow
+                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
       - run:
           name: Submit api test coverage
