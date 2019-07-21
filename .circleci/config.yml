@@ -10,8 +10,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
             - deps-v5-
 
       - run:
@@ -29,7 +29,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install -U pip
-            pip install -r /tmp/src/templateflow/setup.cfg
+            pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
             pip install "setuptools>=27.0" twine codecov
 
@@ -49,7 +49,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
+          key: deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
@@ -85,7 +85,7 @@ jobs:
           name: Submit api test coverage
           command: |
             codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
-                --flags api -e CIRCLE_JOB
+                --flags api,datalad -e CIRCLE_JOB
 
       - run:
           name: Update TemplateFlow skeleton
@@ -118,7 +118,7 @@ jobs:
           name: Submit api test coverage
           command: |
             codecov --file /tmp/cov_api_nodl.xml --root /tmp/src/templateflow \
-                --flags api -e CIRCLE_JOB
+                --flags api,nodatalad -e CIRCLE_JOB
 
       - run:
           name: Run tests (pulling from S3)
@@ -136,7 +136,7 @@ jobs:
           name: Submit api test coverage
           command: |
             codecov --file /tmp/cov_api_s3.xml --root /tmp/src/templateflow \
-                --flags api -e CIRCLE_JOB
+                --flags api,s3 -e CIRCLE_JOB
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
@@ -158,7 +158,7 @@ jobs:
           name: Submit api test coverage
           command: |
             codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
-                --flags api -e CIRCLE_JOB
+                --flags api,dls3 -e CIRCLE_JOB
 
       - store_test_results:
           path: /tmp/tests
@@ -190,8 +190,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
             - deps-v5-
 
       - add_ssh_keys:
@@ -207,7 +207,7 @@ jobs:
             git checkout -f origin/master
             cp /tmp/resources/templateflow-skel.zip templateflow/conf/
             git add templateflow/conf/templateflow-skel.zip
-            git commit -m "rel(${CIRCLE_TAG}): Update S3 skeleton file [skip ci]"
+            git commit -m "auto: Update S3 skeleton file [skip ci]"
             git push origin HEAD:master
 
   deploy_pypi:
@@ -223,8 +223,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
             - deps-v5-
 
       - run:
