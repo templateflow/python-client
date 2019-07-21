@@ -1,3 +1,13 @@
+0.4.1 (July 20, 2019)
+=====================
+
+  * MAINT: Enable code coverage collection (#25)
+  * MAINT: Switch to a ``setup.cfg``-style of installation (#24)
+  * FIX: Check and update ``$HOME`` if needed with every installation (#20)
+  * FIX: Do not merge branches into master when pushing back skell (#19)
+  * FIX: Commit newly generated S3 skeletons back to repo (#17)
+  * FIX: Add ``extension`` entity for selection (#16) @effigies
+
 Version 0.4.0 (July 9, 2019)
 ============================
 
