@@ -100,7 +100,7 @@ jobs:
           path: /tmp/resources/templateflow-skel.zip
 
       - run:
-          name: Run tests (w/o DataLad)
+          name: Run tests (pre-cached full TemplateFlow / no downloads)
           environment:
             TEMPLATEFLOW_USE_DATALAD: 0
             TEMPLATEFLOW_HOME: "/tmp/data/templateflow"
@@ -108,23 +108,22 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
-            pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_nodl.xml \
+            pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
       - run:
           name: Submit api test coverage
           command: |
             codecov --file /tmp/cov_api_nodl.xml --root /tmp/src/templateflow \
-                --flags api,nodatalad -e CIRCLE_JOB
+                --flags api,cached -e CIRCLE_JOB
 
       - run:
           name: Run tests (pulling from S3)
-          environment:
-            TEMPLATEFLOW_USE_DATALAD: 0
-            TEMPLATEFLOW_HOME: "/tmp/skel"
           command: |
             pyenv global 3.5.2
             virtualenv venv
+            export TEMPLATEFLOW_USE_DATALAD=off
+            export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
@@ -136,16 +135,12 @@ jobs:
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
-          environment:
-            TEMPLATEFLOW_USE_DATALAD: 1
-            TEMPLATEFLOW_HOME: /home/circleci/.cache/templateflow-init
           command: |
             pyenv global 3.5.2
             virtualenv venv
-            cd /tmp/src/templateflow
-            pip install -e .
-            python -c "from templateflow import api"
-            export TEMPLATEFLOW_USE_DATALAD=0
+            export TEMPLATEFLOW_USE_DATALAD=off
+            export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
+            mkdir -p $TEMPLATEFLOW_HOME; pushd $TEMPLATEFLOW_HOME; datalad install -r ///templateflow; popd
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
