@@ -10,8 +10,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
             - deps-v5-
 
       - run:
@@ -29,7 +29,7 @@ jobs:
             pyenv global 3.5.2
             virtualenv venv
             pip install -U pip
-            pip install -r /tmp/src/templateflow/requirements.txt
+            pip install -r /tmp/src/templateflow/setup.cfg
             pip install datalad
             pip install "setuptools>=27.0" twine codecov
 
@@ -49,7 +49,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
@@ -177,7 +177,7 @@ jobs:
           paths:
             - resources
 
-  deploy_pypi:
+  update_skel:
     machine:
       image: circleci/classic:201711-01
     working_directory: /tmp/src/templateflow
@@ -190,20 +190,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
             - deps-v5-
-
-      - run:
-          name: Deploy to PyPi
-          command: |
-            pyenv global 3.5.2
-            virtualenv venv
-            pip install "setuptools>=27.0" twine
-            cp /tmp/resources/templateflow-skel.zip templateflow/conf/
-            python setup.py sdist
-            twine check dist/*
-            twine upload dist/*
 
       - add_ssh_keys:
           fingerprints:
@@ -221,6 +210,33 @@ jobs:
             git commit -m "rel(${CIRCLE_TAG}): Update S3 skeleton file [skip ci]"
             git push origin HEAD:master
 
+  deploy_pypi:
+    machine:
+      image: circleci/classic:201711-01
+    working_directory: /tmp/src/templateflow
+    steps:
+      - attach_workspace:
+          at: /tmp
+
+      - checkout:
+          path: /tmp/src/templateflow
+
+      - restore_cache:
+          keys:
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-{{ epoch }}
+            - deps-v5-{{ checksum "/tmp/src/templateflow/setup.cfg"}}-
+            - deps-v5-
+
+      - run:
+          name: Deploy to PyPi
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pip install "setuptools>=27.0" twine
+            python setup.py sdist
+            twine check dist/*
+            twine upload dist/*
+
 workflows:
   version: 2
   build_test_deploy:
@@ -237,3 +253,11 @@ workflows:
               ignore: /.*/
             tags:
               only: /.*/
+      - update_skel:
+          requires:
+            - tests
+          filters:
+            branches:
+              only: /master/
+            tags:
+              ignore: /.*/
