@@ -56,38 +56,9 @@ jobs:
             - "/tmp/cache"
 
       - run:
-          name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
-          command: |
-            pyenv global 3.5.2
-            virtualenv venv
-            pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
-                   /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
-
-      - run:
-          name: Submit config test coverage
-          command: |
-            codecov --file /tmp/cov_config.xml --root /tmp/src/templateflow \
-                --flags config -e CIRCLE_JOB
-
-      - run:
-          name: Run tests (w/ DataLad)
-          command: |
-            pyenv global 3.5.2
-            virtualenv venv
-            export TEMPLATEFLOW_USE_DATALAD=on
-            export TEMPLATEFLOW_HOME=$HOME/templateflow
-            pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
-
-      - run:
-          name: Submit api test coverage
-          command: |
-            codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
-                --flags api,datalad -e CIRCLE_JOB
-
-      - run:
           name: Update TemplateFlow skeleton
           command: |
+            datalad install -r -s  https://github.com/templateflow/templateflow $HOME/.cache/templateflow
             cd $HOME/.cache/templateflow/
             find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
             for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
@@ -98,6 +69,22 @@ jobs:
 
       - store_artifacts:
           path: /tmp/resources/templateflow-skel.zip
+          
+      - run:
+          name: Run tests (w/ DataLad)
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            export TEMPLATEFLOW_USE_DATALAD=on
+            pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
+                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
+
+      - run:
+          name: Submit api test coverage
+          command: |
+            codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
+                --flags api,datalad -e CIRCLE_JOB
+
 
       - run:
           name: Run tests (pre-cached full TemplateFlow / no downloads)
@@ -140,7 +127,7 @@ jobs:
             virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
-            mkdir -p $TEMPLATEFLOW_HOME; pushd $TEMPLATEFLOW_HOME; datalad install -r -s ///templateflow $TEMPLATEFLOW_HOME; popd
+            datalad install -r -s  https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
@@ -149,6 +136,20 @@ jobs:
           command: |
             codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
                 --flags api,dls3 -e CIRCLE_JOB
+
+      - run:
+          name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
+          command: |
+            pyenv global 3.5.2
+            virtualenv venv
+            pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
+                   /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
+
+      - run:
+          name: Submit config test coverage
+          command: |
+            codecov --file /tmp/cov_config.xml --root /tmp/src/templateflow \
+                --flags config -e CIRCLE_JOB
 
       - store_test_results:
           path: /tmp/tests
