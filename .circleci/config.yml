@@ -140,7 +140,7 @@ jobs:
             virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
-            mkdir -p $TEMPLATEFLOW_HOME; pushd $TEMPLATEFLOW_HOME; datalad install -r ///templateflow; popd
+            mkdir -p $TEMPLATEFLOW_HOME; pushd $TEMPLATEFLOW_HOME; datalad install -r -s ///templateflow $TEMPLATEFLOW_HOME; popd
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
