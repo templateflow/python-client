@@ -66,10 +66,11 @@ jobs:
             cd /tmp/skel
             mkdir -p /tmp/resources
             zip -r /tmp/resources/templateflow-skel.zip */
+            find . -type f -exec md5sum {} \; | sort -k 2 | md5sum > /tmp/resources/templateflow-skel.md5
 
       - store_artifacts:
           path: /tmp/resources/templateflow-skel.zip
-          
+
       - run:
           name: Run tests (w/ DataLad)
           command: |
@@ -190,15 +191,23 @@ jobs:
             - "ae:95:0c:cc:09:84:64:99:92:82:b7:b5:f4:a7:e9:23"
 
       - run:
+          name: Check whether skeleton needs an update
+          command: |
+            if cmp --silent /tmp/resources/templateflow-skel.md5 /tmp/src/templateflow/templateflow/conf/templateflow-skel.md5; then
+                echo "S3 Skeleton has not changed"
+                circleci step halt
+            fi
+
+      - run:
           name: Push skeleton back to TemplateFlow's client repo
           command: |
             git config user.email "${GITHUB_EMAIL}"
             git config user.name "CircleCI Deploy"
             git fetch origin
             git checkout -f origin/master
-            cp /tmp/resources/templateflow-skel.zip templateflow/conf/
-            git add templateflow/conf/templateflow-skel.zip
-            git commit -m "auto: Update S3 skeleton file [skip ci]"
+            cp /tmp/resources/templateflow-skel.{zip,md5} templateflow/conf/
+            git add templateflow/conf/templateflow-skel.{zip,md5}
+            git commit -m "auto: Update S3 skeleton file and checksum [skip ci]"
             git push origin HEAD:master
 
   deploy_pypi:
