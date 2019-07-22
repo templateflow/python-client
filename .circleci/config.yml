@@ -101,7 +101,7 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
-            codecov --file /tmp/cov_api_nodl.xml --root /tmp/src/templateflow \
+            codecov --file /tmp/cov_api_cached.xml --root /tmp/src/templateflow \
                 --flags api,cached -e CIRCLE_JOB
 
       - run:
