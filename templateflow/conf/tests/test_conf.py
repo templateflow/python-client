@@ -81,3 +81,12 @@ def test_update_home(monkeypatch, tmp_path, capsys, use_datalad):
         out = capsys.readouterr()[0]
         assert updated is True
         assert out.startswith("Updating TemplateFlow's HOME using S3.")
+
+
+def test_layout(monkeypatch, tmp_path):
+    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
+
+    lines = ('%s' % tfc.TF_LAYOUT).splitlines()
+    assert lines[0] == "TemplateFlow Layout"
+    assert lines[1] == " - Home: %s" % tfc.TF_HOME
+    assert lines[2].startswith(" - Templates:")
