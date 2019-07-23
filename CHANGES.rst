@@ -2,8 +2,8 @@ Upcoming release
 ================
 
 
-0.4.1 (July 20, 2019)
-=====================
+Version 0.4.1 (July 20, 2019)
+=============================
 
   * MAINT: Enable code coverage collection (#25)
   * MAINT: Switch to a ``setup.cfg``-style of installation (#24)
