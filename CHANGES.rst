@@ -1,6 +1,7 @@
 Upcoming release
 ================
 
+  * MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)
 
 Version 0.4.1 (July 20, 2019)
 =============================
