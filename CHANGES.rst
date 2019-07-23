@@ -1,11 +1,10 @@
-Upcoming release
-================
-
-  * MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)
-
-Version 0.4.1 (July 20, 2019)
+Version 0.4.1 (July 22, 2019)
 =============================
 
+First release after a deep revision of the tests and the continuous integration setup.
+Also includes minor reliability improvements over the previous release and some bugfixes.
+
+  * MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)
   * MAINT: Enable code coverage collection (#25)
   * MAINT: Switch to a ``setup.cfg``-style of installation (#24)
   * FIX: Check and update ``$HOME`` if needed with every installation (#20)
