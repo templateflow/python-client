@@ -191,6 +191,24 @@ jobs:
             - "ae:95:0c:cc:09:84:64:99:92:82:b7:b5:f4:a7:e9:23"
 
       - run:
+          name: Checkout origin/master
+          command: |
+            git config user.email "${GITHUB_EMAIL}"
+            git config user.name "CircleCI Deploy"
+            git fetch origin
+            git checkout -f origin/master
+
+      - run:
+          name: Update CHANGES if this is a merge commit
+          command: |
+            if (( $( git cat-file -p HEAD | sed -n '/^parent [0-9a-f]*$/p' | wc -l ) > 1 )); then
+              bash update_changes.sh
+              git add CHANGES.rst
+              git commit -m "auto: Update CHANGES [skip ci]"
+              git push origin HEAD:master
+            fi
+
+      - run:
           name: Check whether skeleton needs an update
           command: |
             if cmp --silent /tmp/resources/templateflow-skel.md5 /tmp/src/templateflow/templateflow/conf/templateflow-skel.md5; then
@@ -201,10 +219,6 @@ jobs:
       - run:
           name: Push skeleton back to TemplateFlow's client repo
           command: |
-            git config user.email "${GITHUB_EMAIL}"
-            git config user.name "CircleCI Deploy"
-            git fetch origin
-            git checkout -f origin/master
             cp /tmp/resources/templateflow-skel.{zip,md5} templateflow/conf/
             git add templateflow/conf/templateflow-skel.{zip,md5}
             git commit -m "auto: Update S3 skeleton file and checksum [skip ci]"
