@@ -1,6 +1,4 @@
-"""
-Settings
-"""
+"""Configuration and settings."""
 from os import getenv
 from warnings import warn
 from pathlib import Path

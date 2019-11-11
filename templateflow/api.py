@@ -8,8 +8,26 @@ from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
 def get(template, **kwargs):
     """
-    Fetch one file from one template
+    Fetch one file from one particular template.
 
+    Parameters
+    ----------
+    template : str
+        A template identifier (e.g., ``MNI152NLin2009cAsym``).
+
+    Keyword Arguments
+    -----------------
+    resolution: int or None
+        Index to an specific spatial resolution of the template.
+    suffix : str or None
+        BIDS suffix
+    atlas : str
+        Name of a particular atlas
+    desc : str
+        Description field
+
+    Examples
+    --------
     >>> str(get('MNI152Lin', resolution=1, suffix='T1w'))  # doctest: +ELLIPSIS
     '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
 
@@ -66,8 +84,21 @@ off (possible values: false, off, 0).""" % TF_LAYOUT.root
 
 def templates(**kwargs):
     """
-    Returns a list of available templates
+    Returns a list of available templates.
 
+    Keyword Arguments
+    -----------------
+    resolution: int or None
+        Index to an specific spatial resolution of the template.
+    suffix : str or None
+        BIDS suffix
+    atlas : str
+        Name of a particular atlas
+    desc : str
+        Description field
+
+    Examples
+    --------
     >>> base = ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs']
     >>> tpls = templates()
     >>> all([t in tpls for t in base])
@@ -82,8 +113,15 @@ def templates(**kwargs):
 
 def get_metadata(template):
     """
-    Fetch one file from one template
+    Fetch one file from one template.
 
+    Parameters
+    ----------
+    template : str
+        A template identifier (e.g., ``MNI152NLin2009cAsym``).
+
+    Examples
+    --------
     >>> get_metadata('MNI152Lin')['Name']
     'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
 

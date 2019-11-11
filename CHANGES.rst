@@ -1,6 +1,5 @@
 Version 0.4.1 (July 22, 2019)
 =============================
-
 First release after a deep revision of the tests and the continuous integration setup.
 Also includes minor reliability improvements over the previous release and some bugfixes.
 
@@ -14,110 +13,86 @@ Also includes minor reliability improvements over the previous release and some 
 
 Version 0.4.0 (July 9, 2019)
 ============================
-
 * MAINT: Use PyBIDS 0.9.x (#15) @effigies
-
 
 Version 0.3.0 (June 4, 2019)
 ============================
-
-* ENH: Add ``MNIInfant`` template
-
+* ENH: Add ``MNIInfant`` template.
 
 Version 0.2.0 (June 4, 2019)
 ============================
-
 * ENH: Added ``MNIPediatricAsym`` template.
-* ENH: Updated spec to allow ``cohort``s.
-
+* ENH: Updated spec to allow several *cohorts* (``cohort-``).
 
 Version 0.1.9 (May 28, 2019)
 ============================
-
-* ENH: Added the `Schaefer 2018 atlas <https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI>`__) to ``MNI152NLin6Asym``
-* ENH: Mapped the Schaefer atlas and the Harvard-Oxford atlas into ``MNI152NLin2009cAsym``
-
+* ENH: Added the `Schaefer 2018 atlas <https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI>`__) to ``MNI152NLin6Asym``.
+* ENH: Mapped the Schaefer atlas and the Harvard-Oxford atlas into ``MNI152NLin2009cAsym``.
 
 Version 0.1.8 (May 9, 2019)
 ===========================
-
-* ENH: Added FSL's Harvard-Oxford template to ``MNI152NLin6Asym``
-
+* ENH: Added FSL's Harvard-Oxford template to ``MNI152NLin6Asym``.
 
 Version 0.1.7 (April 3, 2019)
 =============================
-
-* ENH: New release including bugfixes for `MNI152NLin2009cAsym` (particularly https://github.com/templateflow/tpl-MNI152NLin2009cAsym/commit/6e6d5915c7d8055d4af5efbf5e5457a0ab3246b9)
-
+* ENH: New release including bugfixes for ``MNI152NLin2009cAsym`` (particularly https://github.com/templateflow/tpl-MNI152NLin2009cAsym/commit/6e6d5915c7d8055d4af5efbf5e5457a0ab3246b9)
 
 Version 0.1.6 (March 29, 2019)
 ==============================
-
-Finish adding ``MNI152NLin6Sym`` after curation of NIfTI volumes and exporting to S3.
+* ENH: Finish adding ``MNI152NLin6Sym`` after curation of NIfTI volumes and exporting to S3.
 
 Version 0.1.5 (March 29, 2019)
 ==============================
-
-Add volumetric data to the ``fsLR`` template, and rename the segmentation of subcortical structures to be consistent with the new files.
+* ENH: Add volumetric data to the ``fsLR`` template.
+* ENH: Rename the segmentation of subcortical structures to be consistent with the new files.
 
 Version 0.1.4 (March 28, 2019)
 ==============================
-
-New release to include the new ``MNI152NLin6Asym`` template (the default MNI template of FSL).
+* ENH: New release to include the new ``MNI152NLin6Asym`` template (the default MNI template of FSL).
 
 Version 0.1.3 (March 14, 2019)
 ==============================
-
-Update TemplateFlow skeleton to include ``tpl-fsaverage/tpl-fsaverage_dseg.tsv``, after TemplateFlow update.
+* FIX: Update TemplateFlow skeleton to include ``tpl-fsaverage/tpl-fsaverage_dseg.tsv``, after TemplateFlow update.
 
 Version 0.1.2 (March 12, 2019)
 ==============================
-
 * FIX: ``api.get`` - robuster fetcher algorithm (allows S3 download on DL repos) and better error messages (#10)
 
 Version 0.1.1 (March 12, 2019)
 ==============================
-
 * FIX: Require environment variable to use DataLad (#8)
 
 Version 0.1.0.post1 (March 05, 2019)
 ====================================
-
-Testing a better ``.zenodo.json`` settings.
+* ENH: Testing a better ``.zenodo.json`` settings.
 
 Version 0.1.0 (March 05, 2019)
 ==============================
-
-First minimally functional TemplateFlow client release.
+* ENH: First minimally functional TemplateFlow client release.
 
 Version 0.0.5.post1 (March 04, 2019)
 ====================================
+Hotfix release to retrieve correct version when pip installed.
 
-Hotfix release to retrieve correct version when pip installed. Adds .zenodo.json file.
+* MAINT: Add a ``.zenodo.json`` file.
 
 Version 0.0.5 (March 04, 2019)
 ==============================
-
-* [ENH] Datalad-free alternative for TemplateFlow (#7)
-* [ENH] Use a BIDSLayout to index TemplateFlow (#6)
+* ENH: Datalad-free alternative for TemplateFlow (#7)
+* ENH: Use a BIDSLayout to index TemplateFlow (#6)
 
 Version 0.0.4 (January 18, 2019)
 ================================
-
-* Add a ``get_metadata`` utility
+* ENH: Add a ``get_metadata`` utility
 
 Version 0.0.3 (January 16, 2019)
 ================================
-
-* Add ``api.templates()`` + one doctest
+* ENH: Add ``api.templates()`` + one doctest
 
 Version 0.0.2 (January 16, 2019)
 ================================
-
-* Add one doctest
-
+* ENH: Add one doctest
 
 Version 0.0.1 (January 16, 2019)
 ================================
-
-* First functional release
+* ENH: First functional release

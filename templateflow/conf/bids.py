@@ -1,6 +1,4 @@
-"""
-Extending pyBIDS
-"""
+"""Extending pyBIDS for querying TemplateFlow."""
 from pkg_resources import resource_filename
 from bids.layout import BIDSLayout, add_config_paths
 
