@@ -1,0 +1,21 @@
+templateflow package
+====================
+
+.. automodule:: templateflow
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   templateflow.conf
+
+Submodules
+----------
+
+.. toctree::
+
+   templateflow.api

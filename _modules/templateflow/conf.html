@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>templateflow.conf &mdash; templateflow 0.4.1+4.g8e863fb documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/templateflow.html">templateflow package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>templateflow.conf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<h1>Source code for templateflow.conf</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Configuration and settings.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getenv</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="k">import</span> <span class="n">resource_filename</span>
+
+<span class="n">TF_DEFAULT_HOME</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.cache&#39;</span> <span class="o">/</span> <span class="s1">&#39;templateflow&#39;</span>
+<span class="n">TF_HOME</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TEMPLATEFLOW_HOME&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">TF_DEFAULT_HOME</span><span class="p">)))</span>
+<span class="n">TF_GITHUB_SOURCE</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/templateflow/templateflow.git&#39;</span>
+<span class="n">TF_S3_ROOT</span> <span class="o">=</span> <span class="s1">&#39;https://templateflow.s3.amazonaws.com&#39;</span>
+<span class="n">TF_USE_DATALAD</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TEMPLATEFLOW_USE_DATALAD&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span>
+    <span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;yes&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">TF_CACHED</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">TF_HOME</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">(</span><span class="n">TF_HOME</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+    <span class="n">TF_CACHED</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">TemplateFlow: repository not found at </span><span class="si">%s</span><span class="s2">. Populating a new TemplateFlow stub.</span>
+<span class="s2">If the path reported above is not the desired location for TemplateFlow, </span><span class="se">\</span>
+<span class="s2">please set the TEMPLATEFLOW_HOME environment variable.</span><span class="se">\</span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">TF_HOME</span><span class="p">,</span> <span class="ne">ResourceWarning</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">TF_USE_DATALAD</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">datalad.api</span> <span class="k">import</span> <span class="n">install</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">TF_USE_DATALAD</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">TF_HOME</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">install</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_HOME</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="n">TF_GITHUB_SOURCE</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">TF_USE_DATALAD</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">zipfile</span> <span class="k">import</span> <span class="n">ZipFile</span>
+        <span class="n">TF_HOME</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;templateflow&#39;</span><span class="p">,</span>
+                                       <span class="s1">&#39;conf/templateflow-skel.zip&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zipref</span><span class="p">:</span>
+            <span class="n">zipref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_HOME</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="update_home"><a class="viewcode-back" href="../../api/templateflow.conf.html#templateflow.conf.update_home">[docs]</a><span class="k">def</span> <span class="nf">update_home</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Update an existing DataLad or S3 home.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">TF_CACHED</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">TemplateFlow was not cached (TEMPLATEFLOW_HOME=</span><span class="si">%s</span><span class="s2">), </span><span class="se">\</span>
+<span class="s2">a fresh initialization was done.&quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">TF_HOME</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">TF_USE_DATALAD</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">datalad.api</span> <span class="k">import</span> <span class="n">update</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updating TemplateFlow&#39;s HOME using DataLad ...&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_HOME</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Error updating TemplateFlow&#39;s home directory (using DataLad):</span>
+<span class="si">%s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># This is an S3 type of installation</span>
+    <span class="kn">from</span> <span class="nn">zipfile</span> <span class="k">import</span> <span class="n">ZipFile</span>
+    <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;templateflow&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;conf/templateflow-skel.zip&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zipref</span><span class="p">:</span>
+        <span class="n">allfiles</span> <span class="o">=</span> <span class="n">zipref</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span>
+        <span class="n">current_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">TF_HOME</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">TF_HOME</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;**/*&#39;</span><span class="p">)]</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="o">.</span><span class="n">parent</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">current_files</span><span class="p">]))</span> <span class="o">+</span> \
+            <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">current_files</span><span class="p">]</span>
+        <span class="n">newfiles</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">allfiles</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">existing</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">newfiles</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updating TemplateFlow&#39;s HOME using S3. &quot;</span>
+                  <span class="s2">&quot;Adding: </span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">newfiles</span><span class="p">))</span>
+            <span class="n">zipref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_HOME</span><span class="p">),</span> <span class="n">members</span><span class="o">=</span><span class="n">newfiles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TemplateFlow&#39;s HOME directory (S3 type) was up-to-date.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="n">TF_LAYOUT</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.bids</span> <span class="k">import</span> <span class="n">Layout</span>
+    <span class="n">TF_LAYOUT</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span>
+        <span class="n">TF_HOME</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="s1">&#39;templateflow&#39;</span><span class="p">,</span>
+        <span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.git&#39;</span><span class="p">,</span> <span class="s1">&#39;.datalad&#39;</span><span class="p">,</span> <span class="s1">&#39;.gitannex&#39;</span><span class="p">,</span> <span class="s1">&#39;.gitattributes&#39;</span><span class="p">,</span> <span class="s1">&#39;scripts&#39;</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright 2019, Center for Reproducible Neuroscience, Stanford University
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../master/_modules/templateflow/conf.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

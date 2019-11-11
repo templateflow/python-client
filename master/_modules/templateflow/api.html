@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>templateflow.api &mdash; templateflow 0.4.1+4.g8e863fb documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/templateflow.html">templateflow package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>templateflow.api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<h1>Source code for templateflow.api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TemplateFlow&#39;s Python Client</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">json</span> <span class="k">import</span> <span class="n">loads</span>
+<span class="kn">from</span> <span class="nn">.conf</span> <span class="k">import</span> <span class="n">TF_LAYOUT</span><span class="p">,</span> <span class="n">TF_S3_ROOT</span><span class="p">,</span> <span class="n">TF_USE_DATALAD</span>
+
+
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../api/templateflow.api.html#templateflow.api.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch one file from one particular template.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    template : str</span>
+<span class="sd">        A template identifier (e.g., ``MNI152NLin2009cAsym``).</span>
+
+<span class="sd">    Keyword Arguments</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    resolution: int or None</span>
+<span class="sd">        Index to an specific spatial resolution of the template.</span>
+<span class="sd">    suffix : str or None</span>
+<span class="sd">        BIDS suffix</span>
+<span class="sd">    atlas : str</span>
+<span class="sd">        Name of a particular atlas</span>
+<span class="sd">    desc : str</span>
+<span class="sd">        Description field</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; str(get(&#39;MNI152Lin&#39;, resolution=1, suffix=&#39;T1w&#39;))  # doctest: +ELLIPSIS</span>
+<span class="sd">    &#39;.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; str(get(&#39;MNI152Lin&#39;, resolution=2, suffix=&#39;T1w&#39;))  # doctest: +ELLIPSIS</span>
+<span class="sd">    &#39;.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; [str(p) for p in get(</span>
+<span class="sd">    ...     &#39;MNI152Lin&#39;, suffix=&#39;T1w&#39;)]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&#39;.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz&#39;,</span>
+<span class="sd">     &#39;.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)]</span>
+
+    <span class="c1"># Try DataLad first</span>
+    <span class="n">dl_missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out_file</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="n">TF_USE_DATALAD</span> <span class="ow">and</span> <span class="n">dl_missing</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">dl_missing</span><span class="p">:</span>
+            <span class="n">_datalad_get</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="n">dl_missing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="c1"># Fall-back to S3 if some files are still missing</span>
+    <span class="n">s3_missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out_file</span>
+                  <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">s3_missing</span> <span class="o">+</span> <span class="n">dl_missing</span><span class="p">:</span>
+        <span class="n">_s3_get</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="n">not_fetched</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out_file</span>
+                   <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">not_fetched</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Could not fetch template files: </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">not_fetched</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dl_missing</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">TF_USE_DATALAD</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">The $TEMPLATEFLOW_HOME folder </span><span class="si">%s</span><span class="s2"> seems to contain an initiated DataLad </span><span class="se">\</span>
+<span class="s2">dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is not </span><span class="se">\</span>
+<span class="s2">set or set to one of (false, off, 0). Please set $TEMPLATEFLOW_USE_DATALAD </span><span class="se">\</span>
+<span class="s2">on (possible values: true, on, 1).&quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span>
+
+        <span class="k">if</span> <span class="n">s3_missing</span> <span class="ow">and</span> <span class="n">TF_USE_DATALAD</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">The $TEMPLATEFLOW_HOME folder </span><span class="si">%s</span><span class="s2"> seems to contain an plain </span><span class="se">\</span>
+<span class="s2">dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is </span><span class="se">\</span>
+<span class="s2">set to one of (true, on, 1). Please set $TEMPLATEFLOW_USE_DATALAD </span><span class="se">\</span>
+<span class="s2">off (possible values: false, off, 0).&quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span>
+
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">out_file</span></div>
+
+
+<div class="viewcode-block" id="templates"><a class="viewcode-back" href="../../api/templateflow.api.html#templateflow.api.templates">[docs]</a><span class="k">def</span> <span class="nf">templates</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of available templates.</span>
+
+<span class="sd">    Keyword Arguments</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    resolution: int or None</span>
+<span class="sd">        Index to an specific spatial resolution of the template.</span>
+<span class="sd">    suffix : str or None</span>
+<span class="sd">        BIDS suffix</span>
+<span class="sd">    atlas : str</span>
+<span class="sd">        Name of a particular atlas</span>
+<span class="sd">    desc : str</span>
+<span class="sd">        Description field</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; base = [&#39;MNI152Lin&#39;, &#39;MNI152NLin2009cAsym&#39;, &#39;NKI&#39;, &#39;OASIS30ANTs&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; tpls = templates()</span>
+<span class="sd">    &gt;&gt;&gt; all([t in tpls for t in base])</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; templates(suffix=&#39;PD&#39;)</span>
+<span class="sd">    [&#39;MNI152Lin&#39;, &#39;MNI152NLin2009cAsym&#39;, &#39;MNIInfant&#39;, &#39;MNIPediatricAsym&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">get_templates</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_metadata"><a class="viewcode-back" href="../../api/templateflow.api.html#templateflow.api.get_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch one file from one template.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    template : str</span>
+<span class="sd">        A template identifier (e.g., ``MNI152NLin2009cAsym``).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; get_metadata(&#39;MNI152Lin&#39;)[&#39;Name&#39;]</span>
+<span class="sd">    &#39;Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tf_home</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">tf_home</span> <span class="o">/</span> <span class="p">(</span><span class="s1">&#39;tpl-</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">template</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;template_description.json&#39;</span>
+
+    <span class="c1"># Ensure that template is installed and file is available</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">_datalad_get</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">loads</span><span class="p">(</span><span class="n">filepath</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span></div>
+
+
+<span class="k">def</span> <span class="nf">_datalad_get</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="kn">from</span> <span class="nn">datalad</span> <span class="k">import</span> <span class="n">api</span>
+    <span class="kn">from</span> <span class="nn">datalad.support.exceptions</span> <span class="k">import</span> <span class="n">IncompleteResultsError</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">IncompleteResultsError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">failed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;message&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;path not associated with any dataset&#39;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.conf</span> <span class="k">import</span> <span class="n">TF_GITHUB_SOURCE</span>
+            <span class="n">api</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">TF_GITHUB_SOURCE</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span>
+
+
+<span class="k">def</span> <span class="nf">_s3_get</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">stderr</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">ceil</span>
+    <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+    <span class="kn">import</span> <span class="nn">requests</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">))</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">TF_S3_ROOT</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Downloading </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">url</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="c1"># Streaming, so we can iterate over the response.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Total size in bytes.</span>
+    <span class="n">total_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-length&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">block_size</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="n">wrote</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">filepath</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">filepath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">block_size</span><span class="p">),</span>
+                         <span class="n">total</span><span class="o">=</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_size</span> <span class="o">//</span> <span class="n">block_size</span><span class="p">),</span>
+                         <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">wrote</span> <span class="o">=</span> <span class="n">wrote</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">total_size</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">wrote</span> <span class="o">!=</span> <span class="n">total_size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;ERROR, something went wrong&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright 2019, Center for Reproducible Neuroscience, Stanford University
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="api.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
