@@ -10,3 +10,7 @@ Contents
     :maxdepth: 3
 
     api/templateflow
+
+What's new
+----------
+.. include:: ../CHANGES.rst
