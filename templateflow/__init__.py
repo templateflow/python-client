@@ -6,8 +6,10 @@ The Zone of Templates
 """
 from .__about__ import __version__, __copyright__, __credits__
 
+__packagename__ = 'templateflow'
 __all__ = [
-    '__version__',
     '__copyright__',
     '__credits__',
+    '__packagename__',
+    '__version__',
 ]
