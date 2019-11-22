@@ -23,6 +23,12 @@ def get(template, **kwargs):
         BIDS suffix
     atlas : str
         Name of a particular atlas
+    hemi : str
+        Hemisphere
+    space : str
+        Space template is mapped to
+    density : str
+        Surface density
     desc : str
         Description field
 
@@ -38,6 +44,9 @@ def get(template, **kwargs):
     ...     'MNI152Lin', suffix='T1w')]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
      '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
+
+    >>> str(get('fsLR', space='fsaverage', suffix='sphere', hemi='L', density='32k')) +ELLIPSIS
+    '.../tpl-fsLR_space-fsaverage_hemi-L_den-32k_sphere.surf.gii'
 
     """
     out_file = [Path(p) for p in TF_LAYOUT.get(

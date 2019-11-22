@@ -20,7 +20,7 @@
         },
         {
             "name": "density",
-            "pattern": "[_/\\\\]+den-([a-zA-Z0-9]+)",
+            "pattern": "[_/\\\\]+den-([a-zA-Z0-9]+)"
         },
         {
             "name": "atlas",
