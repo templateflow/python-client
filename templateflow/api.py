@@ -45,7 +45,8 @@ def get(template, **kwargs):
     ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
      '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
 
-    >>> str(get('fsLR', space='fsaverage', suffix='sphere', hemi='L', density='32k')) +ELLIPSIS
+    >>> str(get('fsLR', space='fsaverage', suffix='sphere',
+    ...         hemi='L', density='32k'))  # doctest: +ELLIPSIS
     '.../tpl-fsLR_space-fsaverage_hemi-L_den-32k_sphere.surf.gii'
 
     """
