@@ -21,15 +21,15 @@ def get(template, **kwargs):
         Index to an specific spatial resolution of the template.
     suffix : str or None
         BIDS suffix
-    atlas : str
+    atlas : str or None
         Name of a particular atlas
-    hemi : str
+    hemi : str or None
         Hemisphere
-    space : str
+    space : str or None
         Space template is mapped to
-    density : str
+    density : str or None
         Surface density
-    desc : str
+    desc : str or None
         Description field
 
     Examples
@@ -45,9 +45,9 @@ def get(template, **kwargs):
     ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
      '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
 
-    >>> str(get('fsLR', space='fsaverage', suffix='sphere',
-    ...         hemi='L', density='32k'))  # doctest: +ELLIPSIS
-    '.../tpl-fsLR_space-fsaverage_hemi-L_den-32k_sphere.surf.gii'
+    >>> str(get('fsLR', space=None, hemi='L',
+    ...         density='32k', suffix='sphere'))  # doctest: +ELLIPSIS
+    '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
 
     """
     out_file = [Path(p) for p in TF_LAYOUT.get(
