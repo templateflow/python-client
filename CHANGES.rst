@@ -1,3 +1,4 @@
+  * Fix: density key (#31)
 Version 0.4.1 (July 22, 2019)
 =============================
 First release after a deep revision of the tests and the continuous integration setup.
