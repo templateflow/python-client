@@ -1,0 +1,7 @@
+templateflow.conf.bids module
+=============================
+
+.. automodule:: templateflow.conf.bids
+   :members:
+   :undoc-members:
+   :show-inheritance:

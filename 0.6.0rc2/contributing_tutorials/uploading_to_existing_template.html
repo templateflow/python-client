@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Uploading files to an existing template space &mdash; templateflow 0.7.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Library API (application program interface)" href="../api.html" />
+    <link rel="prev" title="Creating a new template space" href="adding_a_new_template.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../naming.html">TemplateFlow Naming</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Publishing in TemplateFlow</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prerequisites_to_contributing.html">Prerequisites to contributing templates to TemplateFlow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_a_new_template.html">Creating a new template space</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Uploading files to an existing template space</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#big-picture">Big picture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-placing-the-template-on-the-osf-server">Step 1: Placing the template on the OSF server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-telling-datalad-where-the-files-are">Step 2: Telling DataLad where the files are</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-script-when-subdirectories-are-present">Example script when subdirectories are present</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Library API (application program interface)</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Publishing in TemplateFlow</a> &raquo;</li>
+        
+      <li>Uploading files to an existing template space</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/contributing_tutorials/uploading_to_existing_template.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../master/contributing_tutorials/uploading_to_existing_template.html"><b>Warning:</b> This document is for an old version of templateflow. The main version is master.</a></p>
+<div class="section" id="uploading-files-to-an-existing-template-space">
+<span id="upload-to-existing"></span><h1>Uploading files to an existing template space<a class="headerlink" href="#uploading-files-to-an-existing-template-space" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-who-is-this-tutorial-for admonition">
+<p class="admonition-title">Who is this tutorial for?</p>
+<p>First, this is intended for those wishing to upload templates to TemplateFlow.
+Second, this is for people who want to add to a template directory that already exists.
+TemplateFlow consists of multiple templates sorted by the space the template is in.
+If the space for you template does not exist, then you should follow <a class="reference internal" href="adding_a_new_template.html#adding-new-template"><span class="std std-ref">Creating a new template space</span></a>.
+This tutorial assumes you have done all the steps in the preceding tutorial:
+<a class="reference internal" href="prerequisites_to_contributing.html#prerequisites-contributing"><span class="std std-ref">Prerequisites to contributing templates to TemplateFlow</span></a>.</p>
+</div>
+<div class="section" id="big-picture">
+<h2>Big picture<a class="headerlink" href="#big-picture" title="Permalink to this headline">¶</a></h2>
+<p>Image files (e.g. NIfTI files) are hosted on OSF.
+All other information (e.g. TSV, JSON files) will be hosted on github as regular files.</p>
+<p>When you use TemplateFlow, the images are only downloaded when they are needed.
+This can be done with DataLad, DataLad tracks a dataset and only downloads files when they are needed.
+You can read more about DataLad <a class="reference external" href="https://www.datalad.org">here</a>.</p>
+<p>Thus, when uploading to an existing template, there are two different steps:</p>
+<ol class="arabic simple">
+<li><p>You need to place them on the OSF server.</p></li>
+<li><p>you need to tell DataLad about the new items so the Github repo can track the new files.</p></li>
+</ol>
+</div>
+<div class="section" id="step-1-placing-the-template-on-the-osf-server">
+<h2>Step 1: Placing the template on the OSF server<a class="headerlink" href="#step-1-placing-the-template-on-the-osf-server" title="Permalink to this headline">¶</a></h2>
+<p>Go to the TemplateFlow directory you previously initialized.
+Place the file you want to upload in directory and give them appropriate .</p>
+<p>Let us say you want to upload:
+<cite>tpl-test/tpl-test_atlas-test1_dseg.nii.gz</cite>, <cite>tpl-test/tpl-test_atlas-test2_dseg.nii.gz</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">OSF_PASSWORD</span><span class="o">=</span><span class="s1">&#39;&lt;some-password&gt;&#39;</span>
+osf upload tpl-test_atlas-test1_dseg.nii.gz tpl-test_atlas-test1_dseg.nii.gz
+</pre></div>
+</div>
+<p>If you are overwriting an existing image, use the -f flag.</p>
+<p>If you want to upload multiple images (let us say we have multiple atlases), use a for bash loop:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls tpl-test/*_atlas-test*_dseg.nii.gz <span class="p">|</span> parallel -j8 <span class="s1">&#39;osf upload {} {}&#39;</span>
+</pre></div>
+</div>
+<p>And this will iteratively upload all instances of the atlas to OSF.</p>
+</div>
+<div class="section" id="step-2-telling-datalad-where-the-files-are">
+<h2>Step 2: Telling DataLad where the files are<a class="headerlink" href="#step-2-telling-datalad-where-the-files-are" title="Permalink to this headline">¶</a></h2>
+<p>Github is using DataLad to track the files.
+You need to tell DataLad where the new files are.</p>
+<p>To do this, run the following python script, changing the tqo required variables:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">datalad_osf.utils</span> <span class="kn">import</span> <span class="n">url_from_key</span><span class="p">,</span> <span class="n">json_from_url</span><span class="p">,</span>
+                              <span class="n">get_osf_recursive</span><span class="p">,</span> <span class="n">osf_to_csv</span>
+
+<span class="c1">## VARIABLES THAT NEED TO BE CHANGED</span>
+
+<span class="c1"># THe template you are adding too</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="s1">&#39;tpl-test&#39;</span>
+<span class="c1"># A string that identifies your new nifit files</span>
+<span class="c1"># Leave as blank if you want all files added</span>
+<span class="n">strinfile</span> <span class="o">=</span> <span class="s1">&#39;atlas-test&#39;</span>
+
+<span class="c1">## OPTIONAL VARIABLES</span>
+
+<span class="c1"># Name of output file</span>
+<span class="n">output_filename</span> <span class="o">=</span> <span class="s1">&#39;new_files.csv&#39;</span>
+<span class="c1"># templateflow project name</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;ue5gx&#39;</span>
+
+<span class="c1">## Rest of script</span>
+
+<span class="n">toplevel</span> <span class="o">=</span> <span class="n">json_from_url</span><span class="p">(</span><span class="n">url_from_key</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">toplevel</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">subset</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">][</span><span class="s1">&#39;move&#39;</span><span class="p">]</span>
+        <span class="k">break</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">json_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name,link&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">suffixes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">strinfile</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="s1">&#39;.nii&#39;</span> <span class="ow">in</span> <span class="n">ext</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">][</span><span class="s1">&#39;download&#39;</span><span class="p">]</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;materialized&#39;</span><span class="p">]</span>
+        <span class="n">hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">link</span><span class="p">)))</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hits</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Either run this script interactively or save the script as a python file (e.g. ‘get_datalad_urls.py’)
+then run the file with <cite>python get_datalad_urls.py</cite>.</p>
+<p>Note, the above script assumes there are no subdirectories within the template folder.
+See end of tutorial for an example script when there are subdirectories within the template folder.</p>
+<p>This script will produce a file called new_files.csv.</p>
+<p>Finally, the contents of new_files.csv need to be uploaded via DataLad.</p>
+<p>To do this first, move the local image file into a tmp folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv tpl-test/*_atlas-test*.nii.gz ~/tmp/
+</pre></div>
+</div>
+<p>Then you add the new urls to DataLad. Add a message</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>datalad addurls new_files.csv <span class="s1">&#39;{link}&#39;</span> <span class="s1">&#39;{name}&#39;</span> --message <span class="s1">&#39;My test atlases&#39;</span>
+datalad publish
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-script-when-subdirectories-are-present">
+<h2>Example script when subdirectories are present<a class="headerlink" href="#example-script-when-subdirectories-are-present" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">datalad_osf.utils</span> <span class="kn">import</span> <span class="n">url_from_key</span><span class="p">,</span> <span class="n">json_from_url</span><span class="p">,</span> <span class="n">get_osf_recursive</span><span class="p">,</span> <span class="n">osf_to_csv</span>
+
+<span class="c1">## VARIABLES THAT NEED TO BE CHANGED</span>
+
+<span class="c1"># THe template you are adding too</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="s1">&#39;tpl-test&#39;</span>
+<span class="c1"># A string that identifies your new files</span>
+<span class="n">strinfile</span> <span class="o">=</span> <span class="s1">&#39;atlas-test&#39;</span>
+
+<span class="c1">## OPTIONAL VARIABLES</span>
+
+<span class="c1"># Name of output file</span>
+<span class="n">output_filename</span> <span class="o">=</span> <span class="s1">&#39;new_files.csv&#39;</span>
+<span class="c1"># templateflow project name</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;ue5gx&#39;</span>
+
+<span class="c1">## REST OF SCRIPT</span>
+
+<span class="n">toplevel</span> <span class="o">=</span> <span class="n">json_from_url</span><span class="p">(</span><span class="n">url_from_key</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">toplevel</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">subset</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">][</span><span class="s1">&#39;move&#39;</span><span class="p">]</span>
+        <span class="k">break</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">json_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">hits</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name,link&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;kind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;folder&#39;</span><span class="p">:</span>
+        <span class="n">subdata</span> <span class="o">=</span> <span class="n">json_from_url</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">][</span><span class="s1">&#39;move&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">subitem</span> <span class="ow">in</span> <span class="n">subdata</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">subitem</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;kind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">subitem</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">suffixes</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">strinfile</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="s1">&#39;.nii&#39;</span> <span class="ow">in</span> <span class="n">ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">link</span> <span class="o">=</span> <span class="n">subitem</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">][</span><span class="s1">&#39;download&#39;</span><span class="p">]</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">subitem</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;materialized&#39;</span><span class="p">]</span>
+                    <span class="n">hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">link</span><span class="p">)))</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hits</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api.html" class="btn btn-neutral float-right" title="Library API (application program interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="adding_a_new_template.html" class="btn btn-neutral float-left" title="Creating a new template space" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, The TemplateFlow developers
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 0.6.0rc2
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../0.4.2/index.html">0.4.2</a></dd>
+            <dd><a href="../../0.4.2rc1/index.html">0.4.2rc1</a></dd>
+            <dd><a href="../../0.5.0/contributing_tutorials/uploading_to_existing_template.html">0.5.0</a></dd>
+            <dd><a href="../../0.5.0rc1/contributing_tutorials/uploading_to_existing_template.html">0.5.0rc1</a></dd>
+            <dd><a href="../../0.5.1/contributing_tutorials/uploading_to_existing_template.html">0.5.1</a></dd>
+            <dd><a href="../../0.5.1rc1/contributing_tutorials/uploading_to_existing_template.html">0.5.1rc1</a></dd>
+            <dd><a href="../../0.5.2/contributing_tutorials/uploading_to_existing_template.html">0.5.2</a></dd>
+            <dd><a href="../../0.6.0/contributing_tutorials/uploading_to_existing_template.html">0.6.0</a></dd>
+            <dd><a href="../../0.6.0rc1/contributing_tutorials/uploading_to_existing_template.html">0.6.0rc1</a></dd>
+            <dd><a href="uploading_to_existing_template.html">0.6.0rc2</a></dd>
+            <dd><a href="../../0.6.1/contributing_tutorials/uploading_to_existing_template.html">0.6.1</a></dd>
+            <dd><a href="../../0.6.2/contributing_tutorials/uploading_to_existing_template.html">0.6.2</a></dd>
+            <dd><a href="../../0.6.3/contributing_tutorials/uploading_to_existing_template.html">0.6.3</a></dd>
+            <dd><a href="../../0.7.0/contributing_tutorials/uploading_to_existing_template.html">0.7.0</a></dd>
+            <dd><a href="../../0.7.1/contributing_tutorials/uploading_to_existing_template.html">0.7.1</a></dd>
+            <dd><a href="../../0.7.1rc0/contributing_tutorials/uploading_to_existing_template.html">0.7.1rc0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../master/contributing_tutorials/uploading_to_existing_template.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

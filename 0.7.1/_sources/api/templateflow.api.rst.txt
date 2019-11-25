@@ -1,0 +1,7 @@
+templateflow.api module
+=======================
+
+.. automodule:: templateflow.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
