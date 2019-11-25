@@ -33,9 +33,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v5-
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v6-
 
       - run:
           name: Get TemplateFlow Zip package
@@ -72,7 +72,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
@@ -257,9 +257,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v5-
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v6-
 
       - add_ssh_keys:
           fingerprints:
@@ -312,9 +312,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v5-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v5-
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v6-
 
       - run:
           name: Deploy to PyPi
