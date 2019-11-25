@@ -20,8 +20,7 @@
         },
         {
             "name": "density",
-            "pattern": "[_/\\\\]+den-(\\d+)k+",
-            "dtype": "int"
+            "pattern": "[_/\\\\]+den-([a-zA-Z0-9]+)"
         },
         {
             "name": "atlas",
