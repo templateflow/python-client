@@ -13,7 +13,7 @@ If the space for you template already exists, then you should follow the tutoria
 
 This tutorial assumes you have done all the steps in the preceding tutorial: :ref: `prerequisites_to_contributing`.
 
-__Note__ at present, this tutorial will require writing access to the TemplateFlow repo.
+**Note** at present, this tutorial will require writing access to the TemplateFlow repo.
 If you do not have access here, it may be best to open up an issue asking for a template space to be created.
 
 Big picture
@@ -31,7 +31,8 @@ Step 1: create a new dataset
 First make sure you are in your local templateflow directory.
 If you do not have a local templateflow copy, run:
 
-::.
+.. code-block:: bash
+
     git clone https://github.com/templateflow/templateflow/
     cd templateflow
 
@@ -39,17 +40,19 @@ Now set the variable ``TEMPLATENAME`` to whatever your template will be called.
 Also set your Github username to the variable ``GITHUBUSERNAME``.
 Finally, write a description of your template.
 
-::.
+.. code-block:: bash
+
     TEMPALTENAME='tpl-test'
     GITHUBUSERNAME='yourusername'
     TEMPALTEDESCRIPTION="This is a test template"
     GITHUBREPO='templateflow'
 
-At the moment, always keep templateflow as GITHUBREPO, this may be changed in the future 
+At the moment, always keep templateflow as GITHUBREPO, this may be changed in the future.
 
 With these variables set you can then run the following code with no modifications:
 
-::.
+.. code-block:: bash
+
     datalad create -d . -D "$TEMPALTEDESCRIPTION" $TEMPALTENAME
     cd $TEMPALTENAME
     datalad create-sibling-github --github-organization $GITHUBREPO --github-login $GITHUBUSERNAME --access-protocol ssh $TEMPALTENAME
@@ -69,14 +72,16 @@ It will then return to the templateflow directory.
 
 The 5th line in the above code edits the file .gitmodules to replace:
 
-::.
+.. code-block::
+
     [submodule "tpl-test"]
             path = tpl-test
             url = ./tpl-test
 
 with:
 
-::.
+.. code-block::
+
     [submodule "tpl-test"]
             path = tpl-test
             url = https://github.com/templateflow/tpl-test
@@ -90,7 +95,7 @@ Step 2: Add a template_description.json
 Within this directory we place a template_description.json which is needed in all templates.
 The json file contains the following:
 
-::.
+.. code-block:: json
     {
         "Authors": ["Noone"],
         "Acknowledgements": "Curated and added to TemplateFlow by Thompson WH",

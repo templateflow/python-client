@@ -26,6 +26,8 @@ There are three different types of contributions you can make to TemplateFlow.
 This contribution involves adding a new space that does not currently exist.
 Let us say you have made a new pediatric space that you transform your images to; this would be a new template space.
 All the different MNI templates are each considered their own template space.
+Currently this requires writing permissions to the TemplateFlow repo.
+For now, if you do not have access open up an issue in the templateflow repo to say which template spaces should be added.
 
 **Nifti images within an existing template space**.
 This contribution involves adding to a template space that currently exists.
@@ -60,13 +62,17 @@ Once you have the prerequisites set up, you can initialize the OSF directory ont
 
 In a new directory type:
 
-> osf init
+.. code-clock:: bash
+    
+    osf init
 
 This will prompt you for your username and TemplateFlow project number.
 This project number is ``ue5gx``.
 
 You can check that your directory has been correctly set up by typing:
 
-> osf ls
+.. code-clock:: bash
+
+    osf ls
 
 You should see the contents of the OSF project folder appear in the console.

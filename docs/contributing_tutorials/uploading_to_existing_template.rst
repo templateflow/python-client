@@ -108,12 +108,16 @@ Finally, the contents of new_files.csv need to be uploaded via DataLad.
 
 To do this first, move the local image file into a tmp folder.
 
-> mv tpl-test/*_atlas-test*.nii.gz ~/tmp/
+.. code-block:: bash
+
+    mv tpl-test/*_atlas-test*.nii.gz ~/tmp/
 
 Then you add the new urls to DataLad. Add a message
 
-> datalad addurls new_files.csv '{link}' '{name}' --message 'My test atlases'
-> datalad publish
+.. code-block:: bash
+
+    datalad addurls new_files.csv '{link}' '{name}' --message 'My test atlases'
+    datalad publish
 
 Example script when subdirectories are presents
 ================================================
