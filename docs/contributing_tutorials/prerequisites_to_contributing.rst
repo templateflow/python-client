@@ -62,7 +62,7 @@ Once you have the prerequisites set up, you can initialize the OSF directory ont
 
 In a new directory type:
 
-.. code-clock:: bash
+.. code-block:: bash
     
     osf init
 
@@ -71,7 +71,7 @@ This project number is ``ue5gx``.
 
 You can check that your directory has been correctly set up by typing:
 
-.. code-clock:: bash
+.. code-block:: bash
 
     osf ls
 
