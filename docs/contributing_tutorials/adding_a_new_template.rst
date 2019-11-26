@@ -16,15 +16,6 @@ This tutorial assumes you have done all the steps in the preceding tutorial: :re
 **Note** at present, this tutorial will require writing access to the TemplateFlow repo.
 If you do not have access here, it may be best to open up an issue asking for a template space to be created.
 
-Big picture
-===============
-
-Image files (e.g. nifti files) are hosted on OSF and linked to Github.
-
-You will need to publish the directory to OSF and create a link to it to Github.
-This link can be done with DataLad, DataLad tracks a dataset and only downloads files when they are needed.
-You can read more about DataLad [`Link <FIXLINK>`_].
-
 Step 1: create a new dataset
 =============================
 
@@ -96,6 +87,7 @@ Within this directory we place a template_description.json which is needed in al
 The json file contains the following:
 
 .. code-block:: json
+
     {
         "Authors": ["Noone"],
         "Acknowledgements": "Curated and added to TemplateFlow by Thompson WH",

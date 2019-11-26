@@ -20,7 +20,7 @@ All other information (e.g. tsv, json files) will be hosted on github as regular
 
 When you use TemplateFlow, the images are only downloaded when they are needed.
 This can be done with DataLad, DataLad tracks a dataset and only downloads files when they are needed.
-You can read more about DataLad [`Link <FIXLINK>`_].
+You can read more about DataLad `here <https://www.datalad.org>`_.
 
 Thus, when uploading to an existing template, there are two different steps:
 
@@ -36,14 +36,18 @@ Place the file you want to upload in directory and give them appropriate .
 Let us say you want to upload:
 `tpl-test/tpl-test_atlas-test1_dseg.nii.gz`, `tpl-test/tpl-test_atlas-test2_dseg.nii.gz`.
 
->>> export OSF_PASSWORD='<some-password>'
->>> osf upload tpl-test_atlas-test1_dseg.nii.gz tpl-test_atlas-test1_dseg.nii.gz
+.. code-block:: bash
+
+    export OSF_PASSWORD='<some-password>'
+    osf upload tpl-test_atlas-test1_dseg.nii.gz tpl-test_atlas-test1_dseg.nii.gz
 
 If you are overwriting an existing image, use the -f flag.
 
 If you want to upload multiple images (let us say we have multiple atlases), use a for bash loop:
 
->>> ls tpl-test/*_atlas-test*_dseg.nii.gz | parallel -j8 'osf upload {} {}'
+.. code-block:: bash
+
+    ls tpl-test/*_atlas-test*_dseg.nii.gz | parallel -j8 'osf upload {} {}'
 
 And this will iteratively upload all instances of the atlas to OSF.
 
