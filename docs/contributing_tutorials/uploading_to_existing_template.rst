@@ -1,26 +1,25 @@
+.. _upload-to-existing:
+
 Uploading files to an existing template space
-###############################################
+=============================================
 
-Who is this tutorial for
-============================
+.. admonition :: Who is this tutorial for?
 
-First, this is intended for those wishing to upload templates to TemplateFlow.
-Second, this is for people who want to add to a template directory that already exists.
-TemplateFlow consists of multiple templates sorted by the space the template is in.
-
-If the space for you template does not exist, then you should follow this tutorial: :ref: `adding_a_new_template`.
-
-This tutorial assumes you have done all the steps in the preceding tutorial: :ref: `prerequisites_to_contributing`.
+    First, this is intended for those wishing to upload templates to TemplateFlow.
+    Second, this is for people who want to add to a template directory that already exists.
+    TemplateFlow consists of multiple templates sorted by the space the template is in.
+    If the space for you template does not exist, then you should follow :ref:`adding-new-template`.
+    This tutorial assumes you have done all the steps in the preceding tutorial:
+    :ref:`prerequisites-contributing`.
 
 Big picture
-===============
-
-Image files (e.g. nifti files) are hosted on OSF.
-All other information (e.g. tsv, json files) will be hosted on github as regular files.
+~~~~~~~~~~~
+Image files (e.g. NIfTI files) are hosted on OSF.
+All other information (e.g. TSV, JSON files) will be hosted on github as regular files.
 
 When you use TemplateFlow, the images are only downloaded when they are needed.
 This can be done with DataLad, DataLad tracks a dataset and only downloads files when they are needed.
-You can read more about DataLad `here <https://www.datalad.org>`_.
+You can read more about DataLad `here <https://www.datalad.org>`__.
 
 Thus, when uploading to an existing template, there are two different steps:
 
@@ -28,7 +27,7 @@ Thus, when uploading to an existing template, there are two different steps:
 2. you need to tell DataLad about the new items so the Github repo can track the new files.
 
 Step 1: Placing the template on the OSF server
-================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Go to the TemplateFlow directory you previously initialized.
 Place the file you want to upload in directory and give them appropriate .
@@ -51,11 +50,10 @@ If you want to upload multiple images (let us say we have multiple atlases), use
 
 And this will iteratively upload all instances of the atlas to OSF.
 
-Step 2: Telling Datalad where the files are
-================================================
-
-Github is using Datalad to track the files.
-You need to tell Datalad where the new files are.
+Step 2: Telling DataLad where the files are
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Github is using DataLad to track the files.
+You need to tell DataLad where the new files are.
 
 To do this, run the following python script, changing the tqo required variables:
 
@@ -123,8 +121,8 @@ Then you add the new urls to DataLad. Add a message
     datalad addurls new_files.csv '{link}' '{name}' --message 'My test atlases'
     datalad publish
 
-Example script when subdirectories are presents
-================================================
+Example script when subdirectories are present
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 

@@ -1,16 +1,14 @@
 
 TemplateFlow Naming
-===========================
+===================
 
-Who is this tutorial for?
-=================================
+.. admonition :: Who is this tutorial for?
 
-Anyone trying to understand the naming structure in TemplateFlow.
+	Anyone trying to understand the naming structure in TemplateFlow.
 
 Naming information
-===========================
-
-TemplateFlow generally follows the `BIDS naming structure <https://bids-specification.readthedocs.io/en/derivatives/>`_, but has a few deviations (e.g. the tpl key).
+~~~~~~~~~~~~~~~~~~
+TemplateFlow generally follows the `BIDS naming structure <https://bids-specification.readthedocs.io/en/derivatives/>`__, but has a few deviations (e.g. the ``tpl`` key).
 Here we outline the most common names that are found in TemplateFlow.
 
 Common key names using in TemplateFlow:
@@ -48,10 +46,7 @@ Extension    Description
 .h5          Transform file
 ==========   =======
 
-Thus a template with the following name:
-
-``tpl-test_res-01_atlas-myatlas_desc-200nodes_dseg.nii.gz``
-
-This would be a nifti image containing discrete segmentation of "myatlas" which contains 200nodes.
-And it is in the template space "test". 
+Thus a template with the following name: ``tpl-test_res-01_atlas-myatlas_desc-200nodes_dseg.nii.gz``
+would be a NIfTI image containing discrete segmentation of "myatlas" which contains 200nodes.
+And it is in the template space "test".
 The resolution information will be found in the dataset_description.json file under '01'.

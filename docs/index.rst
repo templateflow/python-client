@@ -9,6 +9,8 @@ Contents
 .. toctree::
     :maxdepth: 3
 
+    naming
+    tutorials
     api/templateflow
 
 What's new

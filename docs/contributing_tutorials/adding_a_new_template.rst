@@ -1,24 +1,24 @@
+.. _adding-new-template:
+
 Creating a new template space
-###############################################
-
-Who is this tutorial for
-============================
-
-First, this is intended for those wishing to add templates to TemplateFlow.
-Second, this is for people who want to add a template directory that does not already exists.
-TemplateFlow consists of multiple templates sorted by the space the template is in.
-This tutorial tells you how to add a new template space.
-
-If the space for you template already exists, then you should follow the tutorial: :ref: `uploading_to_existing_templates`.
-
-This tutorial assumes you have done all the steps in the preceding tutorial: :ref: `prerequisites_to_contributing`.
-
-**Note** at present, this tutorial will require writing access to the TemplateFlow repo.
-If you do not have access here, it may be best to open up an issue asking for a template space to be created.
-
-Step 1: create a new dataset
 =============================
 
+.. admonition :: Who is this tutorial for?
+
+    First, this is intended for those wishing to add templates to TemplateFlow.
+    Second, this is for people who want to add a template directory that does not already exists.
+    TemplateFlow consists of multiple templates sorted by the space the template is in.
+    This tutorial tells you how to add a new template space.
+
+    If the space for you template already exists, then you should follow the tutorial: :ref:`upload-to-existing`.
+
+    This tutorial assumes you have done all the steps in the preceding tutorial: :ref:`prerequisites-contributing`.
+
+    **Note** at present, this tutorial will require writing access to the TemplateFlow repo.
+    If you do not have access here, it may be best to open up an issue asking for a template space to be created.
+
+Step 1: create a new dataset
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 First make sure you are in your local templateflow directory.
 If you do not have a local templateflow copy, run:
 
@@ -33,31 +33,30 @@ Finally, write a description of your template.
 
 .. code-block:: bash
 
-    TEMPALTENAME='tpl-test'
+    TEMPLATENAME='tpl-test'
     GITHUBUSERNAME='yourusername'
-    TEMPALTEDESCRIPTION="This is a test template"
+    TEMPLATEDESCRIPTION="This is a test template"
     GITHUBREPO='templateflow'
 
-At the moment, always keep templateflow as GITHUBREPO, this may be changed in the future.
+At the moment, always keep templateflow as ``GITHUBREPO``, this may be changed in the future.
 
 With these variables set you can then run the following code with no modifications:
 
 .. code-block:: bash
 
-    datalad create -d . -D "$TEMPALTEDESCRIPTION" $TEMPALTENAME
-    cd $TEMPALTENAME
-    datalad create-sibling-github --github-organization $GITHUBREPO --github-login $GITHUBUSERNAME --access-protocol ssh $TEMPALTENAME
+    datalad create -d . -D "$TEMPLATEDESCRIPTION" $TEMPLATENAME
+    cd $TEMPLATENAME
+    datalad create-sibling-github --github-organization $GITHUBREPO --github-login $GITHUBUSERNAME --access-protocol ssh $TEMPLATENAME
     cd ..
-    sed -i -e "s/url = .\/$TEMPALTENAME/url = https:\/\/github.com\/$GITHUBREPO\/$TEMPLATENAME/g" .gitmodules
+    sed -i -e "s/url = .\/$TEMPLATENAME/url = https:\/\/github.com\/$GITHUBREPO\/$TEMPLATENAME/g" .gitmodules
     datalad save -m "set the github repo url for new template ``$TEMPLATENAME``"
     datalad publish
 
 You will be asked to enter your github username and password while running this code.
 
 Explanation of above code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-After running, this code will create an empty datalad folder called ``tpl-test`` (or whatever TEMPLATENAME is set to).
+.........................
+After running, this code will create an empty datalad folder called ``tpl-test`` (or whatever ``TEMPLATENAME`` is set to).
 It will then change into that directory, upload the template to github.
 It will then return to the templateflow directory.
 
@@ -77,13 +76,12 @@ with:
             path = tpl-test
             url = https://github.com/templateflow/tpl-test
 
-I.e. it adds a full url link to the.
+I.e., it adds a full url link to the.
 The final two lines upload this change.
 
 Step 2: Add a template_description.json
-========================================
-
-Within this directory we place a template_description.json which is needed in all templates.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Within this directory we place a ``template_description.json`` which is needed in all templates.
 The json file contains the following:
 
 .. code-block:: json
@@ -109,5 +107,5 @@ The json file contains the following:
         }
     }
 
-Add all the necessary information into the .json file.
+Add all the necessary information into the ``.json`` file.
 Then open a pull request on github to submit this information.
