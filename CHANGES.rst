@@ -1,4 +1,10 @@
-  * Fix: density key (#31)
+Version 0.4.2 (January 28, 2020)
+================================
+Patch release including a bugfix, adding a DataLad pin, and making PyBIDS pin more flexible.
+
+  * MAINT: Update PyBIDS pin and DataLad pin
+  * FIX: Density key (#31)
+
 Version 0.4.1 (July 22, 2019)
 =============================
 First release after a deep revision of the tests and the continuous integration setup.

@@ -53,7 +53,7 @@ jobs:
             virtualenv venv
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
-            pip install datalad
+            pip install "datalad ~= 0.11.8"
             pip install "setuptools>=27.0" twine codecov
 
       - run:
@@ -151,7 +151,7 @@ jobs:
             virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
-            datalad install -r -s  https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
+            datalad install -r -s https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
