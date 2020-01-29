@@ -345,7 +345,7 @@ workflows:
               only: /.*/
       - deploy_pypi:
           requires:
-            - tests
+            - deploy_docs_tag
           filters:
             branches:
               ignore: /.*/
@@ -378,3 +378,13 @@ workflows:
               only: /master/
             tags:
               ignore: /.*/
+
+      - deploy_docs_tag:
+          requires:
+            - tests
+            - build_docs
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
