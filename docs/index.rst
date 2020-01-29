@@ -11,7 +11,7 @@ Contents
 
     naming
     tutorials
-    api/templateflow
+    api
 
 What's new
 ----------
