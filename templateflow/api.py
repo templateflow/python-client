@@ -1,8 +1,10 @@
 """
 TemplateFlow's Python Client
 """
-from pathlib import Path
 from json import loads
+from pathlib import Path
+import re
+
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
 
@@ -146,6 +148,39 @@ def get_metadata(template):
     return loads(filepath.read_text())
 
 
+def get_citations(template, bibtex=False):
+    """
+    Fetch template citations
+
+    Parameters
+    ----------
+    template : str
+        A template identifier (e.g., ``MNI152NLin2009cAsym``).
+    bibtex : bool, optional
+        Generate citations in BibTex format.
+
+    """
+    data = get_metadata(template)
+    m = re.search(r'\{(.*?)\}', data.get('HowToAcknowledge', ''))
+    if m is None:
+        return
+
+    allrefs = data.get('ReferencesAndLinks', {})
+    refs = []
+    for idx in m.group(1).split(', '):
+        refs.append(allrefs[idx])
+
+    if not bibtex:
+        return refs
+    bibtex = ''
+    for ref in refs:
+        if 'doi.org' not in ref:
+            print('Cannot generate BibTex citation for reference: %s' % ref)
+            continue
+        bibtex += _to_bibtex(ref) + '\n'
+    return bibtex.rstrip()
+
+
 def _datalad_get(filepath):
     if not filepath:
         return
@@ -192,3 +227,9 @@ def _s3_get(filepath):
             f.write(data)
     if total_size != 0 and wrote != total_size:
         raise RuntimeError("ERROR, something went wrong")
+
+
+def _to_bibtex(doi):
+    from doi2bib.crossref import get_bib_from_doi
+    found, bib = get_bib_from_doi(doi)
+    return bib
