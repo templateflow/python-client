@@ -30,6 +30,8 @@ matrix:
   exclude:
   - python: 3.7
     env: CHECK_TYPE="style"
+  - python: 3.8
+    env: CHECK_TYPE="style"
   allow_failures:
   - python: 3.6
     env: INSTALL_DEPENDS="pip==10.0.1 setuptools==30.3.0"
