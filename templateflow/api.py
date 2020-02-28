@@ -172,6 +172,13 @@ def get_citations(template, bibtex=False):
 
     if not bibtex:
         return refs
+
+    try:
+        import doi2bib
+    except ImportError:
+        print("Cannot generate BibTex citation, missing doi2bib dependency")
+        return
+
     bibtex = ''
     for ref in refs:
         if 'doi.org' not in ref:
