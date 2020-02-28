@@ -175,6 +175,7 @@ def get_citations(template, bibtex=False):
 
     try:
         import doi2bib
+        del doi2bib
     except ImportError:
         print("Cannot generate BibTex citation, missing doi2bib dependency")
         return
