@@ -154,10 +154,10 @@ def get_citations(template, bibtex=False):
 
     Parameters
     ----------
-    template : str
+    template : :obj:`str`
         A template identifier (e.g., ``MNI152NLin2009cAsym``).
-    bibtex : bool, optional
-        Generate citations in BibTex format.
+    bibtex : :obj:`bool`, optional
+        Generate citations in BibTeX format.
 
     """
     data = get_metadata(template)
