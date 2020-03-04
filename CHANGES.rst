@@ -1,3 +1,4 @@
+  * MAINT: Drop Python 3.5 (#36)
 0.5.0 (TBD)
 ===========
 Minor release including a `new rodent template
