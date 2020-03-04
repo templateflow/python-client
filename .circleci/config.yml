@@ -33,9 +33,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v7-
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v8-
 
       - run:
           name: Get TemplateFlow Zip package
@@ -49,6 +49,8 @@ jobs:
       - run:
           name: Prepare environment
           command: |
+            python -m venv /tmp/venv
+            source /tmp/venv/bin/activate
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install "datalad ~= 0.11.8"
@@ -70,16 +72,16 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/tmp/data/templateflow"
             - "/tmp/cache"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.7/site-packages"
+            - "/tmp/venv"
 
       - run:
           name: Update TemplateFlow skeleton
           command: |
+            source /tmp/venv/bin/activate
             datalad install -r -s  https://github.com/templateflow/templateflow $HOME/.cache/templateflow
             cd $HOME/.cache/templateflow/
             find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
@@ -96,6 +98,7 @@ jobs:
       - run:
           name: Run tests (w/ DataLad)
           command: |
+            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=on
             pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
@@ -103,12 +106,14 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
+            source /tmp/venv/bin/activate
             codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
                 --flags api,datalad -e CIRCLE_JOB
 
       - run:
           name: Run tests (pre-cached full TemplateFlow / no downloads)
           command: |
+            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=0
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
             pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
@@ -117,12 +122,14 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
+            source /tmp/venv/bin/activate
             codecov --file /tmp/cov_api_cached.xml --root /tmp/src/templateflow \
                 --flags api,cached -e CIRCLE_JOB
 
       - run:
           name: Run tests (pulling from S3)
           command: |
+            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
@@ -131,12 +138,14 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
+            source /tmp/venv/bin/activate
             codecov --file /tmp/cov_api_s3.xml --root /tmp/src/templateflow \
                 --flags api,s3 -e CIRCLE_JOB
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
           command: |
+            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
             datalad install -r -s https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
@@ -146,18 +155,21 @@ jobs:
       - run:
           name: Submit api test coverage
           command: |
+            source /tmp/venv/bin/activate
             codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
                 --flags api,dls3 -e CIRCLE_JOB
 
       - run:
           name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
           command: |
+            source /tmp/venv/bin/activate
             pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
                    /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
 
       - run:
           name: Submit config test coverage
           command: |
+            source /tmp/venv/bin/activate
             codecov --file /tmp/cov_config.xml --root /tmp/src/templateflow \
                 --flags config -e CIRCLE_JOB
 
@@ -167,6 +179,7 @@ jobs:
       - run:
           name: Test packaging
           command: |
+            source /tmp/venv/bin/activate
             cd /tmp/src/templateflow
             python setup.py sdist
             twine check dist/*
@@ -241,9 +254,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v7-
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v8-
 
       - add_ssh_keys:
           fingerprints:
@@ -296,15 +309,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v7-
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v8-
 
       - run:
           name: Deploy to PyPi
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
+            source /tmp/venv/bin/activate
             pip install "setuptools>=27.0" twine
             python setup.py sdist
             twine check dist/*

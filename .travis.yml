@@ -40,7 +40,7 @@ matrix:
 
 before_install:
   - python -m pip install --upgrade $INSTALL_DEPENDS
-  - pip install "flake8<3.0" flake8-putty
+  - pip install -U flake8
 
 install:
   - |
@@ -59,7 +59,7 @@ install:
     fi
   - |
     if [ "$CHECK_TYPE" == "style" ]; then
-        travis_retry pip install -U flake8 flake8-putty
+        travis_retry pip install -U flake8
     fi
 
 script:
