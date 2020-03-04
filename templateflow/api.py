@@ -4,6 +4,7 @@ TemplateFlow's Python Client
 from json import loads
 from pathlib import Path
 import re
+import sys
 
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
@@ -161,32 +162,14 @@ def get_citations(template, bibtex=False):
 
     """
     data = get_metadata(template)
-    m = re.search(r'\{(.*?)\}', data.get('HowToAcknowledge', ''))
-    if m is None:
-        return
-
-    allrefs = data.get('ReferencesAndLinks', {})
-    refs = []
-    for idx in m.group(1).split(', '):
-        refs.append(allrefs[idx])
+    refs = data.get('ReferencesAndLinks', {})
+    if isinstance(refs, dict):
+        refs = list(refs.values())
 
     if not bibtex:
         return refs
 
-    try:
-        import doi2bib
-        del doi2bib
-    except ImportError:
-        print("Cannot generate BibTex citation, missing doi2bib dependency")
-        return
-
-    bibtex = ''
-    for ref in refs:
-        if 'doi.org' not in ref:
-            print('Cannot generate BibTex citation for reference: %s' % ref)
-            continue
-        bibtex += _to_bibtex(ref) + '\n'
-    return bibtex.rstrip()
+    return [_to_bibtex(ref, template, idx).rstrip() for idx, ref in enumerate(refs, 1)]
 
 
 def _datalad_get(filepath):
@@ -237,7 +220,17 @@ def _s3_get(filepath):
         raise RuntimeError("ERROR, something went wrong")
 
 
-def _to_bibtex(doi):
-    from doi2bib.crossref import get_bib_from_doi
-    found, bib = get_bib_from_doi(doi)
-    return bib
+def _to_bibtex(doi, template, idx):
+    try:
+        from doi2bib.crossref import get_bib_from_doi
+    except ImportError:
+        print("Cannot generate BibTeX citation, missing doi2bib dependency",
+              file=sys.stderr)
+        return doi
+
+    if 'doi.org' not in doi:
+        return doi
+    bib = get_bib_from_doi(doi)[1]
+    # replace identifier with template name
+    m = re.search(r'([A-Z])\w+', bib)
+    return bib.replace(m.group(), '%s%s' % (template.lower(), idx))
