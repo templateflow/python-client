@@ -39,7 +39,7 @@ mni2009_lbib = (
     '\ttitle = {{ANIMAL}$\\mathplus${INSECT}: Improved Cortical Structure '
     'Segmentation},\n'
     '\tbooktitle = {Lecture Notes in Computer Science}\n}'
- )
+)
 
 fslr_urls = [
     'https://doi.org/10.1093/cercor/bhr291',
