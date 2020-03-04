@@ -1,3 +1,8 @@
+0.5.0 (TBD)
+===========
+Minor release including a `new rodent template
+<https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3>`__.
+
 Version 0.4.2 (January 28, 2020)
 ================================
 Patch release including a bugfix, adding a DataLad pin, and making PyBIDS pin more flexible.
