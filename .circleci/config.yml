@@ -24,8 +24,8 @@ docs_deploy: &docs
 version: 2
 jobs:
   tests:
-    machine:
-      image: circleci/classic:201711-01
+    docker:
+      - image: circleci/python:3.7.6
     working_directory: /tmp/tests
     steps:
       - checkout:
@@ -33,9 +33,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v6-
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v7-
 
       - run:
           name: Get TemplateFlow Zip package
@@ -49,8 +49,6 @@ jobs:
       - run:
           name: Prepare environment
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install "datalad ~= 0.11.8"
@@ -72,11 +70,12 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
-            - "/opt/circleci/.pyenv/versions/3.5.2"
             - "/tmp/data/templateflow"
             - "/tmp/cache"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
 
       - run:
           name: Update TemplateFlow skeleton
@@ -97,8 +96,6 @@ jobs:
       - run:
           name: Run tests (w/ DataLad)
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=on
             pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
@@ -109,15 +106,10 @@ jobs:
             codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
                 --flags api,datalad -e CIRCLE_JOB
 
-
       - run:
           name: Run tests (pre-cached full TemplateFlow / no downloads)
-          environment:
-            TEMPLATEFLOW_USE_DATALAD: 0
-            TEMPLATEFLOW_HOME: "/tmp/data/templateflow"
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
+            export TEMPLATEFLOW_USE_DATALAD=0
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
             pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
@@ -131,8 +123,6 @@ jobs:
       - run:
           name: Run tests (pulling from S3)
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
@@ -147,8 +137,6 @@ jobs:
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
             datalad install -r -s https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
@@ -164,8 +152,6 @@ jobs:
       - run:
           name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
                    /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
 
@@ -181,8 +167,6 @@ jobs:
       - run:
           name: Test packaging
           command: |
-            pyenv global 3.5.2
-            virtualenv venv
             cd /tmp/src/templateflow
             python setup.py sdist
             twine check dist/*
@@ -257,9 +241,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v6-
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v7-
 
       - add_ssh_keys:
           fingerprints:
@@ -300,8 +284,8 @@ jobs:
             git push origin HEAD:master
 
   deploy_pypi:
-    machine:
-      image: circleci/classic:201711-01
+    docker:
+      - image: circleci/python:3.7.6
     working_directory: /tmp/src/templateflow
     steps:
       - attach_workspace:
@@ -312,9 +296,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v6-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v6-
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v7-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v7-
 
       - run:
           name: Deploy to PyPi
