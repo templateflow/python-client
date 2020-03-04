@@ -114,7 +114,6 @@ jobs:
           name: Run tests (pre-cached full TemplateFlow / no downloads)
           command: |
             source /tmp/venv/bin/activate
-            export TEMPLATEFLOW_USE_DATALAD=0
             export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
             pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
