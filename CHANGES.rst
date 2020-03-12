@@ -1,8 +1,10 @@
-  * MAINT: Drop Python 3.5 (#36)
-0.5.0 (TBD)
-===========
+0.5.0 (March 12, 2020)
+======================
 Minor release including a `new rodent template
-<https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3>`__.
+<https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3>`__
+and file fixes for ``fsaverage`` and ``fsLR`` templates.
+
+  * MAINT: Drop Python 3.5 (#36)
 
 Version 0.4.2 (January 28, 2020)
 ================================
