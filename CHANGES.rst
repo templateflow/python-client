@@ -1,10 +1,20 @@
-0.5.0 (March 12, 2020)
+0.5.2 (March 20, 2020)
 ======================
-Minor release including a `new rodent template
+Patch release in the 0.5 series, adding a soft brainmask for numerical stability in
+floating-point rounding of atlas-based brain-extraction methods using the
+``MNI152NLin2009cAsym`` template.
+
+0.5.1 (March 20, 2020)
+======================
+Patch of the new 0.5.x series, including a `new rodent template
 <https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3>`__
 and file fixes for ``fsaverage`` and ``fsLR`` templates.
 
   * MAINT: Drop Python 3.5 (#36)
+
+0.5.0 (March 12, 2020)
+======================
+This release has been removed and should not be used.
 
 Version 0.4.2 (January 28, 2020)
 ================================
