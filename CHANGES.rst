@@ -1,3 +1,9 @@
+0.6.0 (April 7, 2020)
+=====================
+Minor relase in preparation of a new CalVer versioning following the lead of
+*fMRIPrep*. This release is hooked to TemplateFlow 1.4.0.
+With thanks to V. Fonov for contributing the new ``tpl-MNI152NLin2009cSym``.
+
 0.5.2 (March 20, 2020)
 ======================
 Patch release in the 0.5 series, adding a soft brainmask for numerical stability in
@@ -9,6 +15,7 @@ floating-point rounding of atlas-based brain-extraction methods using the
 Patch of the new 0.5.x series, including a `new rodent template
 <https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3>`__
 and file fixes for ``fsaverage`` and ``fsLR`` templates.
+With thanks to E. MacNicol for contributing the new ``tpl-WHS``.
 
   * MAINT: Drop Python 3.5 (#36)
 
