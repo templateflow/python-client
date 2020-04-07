@@ -27,25 +27,17 @@ jobs:
     docker:
       - image: circleci/python:3.7.6
     working_directory: /tmp/tests
+    environment:
+      - OSF_MIRROR_PATH: /tmp/data/templateflow
     steps:
       - checkout:
           path: /tmp/src/templateflow
 
       - restore_cache:
           keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
-
-      - run:
-          name: Get TemplateFlow Zip package
-          command: |
-            if [[ ! -d "/tmp/data/templateflow" ]]; then
-              mkdir -p /tmp/data/templateflow
-              curl "https://files.osf.io/v1/resources/ue5gx/providers/osfstorage/?zip=" -o templateflow.zip
-              unzip templateflow.zip -d /tmp/data/templateflow
-            fi
-
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v9-
       - run:
           name: Prepare environment
           command: |
@@ -72,9 +64,8 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
-            - "/tmp/data/templateflow"
             - "/tmp/cache"
             - "/tmp/venv"
 
@@ -95,6 +86,38 @@ jobs:
       - store_artifacts:
           path: /tmp/resources/templateflow-skel.zip
 
+      - restore_cache:
+          keys:
+            - osf-v1-{{ .Branch }}-{{ .Revision }}
+            - osf-v1-{{ .Branch }}-
+            - osf-v1-master
+            - osf-v1-
+          paths:
+            - /tmp/data/templateflow
+      - run:
+          name: Check whether OSF cache needs update
+          command: |
+            if [[ -d "${OSF_MIRROR_PATH}" ]]; then
+              if cmp --silent /tmp/resources/templateflow-skel.md5 /tmp/src/templateflow/templateflow/conf/templateflow-skel.md5; then
+                  echo "Skeleton has not changed"
+              else:
+                  echo "OSF mirror needs update"
+                  rm -rf ${OSF_MIRROR_PATH}
+              fi
+            fi
+      - run:
+          name: Get TemplateFlow Zip package
+          command: |
+            if [[ ! -d "${OSF_MIRROR_PATH}" ]]; then
+              mkdir -p ${OSF_MIRROR_PATH}
+              curl "https://files.osf.io/v1/resources/ue5gx/providers/osfstorage/?zip=" -o templateflow.zip
+              unzip templateflow.zip -d ${OSF_MIRROR_PATH}
+            fi
+      - save_cache:
+          key: osf-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - /tmp/data/templateflow
+
       - run:
           name: Run tests (w/ DataLad)
           command: |
@@ -114,7 +137,7 @@ jobs:
           name: Run tests (pre-cached full TemplateFlow / no downloads)
           command: |
             source /tmp/venv/bin/activate
-            export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
+            export TEMPLATEFLOW_HOME="${OSF_MIRROR_PATH}"
             pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
@@ -131,6 +154,8 @@ jobs:
             source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
+            # Make sure we use an updated skeleton
+            cp /tmp/resources/templateflow-skel.{zip,md5} /tmp/src/templateflow/templateflow/conf/
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
@@ -253,9 +278,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v9-
 
       - add_ssh_keys:
           fingerprints:
@@ -308,9 +333,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v9-
 
       - run:
           name: Deploy to PyPi
