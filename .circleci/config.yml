@@ -100,7 +100,7 @@ jobs:
             if [[ -d "${OSF_MIRROR_PATH}" ]]; then
               if cmp --silent /tmp/resources/templateflow-skel.md5 /tmp/src/templateflow/templateflow/conf/templateflow-skel.md5; then
                   echo "Skeleton has not changed"
-              else:
+              else
                   echo "OSF mirror needs update"
                   rm -rf ${OSF_MIRROR_PATH}
               fi
