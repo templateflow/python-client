@@ -45,7 +45,7 @@ jobs:
             source /tmp/venv/bin/activate
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
-            pip install "datalad ~= 0.11.8"
+            pip install "datalad ~= 0.11.8" doi2bib
             pip install "setuptools>=27.0" twine codecov
 
       - run:
@@ -75,7 +75,7 @@ jobs:
             source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=on
             pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
+                   --doctest-modules /tmp/src/templateflow/templateflow
 
       - run:
           name: Submit api test coverage

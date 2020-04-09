@@ -1,8 +1,11 @@
 """
 TemplateFlow's Python Client
 """
-from pathlib import Path
 from json import loads
+from pathlib import Path
+import re
+import sys
+
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
 
@@ -146,6 +149,29 @@ def get_metadata(template):
     return loads(filepath.read_text())
 
 
+def get_citations(template, bibtex=False):
+    """
+    Fetch template citations
+
+    Parameters
+    ----------
+    template : :obj:`str`
+        A template identifier (e.g., ``MNI152NLin2009cAsym``).
+    bibtex : :obj:`bool`, optional
+        Generate citations in BibTeX format.
+
+    """
+    data = get_metadata(template)
+    refs = data.get('ReferencesAndLinks', [])
+    if isinstance(refs, dict):
+        refs = [x for x in refs.values()]
+
+    if not bibtex:
+        return refs
+
+    return [_to_bibtex(ref, template, idx).rstrip() for idx, ref in enumerate(refs, 1)]
+
+
 def _datalad_get(filepath):
     if not filepath:
         return
@@ -192,3 +218,19 @@ def _s3_get(filepath):
             f.write(data)
     if total_size != 0 and wrote != total_size:
         raise RuntimeError("ERROR, something went wrong")
+
+
+def _to_bibtex(doi, template, idx):
+    try:
+        from doi2bib.crossref import get_bib_from_doi
+    except ImportError:
+        print("Cannot generate BibTeX citation, missing doi2bib dependency",
+              file=sys.stderr)
+        return doi
+
+    if 'doi.org' not in doi:
+        return doi
+    bib = get_bib_from_doi(doi)[1]
+    # replace identifier with template name
+    m = re.search(r'([A-Z])\w+', bib)
+    return bib.replace(m.group(), '%s%s' % (template.lower(), idx))
