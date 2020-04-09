@@ -162,9 +162,9 @@ def get_citations(template, bibtex=False):
 
     """
     data = get_metadata(template)
-    refs = data.get('ReferencesAndLinks', {})
+    refs = data.get('ReferencesAndLinks', [])
     if isinstance(refs, dict):
-        refs = list(refs.values())
+        refs = [x for x in refs.values()]
 
     if not bibtex:
         return refs
