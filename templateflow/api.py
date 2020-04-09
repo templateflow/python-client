@@ -51,8 +51,9 @@ def get(template, **kwargs):
     '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
 
     """
-    out_file = [Path(p) for p in TF_LAYOUT.get(
-        template=template, return_type='file', **kwargs)]
+    out_file = [
+        Path(p) for p in TF_LAYOUT.get(template=template, return_type="file", **kwargs)
+    ]
 
     # Try DataLad first
     dl_missing = [p for p in out_file if not p.is_file()]
@@ -62,29 +63,33 @@ def get(template, **kwargs):
             dl_missing.remove(filepath)
 
     # Fall-back to S3 if some files are still missing
-    s3_missing = [p for p in out_file
-                  if p.is_file() and p.stat().st_size == 0]
+    s3_missing = [p for p in out_file if p.is_file() and p.stat().st_size == 0]
     for filepath in s3_missing + dl_missing:
         _s3_get(filepath)
 
-    not_fetched = [str(p) for p in out_file
-                   if not p.is_file() or p.stat().st_size == 0]
+    not_fetched = [str(p) for p in out_file if not p.is_file() or p.stat().st_size == 0]
 
     if not_fetched:
-        msg = "Could not fetch template files: %s." % ', '.join(not_fetched)
+        msg = "Could not fetch template files: %s." % ", ".join(not_fetched)
         if dl_missing and not TF_USE_DATALAD:
-            msg += """\
+            msg += (
+                """\
 The $TEMPLATEFLOW_HOME folder %s seems to contain an initiated DataLad \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is not \
 set or set to one of (false, off, 0). Please set $TEMPLATEFLOW_USE_DATALAD \
-on (possible values: true, on, 1).""" % TF_LAYOUT.root
+on (possible values: true, on, 1)."""
+                % TF_LAYOUT.root
+            )
 
         if s3_missing and TF_USE_DATALAD:
-            msg += """\
+            msg += (
+                """\
 The $TEMPLATEFLOW_HOME folder %s seems to contain an plain \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is \
 set to one of (true, on, 1). Please set $TEMPLATEFLOW_USE_DATALAD \
-off (possible values: false, off, 0).""" % TF_LAYOUT.root
+off (possible values: false, off, 0)."""
+                % TF_LAYOUT.root
+            )
 
         raise RuntimeError(msg)
 
@@ -139,7 +144,7 @@ def get_metadata(template):
     """
 
     tf_home = Path(TF_LAYOUT.root)
-    filepath = tf_home / ('tpl-%s' % template) / 'template_description.json'
+    filepath = tf_home / ("tpl-%s" % template) / "template_description.json"
 
     # Ensure that template is installed and file is available
     if not filepath.is_file():
@@ -160,7 +165,7 @@ def get_citations(template, bibtex=False):
 
     """
     data = get_metadata(template)
-    refs = data.get('ReferencesAndLinks', [])
+    refs = data.get("ReferencesAndLinks", [])
     if isinstance(refs, dict):
         refs = [x for x in refs.values()]
 
@@ -180,8 +185,9 @@ def _datalad_get(filepath):
     try:
         api.get(str(filepath))
     except IncompleteResultsError as exc:
-        if exc.failed[0]['message'] == 'path not associated with any dataset':
+        if exc.failed[0]["message"] == "path not associated with any dataset":
             from .conf import TF_GITHUB_SOURCE
+
             api.install(path=TF_LAYOUT.root, source=TF_GITHUB_SOURCE, recursive=True)
             api.get(str(filepath))
         else:
@@ -195,23 +201,26 @@ def _s3_get(filepath):
     import requests
 
     path = str(filepath.relative_to(TF_LAYOUT.root))
-    url = '%s/%s' % (TF_S3_ROOT, path)
+    url = "%s/%s" % (TF_S3_ROOT, path)
 
-    print('Downloading %s' % url, file=stderr)
+    print("Downloading %s" % url, file=stderr)
     # Streaming, so we can iterate over the response.
     r = requests.get(url, stream=True)
 
     # Total size in bytes.
-    total_size = int(r.headers.get('content-length', 0))
+    total_size = int(r.headers.get("content-length", 0))
     block_size = 1024
     wrote = 0
     if not filepath.is_file():
         filepath.unlink()
 
-    with filepath.open('wb') as f:
-        for data in tqdm(r.iter_content(block_size),
-                         total=ceil(total_size // block_size),
-                         unit='B', unit_scale=True):
+    with filepath.open("wb") as f:
+        for data in tqdm(
+            r.iter_content(block_size),
+            total=ceil(total_size // block_size),
+            unit="B",
+            unit_scale=True,
+        ):
             wrote = wrote + len(data)
             f.write(data)
     if total_size != 0 and wrote != total_size:
@@ -222,13 +231,15 @@ def _to_bibtex(doi, template, idx):
     try:
         from doi2bib.crossref import get_bib_from_doi
     except ImportError:
-        print("Cannot generate BibTeX citation, missing doi2bib dependency",
-              file=sys.stderr)
+        print(
+            "Cannot generate BibTeX citation, missing doi2bib dependency",
+            file=sys.stderr,
+        )
         return doi
 
-    if 'doi.org' not in doi:
+    if "doi.org" not in doi:
         return doi
     bib = get_bib_from_doi(doi)[1]
     # replace identifier with template name
-    m = re.search(r'([A-Z])\w+', bib)
-    return bib.replace(m.group(), '%s%s' % (template.lower(), idx))
+    m = re.search(r"([A-Z])\w+", bib)
+    return bib.replace(m.group(), "%s%s" % (template.lower(), idx))

@@ -2,9 +2,18 @@
 # vi: set ft=python sts=4 ts=4 sw=4 et:
 """Versioning and other metadata about TemplateFlow."""
 from ._version import get_versions
-__version__ = get_versions()['version']
+
+__version__ = get_versions()["version"]
 del get_versions
 
-__copyright__ = 'Copyright 2019, Center for Reproducible Neuroscience, Stanford University'
-__credits__ = ['Oscar Esteban', 'Chris Markiewicz', 'Rastko Ciric', 'Yaroslav O. Halchenko',
-               'Chris Gorgolewski', 'Russell Poldrack']
+__copyright__ = (
+    "Copyright 2019, Center for Reproducible Neuroscience, Stanford University"
+)
+__credits__ = [
+    "Oscar Esteban",
+    "Chris Markiewicz",
+    "Rastko Ciric",
+    "Yaroslav O. Halchenko",
+    "Chris Gorgolewski",
+    "Russell Poldrack",
+]
