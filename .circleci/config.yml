@@ -27,25 +27,17 @@ jobs:
     docker:
       - image: circleci/python:3.7.6
     working_directory: /tmp/tests
+    environment:
+      - OSF_MIRROR_PATH: /tmp/data/templateflow
     steps:
       - checkout:
           path: /tmp/src/templateflow
 
       - restore_cache:
           keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
-
-      - run:
-          name: Get TemplateFlow Zip package
-          command: |
-            if [[ ! -d "/tmp/data/templateflow" ]]; then
-              mkdir -p /tmp/data/templateflow
-              curl "https://files.osf.io/v1/resources/ue5gx/providers/osfstorage/?zip=" -o templateflow.zip
-              unzip templateflow.zip -d /tmp/data/templateflow
-            fi
-
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v9-
       - run:
           name: Prepare environment
           command: |
@@ -72,28 +64,10 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
-            - "/tmp/data/templateflow"
             - "/tmp/cache"
             - "/tmp/venv"
-
-      - run:
-          name: Update TemplateFlow skeleton
-          command: |
-            source /tmp/venv/bin/activate
-            datalad install -r -s  https://github.com/templateflow/templateflow $HOME/.cache/templateflow
-            cd $HOME/.cache/templateflow/
-            find . -type d -not -path "*/\.*" -exec mkdir -p /tmp/skel/{} \;
-            for i in $( find . -type f -not -path "*/\.*" ); do cp $i /tmp/skel/${i:2}; done
-            find . -type l -not -path "*/\.*" -exec touch /tmp/skel/{} \;
-            cd /tmp/skel
-            mkdir -p /tmp/resources
-            zip -r /tmp/resources/templateflow-skel.zip */
-            find . -type f -exec md5sum {} \; | sort -k 2 | md5sum > /tmp/resources/templateflow-skel.md5
-
-      - store_artifacts:
-          path: /tmp/resources/templateflow-skel.zip
 
       - run:
           name: Run tests (w/ DataLad)
@@ -109,21 +83,6 @@ jobs:
             source /tmp/venv/bin/activate
             codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
                 --flags api,datalad -e CIRCLE_JOB
-
-      - run:
-          name: Run tests (pre-cached full TemplateFlow / no downloads)
-          command: |
-            source /tmp/venv/bin/activate
-            export TEMPLATEFLOW_HOME="/tmp/data/templateflow"
-            pytest --junit-xml=/tmp/tests/wodatalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_cached.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
-
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_cached.xml --root /tmp/src/templateflow \
-                --flags api,cached -e CIRCLE_JOB
 
       - run:
           name: Run tests (pulling from S3)
@@ -183,11 +142,6 @@ jobs:
             python setup.py sdist
             twine check dist/*
 
-      - persist_to_workspace:
-          root: /tmp
-          paths:
-            - resources
-
   build_docs:
     docker:
       - image: python:3.7.4
@@ -240,61 +194,6 @@ jobs:
       - store_artifacts:
           path: ./docs/_build/html
 
-  update_skel:
-    machine:
-      image: circleci/classic:201711-01
-    working_directory: /tmp/src/templateflow
-    steps:
-      - attach_workspace:
-          at: /tmp
-
-      - checkout:
-          path: /tmp/src/templateflow
-
-      - restore_cache:
-          keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
-
-      - add_ssh_keys:
-          fingerprints:
-            - "ae:95:0c:cc:09:84:64:99:92:82:b7:b5:f4:a7:e9:23"
-
-      - run:
-          name: Checkout origin/master
-          command: |
-            git config user.email "${GITHUB_EMAIL}"
-            git config user.name "CircleCI Deploy"
-            git fetch origin
-            git checkout -f origin/master
-
-      - run:
-          name: Update CHANGES if this is a merge commit
-          command: |
-            if (( $( git cat-file -p HEAD | sed -n '/^parent [0-9a-f]*$/p' | wc -l ) > 1 )); then
-              bash update_changes.sh
-              git add CHANGES.rst
-              git commit -m "auto: Update CHANGES [skip ci]"
-              git push origin HEAD:master
-            fi
-
-      - run:
-          name: Check whether skeleton needs an update
-          command: |
-            if cmp --silent /tmp/resources/templateflow-skel.md5 /tmp/src/templateflow/templateflow/conf/templateflow-skel.md5; then
-                echo "S3 Skeleton has not changed"
-                circleci step halt
-            fi
-
-      - run:
-          name: Push skeleton back to TemplateFlow's client repo
-          command: |
-            cp /tmp/resources/templateflow-skel.{zip,md5} templateflow/conf/
-            git add templateflow/conf/templateflow-skel.{zip,md5}
-            git commit -m "auto: Update S3 skeleton file and checksum [skip ci]"
-            git push origin HEAD:master
-
   deploy_pypi:
     docker:
       - image: circleci/python:3.7.6
@@ -308,9 +207,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v8-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v8-
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v9-
 
       - run:
           name: Deploy to PyPi
@@ -346,14 +245,6 @@ workflows:
               ignore: /.*/
             tags:
               only: /.*/
-      - update_skel:
-          requires:
-            - tests
-          filters:
-            branches:
-              only: /master/
-            tags:
-              ignore: /.*/
 
       - build_docs:
           filters:
@@ -366,7 +257,6 @@ workflows:
       - deploy_docs_master:
           requires:
             - tests
-            - update_skel
             - build_docs
           filters:
             branches:
@@ -394,7 +284,3 @@ workflows:
                 - master
     jobs:
       - tests
-      - update_skel:
-          requires:
-            - tests
-
