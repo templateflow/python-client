@@ -19,8 +19,8 @@ def make_cmdclass(basecmd):
     base_run = basecmd.run
 
     def new_run(self):
-        from templateflow.conf import update_home
-        update_home()
+        from templateflow.conf import setup_home
+        setup_home()
         base_run(self)
 
     basecmd.run = new_run
