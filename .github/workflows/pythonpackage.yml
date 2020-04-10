@@ -21,12 +21,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0
         ssh-key: "${{ secrets.NIPREPS_DEPLOY }}"
     - name: Fetch all tags (for setuptools_scm to work)
       run: |
-        /usr/bin/git -c protocol.version=2 fetch --tags --prune origin
-        # git fetch --prune --unshallow --tags
+        # /usr/bin/git -c protocol.version=2 fetch --tags --prune origin
+        /usr/bin/git -c protocol.version=2 fetch --tags --prune --unshallow origin
         /usr/bin/git -c protocol.version=2 describe --dirty --tags --long --match *.*
 
     - name: Set up Python ${{ matrix.python-version }}
