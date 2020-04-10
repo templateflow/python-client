@@ -13,3 +13,14 @@ except ModuleNotFoundError:
         __version__ = "unknown"
     del get_distribution
     del DistributionNotFound
+
+from . import api
+from .conf import update
+
+__all__ = [
+    '__copyright__',
+    '__packagename__',
+    '__version__',
+    'api',
+    'update',
+]

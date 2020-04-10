@@ -4,6 +4,8 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.develop import develop
+from setuptools.command.egg_info import egg_info
+
 
 # Give setuptools a hint to complain if it's too old a version
 # 30.3.0 allows us to put most metadata in setup.cfg
@@ -29,12 +31,17 @@ def make_cmdclass(basecmd):
 
 @make_cmdclass
 class CheckHomeDevCommand(develop):
-    pass
+    """Setuptools command."""
 
 
 @make_cmdclass
 class CheckHomeProdCommand(install):
-    pass
+    """Setuptools command."""
+
+
+@make_cmdclass
+class CheckHomeEggCommand(egg_info):
+    """Setuptools command."""
 
 
 if __name__ == "__main__":
@@ -42,5 +49,9 @@ if __name__ == "__main__":
     setup(
         name="templateflow",
         setup_requires=SETUP_REQUIRES,
-        cmdclass={"develop": CheckHomeDevCommand, "install": CheckHomeProdCommand},
+        cmdclass={
+            "develop": CheckHomeDevCommand,
+            "install": CheckHomeProdCommand,
+            "egg_info": CheckHomeEggCommand,
+        },
     )
