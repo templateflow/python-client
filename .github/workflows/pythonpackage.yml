@@ -32,6 +32,8 @@ jobs:
         python setup.py sdist bdist_wheel
         python -m twine check dist/templateflow*
     - name: Install in confined environment [sdist]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
         python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
@@ -47,7 +49,18 @@ jobs:
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
+    - name: Re-install in confined environment [sdist]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/sdist
+      run: |
+        python -m venv /tmp/install_sdist
+        source /tmp/install_sdist/bin/activate
+        python -m pip install dist/templateflow*.tar.gz
+        find ${TEMPLATEFLOW_HOME}
+
     - name: Install in confined environment [wheel]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
         python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
@@ -63,7 +76,18 @@ jobs:
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
+    - name: Re-install in confined environment [wheel]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/wheel
+      run: |
+        python -m venv /tmp/install_wheel
+        source /tmp/install_wheel/bin/activate
+        python -m pip install dist/templateflow*.whl
+        find ${TEMPLATEFLOW_HOME}
+
     - name: Install in confined environment [setup.py - install]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_install
       run: |
         python -m venv /tmp/setup_install
         source /tmp/setup_install/bin/activate
@@ -77,8 +101,19 @@ jobs:
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
+        
+    - name: Re-install in confined environment [setup.py - install]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_install
+      run: |
+        python -m venv /tmp/setup_install
+        source /tmp/setup_install/bin/activate
+        python setup.py install
+        find ${TEMPLATEFLOW_HOME}
 
     - name: Install in confined environment [setup.py - develop]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
       run: |
         python -m venv /tmp/setup_develop
         source /tmp/setup_develop/bin/activate
@@ -92,3 +127,12 @@ jobs:
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
+
+    - name: Re-install in confined environment [setup.py - develop]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
+      run: |
+        python -m venv /tmp/setup_develop
+        source /tmp/setup_develop/bin/activate
+        python setup.py develop
+        find ${TEMPLATEFLOW_HOME}
