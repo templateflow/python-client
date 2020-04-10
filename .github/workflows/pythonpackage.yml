@@ -23,6 +23,7 @@ jobs:
       with:
         ssh-key: "${{ secrets.NIPREPS_DEPLOY }}"
     - name: Fetch all tags (for setuptools_scm to work)
+      if: github.ref == 'refs/heads/master'
       run: |
         /usr/bin/git -c protocol.version=2 fetch --tags --prune --unshallow origin
     - name: Set up Python ${{ matrix.python-version }}
