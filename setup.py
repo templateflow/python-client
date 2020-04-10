@@ -4,7 +4,6 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.develop import develop
-from setuptools.command.egg_info import egg_info
 
 
 # Give setuptools a hint to complain if it's too old a version
@@ -44,11 +43,6 @@ class CheckHomeProdCommand(install):
     """Setuptools command."""
 
 
-@make_cmdclass
-class CheckHomeEggCommand(egg_info):
-    """Setuptools command."""
-
-
 if __name__ == "__main__":
     """ Install entry-point """
     setup(
@@ -57,6 +51,5 @@ if __name__ == "__main__":
         cmdclass={
             "develop": CheckHomeDevCommand,
             "install": CheckHomeProdCommand,
-            "egg_info": CheckHomeEggCommand,
         },
     )
