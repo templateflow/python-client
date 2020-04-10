@@ -1,8 +1,24 @@
-0.6.0 (April 7, 2020)
-=====================
-Minor relase in preparation of a new CalVer versioning following the lead of
-*fMRIPrep*. This release is hooked to TemplateFlow 1.4.0.
-With thanks to V. Fonov for contributing the new ``tpl-MNI152NLin2009cSym``.
+0.6.0 (TBD)
+===========
+Minor relase in preparation of a new CalVer versioning
+following the lead of *fMRIPrep*.
+This release contains a fair amount of maintenance work to
+ensure synchronizity with the TemplateFlow archive
+(https://github.com/templateflow/templateflow).
+These maintenance actions drive the development towards
+establishing a peer-reviewed, lightweight template submission
+protocol.
+With thanks to V. Fonov for contributing the new
+``tpl-MNI152NLin2009cSym``.
+
+  * ENH: Update the internal index of *TemplateFlow* (#40)
+  * ENH: Automatic generation of template citations (#35)
+  * MAINT: Set-up a GitHub action to test installation
+    alternatives (see #23).
+  * MAINT: Migrate to ``setuptools_scm`` (#42)
+  * MAINT: Run black on the whole tree (#41)
+  * MAINT: Transfer the burden of keeping skeleton updated
+    over to the archive (#39)
 
 0.5.2 (March 20, 2020)
 ======================
