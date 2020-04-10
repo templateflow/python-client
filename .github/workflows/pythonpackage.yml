@@ -92,9 +92,6 @@ jobs:
       run: |
         source /tmp/install_wheel/bin/activate
         python -m pip install dist/templateflow*.whl
-        # Wheels do not run post-install hooks:
-        test ! -d ${TEMPLATEFLOW_HOME}
-        python -c "from templateflow.api import templates; print(templates())"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
     - name: Re-install in confined environment [wheel - missing template]
       env:
