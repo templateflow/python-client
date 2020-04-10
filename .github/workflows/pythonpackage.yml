@@ -54,10 +54,19 @@ jobs:
       env:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
-        python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
         python -m pip install dist/templateflow*.tar.gz
-        find ${TEMPLATEFLOW_HOME}
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
+    - name: Re-install in confined environment [sdist - missing template]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/sdist
+      run: |
+        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
+        source /tmp/install_sdist/bin/activate
+        python -m pip install dist/templateflow*.tar.gz
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
+        diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
+        exit $?
 
     - name: Install in confined environment [wheel]
       env:
@@ -81,13 +90,25 @@ jobs:
       env:
         TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
-        python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
         python -m pip install dist/templateflow*.whl
         # Wheels do not run post-install hooks:
         test ! -d ${TEMPLATEFLOW_HOME}
         python -c "from templateflow.api import templates; print(templates())"
-        find ${TEMPLATEFLOW_HOME}
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
+    - name: Re-install in confined environment [wheel - missing template]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/wheel
+      run: |
+        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
+        source /tmp/install_wheel/bin/activate
+        python -m pip install dist/templateflow*.whl
+        # Wheels do not run post-install hooks:
+        test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
+        python -c "from templateflow.api import templates; print(templates())"
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install-2.txt
+        diff /tmp/.wheel-install.txt /tmp/.wheel-install-2.txt
+        exit $?
 
     - name: Install in confined environment [setup.py - install]
       env:
@@ -110,11 +131,20 @@ jobs:
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_install
       run: |
-        python -m venv /tmp/setup_install
         source /tmp/setup_install/bin/activate
         python setup.py install
-        find ${TEMPLATEFLOW_HOME}
-
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-install.txt
+    - name: Re-install in confined environment [setup.py - install - missing template]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_install
+      run: |
+        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
+        source /tmp/setup_install/bin/activate
+        python setup.py install
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-install-2.txt
+        diff /tmp/.setup-install.txt /tmp/.setup-install-2.txt
+        exit $?
+        
     - name: Install in confined environment [setup.py - develop]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_develop
@@ -136,7 +166,17 @@ jobs:
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_develop
       run: |
-        python -m venv /tmp/setup_develop
         source /tmp/setup_develop/bin/activate
         python setup.py develop
-        find ${TEMPLATEFLOW_HOME}
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop.txt
+
+    - name: Re-install in confined environment [setup.py - develop - missing template]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
+      run: |
+        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
+        source /tmp/setup_develop/bin/activate
+        python setup.py develop
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop-2.txt
+        diff /tmp/.setup-develop.txt /tmp/.setup-develop-2.txt
+        exit $?
