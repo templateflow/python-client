@@ -16,15 +16,15 @@ env:
   global:
     - CHECK_TYPE="install"
     - INSTALL_TYPE="pip"
-    - INSTALL_DEPENDS="pip setuptools"
+    - PIP="pip"
   matrix:
     - CHECK_TYPE="style"
     - INSTALL_TYPE="install"
     - INSTALL_TYPE="develop"
     - INSTALL_TYPE="sdist"
     - INSTALL_TYPE="wheel"
-    - INSTALL_DEPENDS="pip==18.1 setuptools==30.2.1"
-    - INSTALL_DEPENDS="pip==10.0.1 setuptools==30.3.0"
+    - PIP="pip==18.1"
+    - PIP="pip==10.0.1"
 
 matrix:
   exclude:
@@ -32,16 +32,10 @@ matrix:
     env: CHECK_TYPE="style"
   - python: 3.8
     env: CHECK_TYPE="style"
-  allow_failures:
-  - python: 3.6
-    env: INSTALL_DEPENDS="pip==10.0.1 setuptools==30.3.0"
-  - python: 3.7
-    env: INSTALL_DEPENDS="pip==10.0.1 setuptools==30.3.0"
-  - python: 3.8
-    env: INSTALL_DEPENDS="pip==10.0.1 setuptools==30.3.0"
 
 before_install:
-  - python -m pip install --upgrade $INSTALL_DEPENDS
+  - python -m pip install -U $PIP
+  - python -m pip install -U "setuptools>=42.0" "setuptools_scm[toml]>=3.4"
   - pip install -U flake8
 
 install:
@@ -69,7 +63,7 @@ script:
     if [ "$CHECK_TYPE" == "style" ]; then
       flake8 templateflow
     elif [ "$CHECK_TYPE" == "install" ]; then
-      INTENDED_VERSION="$(python -c 'import versioneer; print(versioneer.get_version())')"
+      INTENDED_VERSION="$(python setup.py --version)"
       mkdir for_testing
       cd for_testing
       INSTALLED_VERSION="$(python -c 'import templateflow; print(templateflow.__version__)')"
