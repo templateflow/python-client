@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Fetch all tags (for setuptools_scm to work)
-      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      run: git fetch --tags
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
