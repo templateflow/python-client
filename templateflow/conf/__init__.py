@@ -2,7 +2,6 @@
 from os import getenv
 from warnings import warn
 from pathlib import Path
-from pkg_resources import resource_filename
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
 TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
@@ -29,48 +28,37 @@ please set the TEMPLATEFLOW_HOME environment variable.\
             install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
 
     if not TF_USE_DATALAD:
-        from zipfile import ZipFile
-        TF_HOME.mkdir(exist_ok=True, parents=True)
-        with ZipFile(resource_filename('templateflow',
-                                       'conf/templateflow-skel.zip'), 'r') as zipref:
-            zipref.extractall(str(TF_HOME))
+        from ._s3 import update as _update_s3
+        _update_s3(TF_HOME, local=True, overwrite=True)
 
 
-def update_home(force=False):
+def update(local=False, overwrite=True):
     """Update an existing DataLad or S3 home."""
-    if not force and not TF_CACHED:
-        print("""\
-TemplateFlow was not cached (TEMPLATEFLOW_HOME=%s), \
-a fresh initialization was done.""" % TF_HOME)
-        return False
-
-    if TF_USE_DATALAD:
-        from datalad.api import update
-        print("Updating TemplateFlow's HOME using DataLad ...")
-        try:
-            update(str(TF_HOME), recursive=True, merge=True)
-        except Exception as e:
-            warn("""Error updating TemplateFlow's home directory (using DataLad):
-%s""" % str(e))
+    if TF_USE_DATALAD and _update_datalad():
         return True
 
-    # This is an S3 type of installation
-    from zipfile import ZipFile
-    with ZipFile(resource_filename('templateflow',
-                                   'conf/templateflow-skel.zip'), 'r') as zipref:
-        allfiles = zipref.namelist()
-        current_files = [s.relative_to(TF_HOME) for s in TF_HOME.glob('**/*')]
-        existing = sorted(set(['%s/' % s.parent for s in current_files])) + \
-            [str(s) for s in current_files]
-        newfiles = sorted(set(allfiles) - set(existing))
-        if newfiles:
-            print("Updating TemplateFlow's HOME using S3. "
-                  "Adding: \n%s" % "\n".join(newfiles))
-            zipref.extractall(str(TF_HOME), members=newfiles)
-            return True
+    from ._s3 import update as _update_s3
+    return _update_s3(TF_HOME, local=local, overwrite=overwrite)
 
-    print("TemplateFlow's HOME directory (S3 type) was up-to-date.")
-    return False
+
+def setup_home(force=False):
+    """Initialize/update TF's home if necessary."""
+    if not force and not TF_CACHED:
+        print(f"""\
+TemplateFlow was not cached (TEMPLATEFLOW_HOME={TF_HOME}), \
+a fresh initialization was done.""")
+        return False
+    return update(local=True, overwrite=False)
+
+
+def _update_datalad():
+    from datalad.api import update
+    print("Updating TEMPLATEFLOW_HOME using DataLad ...")
+    try:
+        update(str(TF_HOME), recursive=True, merge=True)
+    except Exception as e:
+        warn(f"Error updating TemplateFlow's home directory (using DataLad): {e}")
+    return True
 
 
 TF_LAYOUT = None
@@ -78,6 +66,6 @@ try:
     from .bids import Layout
     TF_LAYOUT = Layout(
         TF_HOME, validate=False, config='templateflow',
-        ignore=['.git', '.datalad', '.gitannex', '.gitattributes', 'scripts'])
+        ignore=['.git', '.datalad', '.gitannex', '.gitattributes', '.github', 'scripts'])
 except ImportError:
     pass

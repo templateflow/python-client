@@ -1,6 +1,4 @@
-"""
-TemplateFlow's Python Client
-"""
+"""TemplateFlow's Python Client."""
 from json import loads
 from pathlib import Path
 import re
