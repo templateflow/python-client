@@ -2,7 +2,8 @@
 
 About
 -----
-.. include:: ../long_description.rst
+.. include:: ../README.rst
+    :start-line: 3
 
 Contents
 --------
