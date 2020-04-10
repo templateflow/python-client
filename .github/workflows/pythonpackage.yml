@@ -20,11 +20,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
     - name: Fetch all tags (for setuptools_scm to work)
       run: |
-        git fetch --tags
+        git fetch --prune --unshallow --tags
         git describe --dirty --tags --long --match *.*
 
     - name: Set up Python ${{ matrix.python-version }}
