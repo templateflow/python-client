@@ -25,9 +25,9 @@ jobs:
         ssh-key: "${{ secrets.NIPREPS_DEPLOY }}"
     - name: Fetch all tags (for setuptools_scm to work)
       run: |
-        git fetch --prune --tags --all
+        /usr/bin/git -c protocol.version=2 fetch --tags --prune origin
         # git fetch --prune --unshallow --tags
-        git describe --dirty --tags --long --match *.*
+        /usr/bin/git -c protocol.version=2 describe --dirty --tags --long --match *.*
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
