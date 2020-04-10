@@ -28,6 +28,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Build in confined environment and interpolate version
       run: |
+        git describe --dirty --tags --long --match *.*
         python -m venv /tmp/buildenv
         source /tmp/buildenv/bin/activate
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
