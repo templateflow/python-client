@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Build in confined environment
+    - name: Build in confined environment and interpolate version
       run: |
         python -m venv /tmp/buildenv
         source /tmp/buildenv/bin/activate
@@ -34,6 +34,15 @@ jobs:
                               setuptools_scm_git_archive "pip>=10.0.1" twine docutils
         python setup.py sdist bdist_wheel
         python -m twine check dist/templateflow*
+
+        # Interpolate version
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          TAG=${GITHUB_REF##*/}
+        fi
+        THISVERSION=$( python setup.py --version )
+        THISVERSION=${TAG:-$THISVERSION}
+        echo "Expected VERSION: \"${THISVERSION}\""
+        echo ::set-env name=THISVERSION::"${THISVERSION}"
     - name: Install in confined environment [sdist]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
@@ -41,11 +50,6 @@ jobs:
         python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          TAG=${GITHUB_REF##*/}
-        fi
-        THISVERSION=$( python setup.py --version )
-        THISVERSION=${TAG:-$THISVERSION}
         python -m pip install dist/templateflow*.tar.gz
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
@@ -77,14 +81,8 @@ jobs:
         python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          TAG=${GITHUB_REF##*/}
-        fi
-        THISVERSION=$( python setup.py --version )
-        THISVERSION=${TAG:-$THISVERSION}
         python -m pip install dist/templateflow*.whl
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
@@ -117,13 +115,8 @@ jobs:
         source /tmp/setup_install/bin/activate
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "pip>=10.0.1"
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          TAG=${GITHUB_REF##*/}
-        fi
-        THISVERSION=$( python setup.py --version )
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
@@ -153,13 +146,8 @@ jobs:
         source /tmp/setup_develop/bin/activate
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "pip>=10.0.1"
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          TAG=${GITHUB_REF##*/}
-        fi
-        THISVERSION=$( python setup.py --version )
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
