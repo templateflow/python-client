@@ -46,7 +46,7 @@ jobs:
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install "datalad ~= 0.11.8" doi2bib
-            pip install "setuptools>=27.0" twine codecov
+            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" twine codecov
 
       - run:
           name: Install git and git-annex
@@ -166,10 +166,14 @@ jobs:
           command: apt update && apt -y install graphviz
       - run:
           name: Install deps
-          command: pip install --no-cache-dir -r docs/requirements.txt
+          command: |
+            pip install --no-cache-dir "setuptools>=42.0" "setuptools_scm[toml]>=3.4"
+            pip install --no-cache-dir -r docs/requirements.txt
       - run:
           name: Build only this commit
-          command: make -C docs SPHINXOPTS="-W" BUILDDIR="_build/no_version_html" html
+          command: |
+            python setup.py --version
+            make -C docs SPHINXOPTS="-W" BUILDDIR="_build/no_version_html" html
       - store_artifacts:
           path: ./docs/_build/no_version_html
       - run:
@@ -215,7 +219,7 @@ jobs:
           name: Deploy to PyPi
           command: |
             source /tmp/venv/bin/activate
-            pip install "setuptools>=27.0" twine
+            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" twine
             python setup.py sdist
             twine check dist/*
             twine upload dist/*
