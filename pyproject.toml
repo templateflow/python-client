@@ -1,8 +1,9 @@
-requires =
-    "setuptools >= 42.0"
-    "setuptools_scm[toml] >= 3.4"
-    "setuptools_scm_git_archive"
+requires = [
+    "setuptools >= 42.0",
+    "setuptools_scm[toml] >= 3.4",
+    "setuptools_scm_git_archive",
     "wheel"
+]
 
 [tool.setuptools_scm]
 write_to = "templateflow/_version.py"

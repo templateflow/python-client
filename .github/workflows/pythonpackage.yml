@@ -31,7 +31,7 @@ jobs:
         python -m venv /tmp/buildenv
         source /tmp/buildenv/bin/activate
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
-                              "pip>=10.0.1" twine docutils
+                              setuptools_scm_git_archive "pip>=10.0.1" twine docutils
         python setup.py sdist bdist_wheel
         python -m twine check dist/templateflow*
     - name: Install in confined environment [sdist]
@@ -115,7 +115,8 @@ jobs:
       run: |
         python -m venv /tmp/setup_install
         source /tmp/setup_install/bin/activate
-        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
+                              setuptools_scm_git_archive "pip>=10.0.1"
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           TAG=${GITHUB_REF##*/}
         fi
@@ -150,7 +151,8 @@ jobs:
       run: |
         python -m venv /tmp/setup_develop
         source /tmp/setup_develop/bin/activate
-        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
+                              setuptools_scm_git_archive "pip>=10.0.1"
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           TAG=${GITHUB_REF##*/}
         fi
