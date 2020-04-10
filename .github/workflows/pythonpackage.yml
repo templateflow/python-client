@@ -20,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Fetch all tags (for setuptools_scm to work)
       run: |
         git fetch --prune --unshallow
