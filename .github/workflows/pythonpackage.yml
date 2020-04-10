@@ -23,6 +23,7 @@ jobs:
     - name: Fetch all tags (for setuptools_scm to work)
       run: |
         git fetch --prune --unshallow
+        git fetch --tags
         git describe --dirty --tags --long --match *.*
 
     - name: Set up Python ${{ matrix.python-version }}
