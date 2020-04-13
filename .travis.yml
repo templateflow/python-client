@@ -66,7 +66,7 @@ script:
       INTENDED_VERSION="$(python setup.py --version)"
       mkdir for_testing
       cd for_testing
-      INSTALLED_VERSION="$(python -c 'import templateflow; print(templateflow.__version__)')"
+      INSTALLED_VERSION="$(python -c 'import templateflow; print(templateflow.__version__)' | tail -1)"
       python -c 'import templateflow; print(templateflow.__file__)'
       echo "Intended: $INTENDED_VERSION"
       echo "Installed: $INSTALLED_VERSION"
