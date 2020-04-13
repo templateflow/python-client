@@ -16,7 +16,7 @@ except ModuleNotFoundError:
 
 import os
 from . import api
-from .conf import update, setup_home
+from .conf import update
 
 
 if os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
