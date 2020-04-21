@@ -55,7 +55,7 @@ jobs:
         source /tmp/install_sdist/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
         python -m pip install dist/templateflow*.tar.gz
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")' | tail -1)
+        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
@@ -87,7 +87,7 @@ jobs:
         source /tmp/install_wheel/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
         python -m pip install dist/templateflow*.whl
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")' | tail -1)
+        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
@@ -121,7 +121,7 @@ jobs:
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "pip>=10.0.1"
         python setup.py install
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")' | tail -1)
+        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
@@ -153,7 +153,7 @@ jobs:
         python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "pip>=10.0.1"
         python setup.py develop
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")' | tail -1)
+        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 

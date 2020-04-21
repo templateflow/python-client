@@ -27,8 +27,7 @@ if os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
     "n",
 ):
     # trigger skeleton autoupdate
-    update(local=True, overwrite=False)
-
+    update(local=True, overwrite=False, silent=True)
 
 __all__ = [
     '__copyright__',

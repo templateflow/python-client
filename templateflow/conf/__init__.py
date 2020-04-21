@@ -42,14 +42,14 @@ please set the TEMPLATEFLOW_HOME environment variable.\
         _update_s3(TF_HOME, local=True, overwrite=True)
 
 
-def update(local=False, overwrite=True):
+def update(local=False, overwrite=True, silent=False):
     """Update an existing DataLad or S3 home."""
     if TF_USE_DATALAD and _update_datalad():
         return True
 
     from ._s3 import update as _update_s3
 
-    return _update_s3(TF_HOME, local=local, overwrite=overwrite)
+    return _update_s3(TF_HOME, local=local, overwrite=overwrite, silent=silent)
 
 
 def setup_home(force=False):
