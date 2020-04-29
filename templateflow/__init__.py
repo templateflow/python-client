@@ -16,10 +16,10 @@ except ModuleNotFoundError:
 
 import os
 from . import api
-from .conf import update
+from .conf import update, TF_USE_DATALAD
 
 
-if os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
+if not TF_USE_DATALAD and os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
     "false",
     "off",
     "0",
