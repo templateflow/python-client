@@ -69,7 +69,7 @@ def _update_datalad():
 
     print("Updating TEMPLATEFLOW_HOME using DataLad ...")
     try:
-        update(str(TF_HOME), recursive=True, merge=True)
+        update(dataset=str(TF_HOME), recursive=True, merge=True)
     except Exception as e:
         warn(f"Error updating TemplateFlow's home directory (using DataLad): {e}")
     return True
