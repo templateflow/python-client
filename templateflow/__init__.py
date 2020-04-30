@@ -14,8 +14,20 @@ except ModuleNotFoundError:
     del get_distribution
     del DistributionNotFound
 
+import os
 from . import api
-from .conf import update
+from .conf import update, TF_USE_DATALAD
+
+
+if not TF_USE_DATALAD and os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
+    "false",
+    "off",
+    "0",
+    "no",
+    "n",
+):
+    # trigger skeleton autoupdate
+    update(local=True, overwrite=False, silent=True)
 
 __all__ = [
     '__copyright__',

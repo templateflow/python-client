@@ -74,6 +74,7 @@ jobs:
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_sdist/bin/activate
         python -m pip install dist/templateflow*.tar.gz
+        python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
         diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
         exit $?
@@ -138,6 +139,7 @@ jobs:
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/setup_install/bin/activate
         python setup.py install
+        python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-install-2.txt
         diff /tmp/.setup-install.txt /tmp/.setup-install-2.txt
         exit $?
@@ -170,6 +172,7 @@ jobs:
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/setup_develop/bin/activate
         python setup.py develop
+        python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop-2.txt
         diff /tmp/.setup-develop.txt /tmp/.setup-develop-2.txt
         exit $?

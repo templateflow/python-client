@@ -13,11 +13,11 @@ TF_SKEL_MD5 = Path(
 ).read_text()
 
 
-def update(dest, local=True, overwrite=True):
+def update(dest, local=True, overwrite=True, silent=False):
     """Update an S3-backed TEMPLATEFLOW_HOME repository."""
     skel_file = Path((_get_skeleton_file() if not local else None) or TF_SKEL_PATH)
 
-    retval = _update_skeleton(skel_file, dest, overwrite=overwrite)
+    retval = _update_skeleton(skel_file, dest, overwrite=overwrite, silent=silent)
     if skel_file != TF_SKEL_PATH:
         skel_file.unlink()
     return retval
@@ -45,7 +45,7 @@ def _get_skeleton_file():
             return skel_file
 
 
-def _update_skeleton(skel_file, dest, overwrite=True):
+def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
     from zipfile import ZipFile
 
     dest = Path(dest)
@@ -62,11 +62,12 @@ def _update_skeleton(skel_file, dest, overwrite=True):
         ]
         newfiles = sorted(set(allfiles) - set(existing))
         if newfiles:
-            print(
-                "Updating TEMPLATEFLOW_HOME using S3. "
-                "Adding: \n%s" % "\n".join(newfiles)
-            )
+            if not silent:
+                print(
+                    "Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s" % '\n'.join(newfiles)
+                )
             zipref.extractall(str(dest), members=newfiles)
             return True
-    print("TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.")
+    if not silent:
+        print("TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.")
     return False
