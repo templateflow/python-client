@@ -1,15 +1,18 @@
-0.6.0 (TBD)
-===========
+0.6.0 (May 1st, 2020)
+=====================
 Minor release in preparation of a new CalVer versioning following the lead of *fMRIPrep*.
-This release contains a fair amount of maintenance work to ensure synchronicity with the TemplateFlow archive (https://github.com/templateflow/templateflow). These maintenance actions drive the development towards establishing a peer-reviewed, lightweight template submission protocol.
+This release contains a fair amount of maintenance work to ensure synchronicity with the TemplateFlow Archive (https://github.com/templateflow/templateflow). These maintenance actions drive the development towards establishing a peer-reviewed, lightweight template submission protocol. The release includes an update mechanism, enabling users of the *S3-backed mode of operation* (default) to update their local Archive structure without reinstalling the client. This feature is enabled by default on import time, to disable it make sure you export ``TEMPLATEFLOW_AUTOUPDATE=off``.
+With thanks to Yarik for a datalad-related bug-fix.
 With thanks to V. Fonov for contributing with the new ``tpl-MNI152NLin2009cSym``.
 
+  * FIX: Provide path to the dataset as ``dataset`` argument (#48)
+  * ENH: Run an automatic S3-skeleton update on import by default (#45)
   * ENH: Update the internal index of *TemplateFlow* (#40)
   * ENH: Automatic generation of template citations (#35)
   * MAINT: Set-up a GitHub action to test installation alternatives (see #23).
   * MAINT: Migrate to ``setuptools_scm`` (#42)
-  * MAINT: Run black on the whole tree (#41)
-  * MAINT: Transfer the burden of keeping skeleton updated over to the archive (#39)
+  * MAINT: Run ``black`` on the whole tree (#41)
+  * MAINT: Transfer the burden of keeping the S3-skeleton updated over to the archive (#39)
 
 0.5.2 (March 20, 2020)
 ======================
