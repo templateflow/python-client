@@ -64,7 +64,8 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
         if newfiles:
             if not silent:
                 print(
-                    "Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s" % '\n'.join(newfiles)
+                    "Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s"
+                    % "\n".join(newfiles)
                 )
             zipref.extractall(str(dest), members=newfiles)
             return True
