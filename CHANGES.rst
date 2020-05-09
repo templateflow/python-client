@@ -1,3 +1,11 @@
+0.6.1 (May 09, 2020)
+====================
+Patch release to generate and distribute wheels.
+
+  * MAINT: Run ``black`` (#50)
+  * MAINT: Distribute wheel + Revise CI framework (#49)
+
+
 0.6.0 (May 1st, 2020)
 =====================
 Minor release in preparation of a new CalVer versioning following the lead of *fMRIPrep*.
