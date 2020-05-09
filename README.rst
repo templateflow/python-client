@@ -16,7 +16,7 @@ version-controlled resource that allows researchers to use templates
    :target: https://doi.org/10.5281/zenodo.2583289
 .. |CircleCI| image:: https://circleci.com/gh/templateflow/python-client/tree/master.svg?style=shield
    :target: https://circleci.com/gh/templateflow/python-client/tree/master
-.. |Build Status| image:: https://travis-ci.org/templateflow/python-client.svg?branch=master
-   :target: https://travis-ci.org/templateflow/python-client
+.. |Build Status| image:: https://github.com/templateflow/python-client/workflows/Python%20package/badge.svg
+   :target: https://github.com/templateflow/python-client/actions?query=workflow%3A%22Python+package%22
 .. |Pypi| image:: https://img.shields.io/pypi/v/templateflow.svg
    :target: https://pypi.python.org/pypi/templateflow/
