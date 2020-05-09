@@ -1,3 +1,10 @@
+0.6.2 (May 09, 2020)
+====================
+Patch release including some minimal improvements to package building and CI.
+
+  * MAINT: Some additional distribution improvements (#51)
+
+
 0.6.1 (May 09, 2020)
 ====================
 Patch release to generate and distribute wheels.
