@@ -17,6 +17,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
+        pip: ["pip", "pip~=10.0.1"]
 
     steps:
     - uses: actions/checkout@v2
@@ -35,8 +36,8 @@ jobs:
       run: |
         python -m venv /tmp/buildenv
         source /tmp/buildenv/bin/activate
-        python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
-                              setuptools_scm_git_archive "pip>=10.0.1" twine docutils
+        python -m pip install -U "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
+                              setuptools_scm_git_archive pip twine docutils
         python setup.py sdist bdist_wheel
         python -m twine check dist/templateflow*
 
@@ -58,7 +59,7 @@ jobs:
       run: |
         python -m venv /tmp/pip
         source /tmp/pip/bin/activate
-        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install -U "setuptools ~= 42.0" "setuptools_scm[toml] >= 3.4" "${{ matrix.pip }}"
         python -m pip install .
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
@@ -71,7 +72,7 @@ jobs:
       run: |
         python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
-        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install -U "setuptools ~= 42.0" "${{ matrix.pip }}"
         python -m pip install /tmp/package/templateflow*.tar.gz
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
@@ -103,7 +104,7 @@ jobs:
       run: |
         python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
-        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install -U "setuptools ~= 42.0" "${{ matrix.pip }}"
         python -m pip install /tmp/package/templateflow*.whl
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -136,8 +137,8 @@ jobs:
       run: |
         python -m venv /tmp/setup_install
         source /tmp/setup_install/bin/activate
-        python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
-                              setuptools_scm_git_archive "pip>=10.0.1"
+        python -m pip install -U "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
+                              setuptools_scm_git_archive "${{ matrix.pip }}"
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -168,8 +169,8 @@ jobs:
       run: |
         python -m venv /tmp/setup_develop
         source /tmp/setup_develop/bin/activate
-        python -m pip install "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
-                              setuptools_scm_git_archive "pip>=10.0.1"
+        python -m pip install -U "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
+                              setuptools_scm_git_archive "${{ matrix.pip }}"
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
