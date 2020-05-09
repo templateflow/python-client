@@ -30,6 +30,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Build in confined environment and interpolate version
       run: |
         python -m venv /tmp/buildenv
@@ -39,6 +40,9 @@ jobs:
         python setup.py sdist bdist_wheel
         python -m twine check dist/templateflow*
 
+        mv dist /tmp/package
+        rm -rf templateflow.egg-info/
+
         # Interpolate version
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           TAG=${GITHUB_REF##*/}
@@ -47,6 +51,20 @@ jobs:
         THISVERSION=${TAG:-$THISVERSION}
         echo "Expected VERSION: \"${THISVERSION}\""
         echo ::set-env name=THISVERSION::"${THISVERSION}"
+
+    - name: Install in confined environment [pip]
+      env:
+        TEMPLATEFLOW_HOME: /tmp/home/pip
+      run: |
+        python -m venv /tmp/pip
+        source /tmp/pip/bin/activate
+        python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
+        python -m pip install .
+        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
+        echo "VERSION: \"${THISVERSION}\""
+        echo "INSTALLED: \"${INSTALLED_VERSION}\""
+        test "${INSTALLED_VERSION}" = "${THISVERSION}"
+
     - name: Install in confined environment [sdist]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
@@ -54,7 +72,7 @@ jobs:
         python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
-        python -m pip install dist/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -65,7 +83,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
         source /tmp/install_sdist/bin/activate
-        python -m pip install dist/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
     - name: Re-install in confined environment [sdist - missing template]
       env:
@@ -73,7 +91,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_sdist/bin/activate
-        python -m pip install dist/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz
         python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
         diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
@@ -86,7 +104,7 @@ jobs:
         python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
         python -m pip install "setuptools ~= 42.0" "pip>=10.0.1"
-        python -m pip install dist/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
@@ -96,7 +114,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
         source /tmp/install_wheel/bin/activate
-        python -m pip install dist/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl
         find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
     - name: Re-install in confined environment [wheel - missing template]
       env:
@@ -104,7 +122,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_wheel/bin/activate
-        python -m pip install dist/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl
         # Wheels do not run post-install hooks:
         test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         python -c "import templateflow; templateflow.update(overwrite=False)"
