@@ -219,8 +219,8 @@ jobs:
           name: Deploy to PyPi
           command: |
             source /tmp/venv/bin/activate
-            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" twine
-            python setup.py sdist
+            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" wheel twine
+            python setup.py sdist bdist_wheel
             twine check dist/*
             twine upload dist/*
 
