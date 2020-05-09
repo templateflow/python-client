@@ -7,6 +7,7 @@ try:
     from ._version import __version__
 except ModuleNotFoundError:
     from pkg_resources import get_distribution, DistributionNotFound
+
     try:
         __version__ = get_distribution(__packagename__).version
     except DistributionNotFound:
@@ -30,9 +31,9 @@ if not TF_USE_DATALAD and os.getenv("TEMPLATEFLOW_AUTOUPDATE", "1") not in (
     update(local=True, overwrite=False, silent=True)
 
 __all__ = [
-    '__copyright__',
-    '__packagename__',
-    '__version__',
-    'api',
-    'update',
+    "__copyright__",
+    "__packagename__",
+    "__version__",
+    "api",
+    "update",
 ]

@@ -8,6 +8,7 @@ import templateflow
 
 def test_version_scm0(monkeypatch):
     """Retrieve the version via setuptools_scm."""
+
     class _version:
         __version__ = "10.0.0"
 

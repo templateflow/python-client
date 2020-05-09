@@ -19,6 +19,5 @@ SETUP_REQUIRES += ["wheel"] if "bdist_wheel" in sys.argv else []
 if __name__ == "__main__":
     """ Install entry-point """
     setup(
-        name="templateflow",
-        setup_requires=SETUP_REQUIRES,
+        name="templateflow", setup_requires=SETUP_REQUIRES,
     )
