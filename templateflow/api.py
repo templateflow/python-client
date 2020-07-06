@@ -7,7 +7,7 @@ import sys
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
 
 
-def get(template, **kwargs):
+def get(template, raise_empty=False, **kwargs):
     """
     Fetch one file from one particular template.
 
@@ -15,6 +15,8 @@ def get(template, **kwargs):
     ----------
     template : str
         A template identifier (e.g., ``MNI152NLin2009cAsym``).
+    raise_empty : bool, optional
+        Raise exception if no files were matched
 
     Keyword Arguments
     -----------------
@@ -49,6 +51,14 @@ def get(template, **kwargs):
     >>> str(get('fsLR', space=None, hemi='L',
     ...         density='32k', suffix='sphere'))  # doctest: +ELLIPSIS
     '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
+
+    >>> get('fsLR', space='madeup')
+    []
+
+    >>> get('fsLR', raise_empty=True, space='madeup')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    Exception:
+    ...
 
     """
     out_file = [
@@ -92,6 +102,9 @@ off (possible values: false, off, 0)."""
             )
 
         raise RuntimeError(msg)
+
+    if not out_file and raise_empty:
+        raise Exception("No results found")
 
     if len(out_file) == 1:
         return out_file[0]
