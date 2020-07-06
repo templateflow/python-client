@@ -1,3 +1,9 @@
+0.6.3 (July 06, 2020)
+=====================
+Patch release including an updated PyBIDS configuration file for the PyBIDS 0.11.x series.
+
+  * FIX: Include leading dots in extensions (#56)
+
 0.6.2 (May 09, 2020)
 ====================
 Patch release including some minimal improvements to package building and CI.
