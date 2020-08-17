@@ -45,11 +45,19 @@ please set the TEMPLATEFLOW_HOME environment variable.\
 def update(local=False, overwrite=True, silent=False):
     """Update an existing DataLad or S3 home."""
     if TF_USE_DATALAD and _update_datalad():
-        return True
+        success = True
+    else:
+        from ._s3 import update as _update_s3
+        success = _update_s3(TF_HOME, local=local, overwrite=overwrite, silent=silent)
 
-    from ._s3 import update as _update_s3
-
-    return _update_s3(TF_HOME, local=local, overwrite=overwrite, silent=silent)
+    # update Layout only if necessary
+    if success and TF_LAYOUT is not None:
+        init_layout()
+        # ensure the api uses the updated layout
+        import importlib
+        from .. import api
+        importlib.reload(api)
+    return success
 
 
 def setup_home(force=False):
@@ -76,9 +84,12 @@ def _update_datalad():
 
 
 TF_LAYOUT = None
-try:
+
+
+def init_layout():
     from .bids import Layout
 
+    global TF_LAYOUT
     TF_LAYOUT = Layout(
         TF_HOME,
         validate=False,
@@ -92,5 +103,9 @@ try:
             "scripts",
         ],
     )
+
+
+try:
+    init_layout()
 except ImportError:
     pass
