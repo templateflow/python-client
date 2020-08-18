@@ -27,7 +27,7 @@ def _get_skeleton_file():
     import requests
 
     try:
-        r = requests.get(TF_SKEL_URL(release="master", ext="md5", allow_redirects=True))
+        r = requests.get(TF_SKEL_URL(release="master", ext="md5"), allow_redirects=True)
     except requests.exceptions.ConnectionError:
         return
 
@@ -35,7 +35,7 @@ def _get_skeleton_file():
         return
 
     if r.content.decode().split()[0] != TF_SKEL_MD5:
-        r = requests.get(TF_SKEL_URL(release="master", ext="zip", allow_redirects=True))
+        r = requests.get(TF_SKEL_URL(release="master", ext="zip"), allow_redirects=True)
         if r.ok:
             from os import close
 
