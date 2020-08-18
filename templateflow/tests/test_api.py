@@ -24,7 +24,7 @@ mni2009_fbib = (
     "\tauthor = {Vladimir Fonov and Alan C. Evans and Kelly Botteron and C. "
     "Robert Almli and Robert C. McKinstry and D. Louis Collins},\n"
     "\ttitle = {Unbiased average age-appropriate atlases for pediatric studies},\n"
-    "\tjournal = {{NeuroImage}}\n}"
+    "\tjournal = {NeuroImage}}\n}"
 )
 
 mni2009_lbib = (
