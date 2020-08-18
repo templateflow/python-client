@@ -1,7 +1,9 @@
 from pathlib import Path
+import pytest
 from .. import conf, api
 
 
+@pytest.mark.skipif(conf.TF_USE_DATALAD, reason="S3 only")
 def test_update_s3(tmp_path):
     conf.TF_HOME = tmp_path / 'templateflow'
     conf.TF_HOME.mkdir(exist_ok=True)
