@@ -45,7 +45,7 @@ jobs:
             source /tmp/venv/bin/activate
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
-            pip install "datalad ~= 0.11.8" doi2bib
+            pip install "datalad ~= 0.11.8" "doi2bib < 0.4"
             pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" twine codecov
 
       - run:
