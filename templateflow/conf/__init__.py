@@ -88,7 +88,7 @@ TF_LAYOUT = None
 
 def init_layout():
     from .bids import Layout
-    from bids.layout import BIDSLayoutIndexer
+    from bids.layout.index import BIDSLayoutIndexer
 
     global TF_LAYOUT
     TF_LAYOUT = Layout(
