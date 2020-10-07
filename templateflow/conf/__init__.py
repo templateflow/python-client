@@ -88,20 +88,24 @@ TF_LAYOUT = None
 
 def init_layout():
     from .bids import Layout
+    from bids.layout.index import BIDSLayoutIndexer
 
     global TF_LAYOUT
     TF_LAYOUT = Layout(
         TF_HOME,
         validate=False,
         config="templateflow",
-        ignore=[
-            ".git",
-            ".datalad",
-            ".gitannex",
-            ".gitattributes",
-            ".github",
-            "scripts",
-        ],
+        indexer=BIDSLayoutIndexer(
+            validate=False,
+            ignore=(
+                ".git",
+                ".datalad",
+                ".gitannex",
+                ".gitattributes",
+                ".github",
+                "scripts",
+            ),
+        ),
     )
 
 
