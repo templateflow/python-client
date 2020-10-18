@@ -209,7 +209,6 @@ def _datalad_get(filepath):
 
 def _s3_get(filepath):
     from sys import stderr
-    from math import ceil
     from tqdm import tqdm
     import requests
 
@@ -228,14 +227,12 @@ def _s3_get(filepath):
         filepath.unlink()
 
     with filepath.open("wb") as f:
-        for data in tqdm(
-            r.iter_content(block_size),
-            total=ceil(total_size // block_size),
-            unit="B",
-            unit_scale=True,
-        ):
-            wrote = wrote + len(data)
-            f.write(data)
+        with tqdm(total=total_size, unit="B", unit_scale=True) as t:
+            for data in r.iter_content(block_size):
+                wrote = wrote + len(data)
+                f.write(data)
+                t.update(len(data))
+
     if total_size != 0 and wrote != total_size:
         raise RuntimeError("ERROR, something went wrong")
 
