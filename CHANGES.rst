@@ -1,3 +1,14 @@
+0.7.0 (November 17, 2020)
+=========================
+Minor release with improvements to the template fetching experience.
+With thanks to Lea Waller for the contribution.
+
+  * ENH: Add option to raise exception on empty ``get`` queries (#57)
+  * ENH: Ensure templates layout is re-indexed when updated (#59)
+  * RF: Use BIDSLayoutIndexer when initiating BIDSLayout (#61)
+  * FIX: Display correct units when downloading templates (#63)
+
+
 0.6.3 (July 06, 2020)
 =====================
 Patch release including an updated PyBIDS configuration file for the PyBIDS 0.11.x series.
