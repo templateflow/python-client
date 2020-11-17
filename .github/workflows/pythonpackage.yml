@@ -54,7 +54,7 @@ jobs:
         THISVERSION=$( python setup.py --version )
         THISVERSION=${TAG:-$THISVERSION}
         echo "Expected VERSION: \"${THISVERSION}\""
-        echo ::set-env name=THISVERSION::"${THISVERSION}"
+        echo "THISVERSION=${THISVERSION}" >> $GITHUB_ENV
 
     - name: Install in confined environment [pip]
       env:
