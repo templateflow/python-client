@@ -5,6 +5,7 @@ With thanks to Lea Waller for the contribution.
 
   * FIX: Use ``BIDSLayoutIndexer`` when initiating ``BIDSLayout`` (#61)
   * FIX: Display correct units when downloading templates (#63)
+  * FIX: GitHub Actions build (#64)
   * ENH: Add option to raise exception on empty ``get`` queries (#57)
   * ENH: Ensure templates layout is re-indexed when updated (#59)
 
