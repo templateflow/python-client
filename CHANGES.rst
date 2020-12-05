@@ -1,13 +1,16 @@
-0.7.0 (November 17, 2020)
-=========================
+0.7.1 (TBD)
+===========
 Minor release with improvements to the template fetching experience.
 With thanks to Lea Waller for the contribution.
 
+  * FIX: Use ``BIDSLayoutIndexer`` when initiating ``BIDSLayout`` (#61)
+  * FIX: Display correct units when downloading templates (#63)
   * ENH: Add option to raise exception on empty ``get`` queries (#57)
   * ENH: Ensure templates layout is re-indexed when updated (#59)
-  * RF: Use BIDSLayoutIndexer when initiating BIDSLayout (#61)
-  * FIX: Display correct units when downloading templates (#63)
 
+0.7.0 - Withdrawn
+=================
+Release 0.7.0 was withdrawn because of inconsistencies in deployment.
 
 0.6.3 (July 06, 2020)
 =====================
