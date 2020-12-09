@@ -1,5 +1,5 @@
-0.7.1 (TBD)
-===========
+0.7.1 (December 9, 2020)
+========================
 Minor release with improvements to the template fetching experience.
 With thanks to Lea Waller for the contribution.
 
