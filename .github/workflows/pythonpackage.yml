@@ -143,7 +143,7 @@ jobs:
         python -m pip install -U "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
         if [ "${{ matrix.python-version }}" == "3.6" ]; then
-          pip install "numpy < 1.20"
+          pip install "numpy < 1.20" "pandas < 1.2.0"
         fi
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
@@ -178,7 +178,7 @@ jobs:
         python -m pip install -U "setuptools ~= 42.0" wheel "setuptools_scm[toml] >= 3.4" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
         if [ "${{ matrix.python-version }}" == "3.6" ]; then
-          pip install "numpy < 1.20"
+          pip install "numpy < 1.20" "pandas < 1.2.0"
         fi
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
