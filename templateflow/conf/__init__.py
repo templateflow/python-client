@@ -3,6 +3,7 @@ from os import getenv
 from warnings import warn
 from pathlib import Path
 from contextlib import suppress
+from functools import wraps
 
 TF_DEFAULT_HOME = Path.home() / ".cache" / "templateflow"
 TF_HOME = Path(getenv("TEMPLATEFLOW_HOME", str(TF_DEFAULT_HOME)))
@@ -16,6 +17,20 @@ TF_USE_DATALAD = getenv("TEMPLATEFLOW_USE_DATALAD", "false").lower() in (
     "y",
 )
 TF_CACHED = True
+
+
+def requires_layout(func):
+    """Decorate function to ensure ``TF_LAYOUT`` is correctly initiated."""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        from templateflow.conf import TF_LAYOUT
+
+        if TF_LAYOUT is None:
+            from bids import __version__
+            raise RuntimeError(f"A layout with PyBIDS <{__version__}> could not be initiated")
+        return func(*args, **kwargs)
+    return wrapper
+
 
 if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
     TF_CACHED = False
