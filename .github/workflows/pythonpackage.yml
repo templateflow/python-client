@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
         pip: ["pip~=20.0", "pip~=21.0"]
 
     steps:
@@ -142,9 +142,6 @@ jobs:
         source /tmp/setup_install/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
-        if [ "${{ matrix.python-version }}" == "3.6" ]; then
-          pip install "numpy < 1.20" "pandas < 1.2.0"
-        fi
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -177,9 +174,6 @@ jobs:
         source /tmp/setup_develop/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
-        if [ "${{ matrix.python-version }}" == "3.6" ]; then
-          pip install "numpy < 1.20" "pandas < 1.2.0"
-        fi
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
