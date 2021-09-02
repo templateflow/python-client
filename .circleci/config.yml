@@ -46,7 +46,7 @@ jobs:
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install "datalad ~= 0.11.8" "doi2bib < 0.4"
-            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" twine codecov
+            pip install "setuptools>=45" "setuptools_scm >= 6.2" twine codecov
 
       - run:
           name: Install git and git-annex
@@ -167,7 +167,7 @@ jobs:
       - run:
           name: Install deps
           command: |
-            pip install --no-cache-dir "setuptools>=42.0" "setuptools_scm[toml]>=3.4"
+            pip install --no-cache-dir "setuptools>=45" "setuptools_scm >= 6.2"
             pip install --no-cache-dir -r docs/requirements.txt
       - run:
           name: Build only this commit
@@ -219,7 +219,7 @@ jobs:
           name: Deploy to PyPi
           command: |
             source /tmp/venv/bin/activate
-            pip install "setuptools>=42.0" "setuptools_scm[toml] >= 3.4" wheel twine
+            pip install "setuptools>=45" "setuptools_scm >= 6.2" wheel twine
             python setup.py sdist bdist_wheel
             twine check dist/*
             twine upload dist/*
