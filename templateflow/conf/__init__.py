@@ -2,6 +2,7 @@
 from os import getenv
 from warnings import warn
 from pathlib import Path
+from contextlib import suppress
 
 TF_DEFAULT_HOME = Path.home() / ".cache" / "templateflow"
 TF_HOME = Path(getenv("TEMPLATEFLOW_HOME", str(TF_DEFAULT_HOME)))
@@ -87,7 +88,7 @@ TF_LAYOUT = None
 
 
 def init_layout():
-    from .bids import Layout
+    from templateflow.conf.bids import Layout
     from bids.layout.index import BIDSLayoutIndexer
 
     global TF_LAYOUT
@@ -109,7 +110,5 @@ def init_layout():
     )
 
 
-try:
+with suppress(ImportError):
     init_layout()
-except ImportError:
-    pass

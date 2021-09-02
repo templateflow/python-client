@@ -61,6 +61,10 @@ def get(template, raise_empty=False, **kwargs):
     ...
 
     """
+    if TF_LAYOUT is None:
+        from bids import __version__
+        raise RuntimeError(f"A layout with PyBIDS <{__version__}> could not be initiated")
+
     out_file = [
         Path(p) for p in TF_LAYOUT.get(template=template, return_type="file", **kwargs)
     ]
@@ -137,6 +141,10 @@ def templates(**kwargs):
     ['MNI152Lin', 'MNI152NLin2009cAsym', 'MNI152NLin2009cSym', 'MNIInfant', 'MNIPediatricAsym']
 
     """
+    if TF_LAYOUT is None:
+        from bids import __version__
+        raise RuntimeError(f"A layout with PyBIDS <{__version__}> could not be initiated")
+
     return sorted(TF_LAYOUT.get_templates(**kwargs))
 
 
@@ -155,6 +163,9 @@ def get_metadata(template):
     'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
 
     """
+    if TF_LAYOUT is None:
+        from bids import __version__
+        raise RuntimeError(f"A layout with PyBIDS <{__version__}> could not be initiated")
 
     tf_home = Path(TF_LAYOUT.root)
     filepath = tf_home / ("tpl-%s" % template) / "template_description.json"
