@@ -90,3 +90,29 @@ def test_layout(monkeypatch, tmp_path):
     assert lines[0] == "TemplateFlow Layout"
     assert lines[1] == " - Home: %s" % tfc.TF_HOME
     assert lines[2].startswith(" - Templates:")
+
+
+def test_layout_errors(monkeypatch):
+    """Check regression of #71."""
+    import sys
+    import builtins
+    from importlib import __import__ as oldimport
+
+    @tfc.requires_layout
+    def myfunc():
+        return "okay"
+
+    def mock_import(name, globals=None, locals=None, fromlist=tuple(), level=0):
+        if name == "bids":
+            raise ModuleNotFoundError
+        return oldimport(name, globals=globals, locals=locals, fromlist=fromlist, level=level)
+
+    with monkeypatch.context() as m:
+        m.setattr(tfc, "TF_LAYOUT", None)
+        with pytest.raises(RuntimeError):
+            myfunc()
+
+        m.delitem(sys.modules, "bids")
+        m.setattr(builtins, "__import__", mock_import)
+        with pytest.raises(ImportError):
+            myfunc()

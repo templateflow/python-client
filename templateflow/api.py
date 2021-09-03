@@ -4,9 +4,10 @@ from pathlib import Path
 import re
 import sys
 
-from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD
+from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
 
 
+@requires_layout
 def get(template, raise_empty=False, **kwargs):
     """
     Fetch one file from one particular template.
@@ -111,9 +112,10 @@ off (possible values: false, off, 0)."""
     return out_file
 
 
+@requires_layout
 def templates(**kwargs):
     """
-    Returns a list of available templates.
+    Return a list of available templates.
 
     Keyword Arguments
     -----------------
@@ -140,6 +142,7 @@ def templates(**kwargs):
     return sorted(TF_LAYOUT.get_templates(**kwargs))
 
 
+@requires_layout
 def get_metadata(template):
     """
     Fetch one file from one template.
@@ -155,7 +158,6 @@ def get_metadata(template):
     'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
 
     """
-
     tf_home = Path(TF_LAYOUT.root)
     filepath = tf_home / ("tpl-%s" % template) / "template_description.json"
 
