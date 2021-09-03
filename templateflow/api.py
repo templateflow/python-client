@@ -238,18 +238,21 @@ def _s3_get(filepath):
 
 
 def _to_bibtex(doi, template, idx):
-    try:
-        from doi2bib.crossref import get_bib_from_doi
-    except ImportError:
+    if "doi.org" not in doi:
+        return doi
+
+    # Is a DOI URL
+    import requests
+
+    response = requests.post(
+        doi,
+        headers={"Accept": "application/x-bibtex; charset=utf-8"}
+    )
+    if not response.ok:
         print(
-            "Cannot generate BibTeX citation, missing doi2bib dependency",
+            f"Failed to convert DOI <{doi}> to bibtex, returning URL.",
             file=sys.stderr,
         )
         return doi
 
-    if "doi.org" not in doi:
-        return doi
-    bib = get_bib_from_doi(doi)[1]
-    # replace identifier with template name
-    m = re.search(r"([A-Z])\w+", bib)
-    return bib.replace(m.group(), "%s%s" % (template.lower(), idx))
+    return response.text
