@@ -32,15 +32,16 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.doctest",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.ifconfig",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.doctest",
     "sphinx.ext.githubpages",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
-    "sphinxcontrib.napoleon",
+    "sphinx_multiversion",
 ]
 
 autodoc_mock_imports = [
@@ -60,11 +61,11 @@ autodoc_mock_imports = [
 # of parameters.
 # Requires pinning sphinxcontrib-napoleon to a specific commit while
 # https://github.com/sphinx-contrib/napoleon/pull/10 is merged.
-napoleon_use_param = False
-napoleon_custom_sections = [
-    ("Inputs", "Parameters"),
-    ("Outputs", "Parameters"),
-]
+# napoleon_use_param = False
+# napoleon_custom_sections = [
+#     ("Inputs", "Parameters"),
+#     ("Outputs", "Parameters"),
+# ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -213,7 +214,12 @@ epub_exclude_files = ["search.html"]
 
 apidoc_module_dir = "../templateflow"
 apidoc_output_dir = "api"
-apidoc_excluded_paths = ["conftest.py", "*/tests/*", "tests/*", "data/*"]
+apidoc_excluded_paths = [
+    "conftest.py",
+    "*/tests/*",
+    "tests/*",
+    "data/*",
+]
 apidoc_separate_modules = True
 apidoc_extra_args = ["--module-first", "-d 1", "-T"]
 
@@ -223,4 +229,16 @@ apidoc_extra_args = ["--module-first", "-d 1", "-T"]
 intersphinx_mapping = {"https://docs.python.org/": None}
 
 # -- Options for versioning extension ----------------------------------------
-scv_show_banner = True
+html_sidebars = {"**": ["versioning.html"]}
+
+smv_branch_whitelist = r"^master$"
+smv_tag_whitelist = r"^\d+\.\d+\.\d+(?!rc|dev).*$"
+# smv_prebuild_command = f"""\
+# sphinx-apidoc \
+# {' '.join(apidoc_extra_args)} \
+# {'-e ' * apidoc_separate_modules} \
+# -o {apidoc_output_dir} \
+# {apidoc_module_dir} \
+# {' '.join([apidoc_module_dir + '/' + p for p in apidoc_excluded_paths])}
+# """
+smv_rebuild_tags = False

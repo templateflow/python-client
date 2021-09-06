@@ -55,9 +55,15 @@ clean:
 	rm -rf api/*
 
 html:
-	PYTHONPATH=$(PYTHONPATH) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	PYTHONPATH=$(PYTHONPATH) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html/$(CURBRANCH)
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+
+
+versioned:
+	PYTHONPATH=$(PYTHONPATH) sphinx-multiversion -v . $(BUILDDIR)/html/
+	@echo
+	@echo "Multi-version build finished. The HTML pages are in $(BUILDDIR)/html."	
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
@@ -180,6 +186,3 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
-
-versioned:
-	PYTHONPATH=$(PYTHONPATH) sphinx-versioning -vv -l ./docs/conf.py build -r $(CURBRANCH) ./docs/ docs/$(BUILDDIR)/html/
