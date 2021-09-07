@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>templateflow.api module &mdash; templateflow 0.7.1 documentation</title>
   
@@ -13,11 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -27,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -52,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> templateflow
+            <a href="../index.html" class="icon icon-home"> templateflow
           
 
           
@@ -135,6 +139,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -148,7 +154,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/templateflow.api.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -162,27 +168,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-    
-    
-
-
-
-    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../master/api/templateflow.api.html"><b>Warning:</b> This document is for an old version of templateflow. The main version is master.</a></p>
-<div class="section" id="module-templateflow.api">
+  <div class="section" id="module-templateflow.api">
 <span id="templateflow-api-module"></span><h1>templateflow.api module<a class="headerlink" href="#module-templateflow.api" title="Permalink to this headline">¶</a></h1>
 <p>TemplateFlow’s Python Client.</p>
 <dl class="py function">
-<dt id="templateflow.api.get">
-<code class="sig-prename descclassname">templateflow.api.</code><code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">template</span></em>, <em class="sig-param"><span class="n">raise_empty</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#templateflow.api.get" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="templateflow.api.get">
+<span class="sig-prename descclassname"><span class="pre">templateflow.api.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#templateflow.api.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch one file from one particular template.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>template</strong> (<em>str</em>) – A template identifier (e.g., <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>).</p></li>
-<li><p><strong>raise_empty</strong> (<em>bool, optional</em>) – Raise exception if no files were matched</p></li>
+<li><p><strong>template</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A template identifier (e.g., <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>).</p></li>
+<li><p><strong>raise_empty</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Raise exception if no files were matched</p></li>
 </ul>
 </dd>
 <dt class="field-even">Keyword Arguments</dt>
@@ -230,8 +227,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="templateflow.api.get_citations">
-<code class="sig-prename descclassname">templateflow.api.</code><code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">template</span></em>, <em class="sig-param"><span class="n">bibtex</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get_citations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#templateflow.api.get_citations" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="templateflow.api.get_citations">
+<span class="sig-prename descclassname"><span class="pre">templateflow.api.</span></span><span class="sig-name descname"><span class="pre">get_citations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bibtex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get_citations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#templateflow.api.get_citations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch template citations</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -244,12 +241,12 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="templateflow.api.get_metadata">
-<code class="sig-prename descclassname">templateflow.api.</code><code class="sig-name descname">get_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">template</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#templateflow.api.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="templateflow.api.get_metadata">
+<span class="sig-prename descclassname"><span class="pre">templateflow.api.</span></span><span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#get_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#templateflow.api.get_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch one file from one template.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>template</strong> (<em>str</em>) – A template identifier (e.g., <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>).</p>
+<dd class="field-odd"><p><strong>template</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A template identifier (e.g., <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -260,8 +257,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="templateflow.api.templates">
-<code class="sig-prename descclassname">templateflow.api.</code><code class="sig-name descname">templates</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#templates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#templateflow.api.templates" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="templateflow.api.templates">
+<span class="sig-prename descclassname"><span class="pre">templateflow.api.</span></span><span class="sig-name descname"><span class="pre">templates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/templateflow/api.html#templates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#templateflow.api.templates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of available templates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Keyword Arguments</dt>
@@ -293,77 +290,71 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="templateflow.conf.html" class="btn btn-neutral float-right" title="templateflow.conf package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../api.html" class="btn btn-neutral float-left" title="Library API (application program interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="templateflow.conf.html" class="btn btn-neutral float-right" title="templateflow.conf package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../api.html" class="btn btn-neutral float-left" title="Library API (application program interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, The TemplateFlow developers
+        &#169; Copyright 2020, The TemplateFlow developers.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
     </section>
 
   </div>
-  
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: 0.7.1
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../../0.4.2/api/templateflow.api.html">0.4.2</a></dd>
-            <dd><a href="../../0.4.2rc1/api/templateflow.api.html">0.4.2rc1</a></dd>
-            <dd><a href="../../0.5.0/api/templateflow.api.html">0.5.0</a></dd>
-            <dd><a href="../../0.5.0rc1/api/templateflow.api.html">0.5.0rc1</a></dd>
-            <dd><a href="../../0.5.1/api/templateflow.api.html">0.5.1</a></dd>
-            <dd><a href="../../0.5.1rc1/api/templateflow.api.html">0.5.1rc1</a></dd>
-            <dd><a href="../../0.5.2/api/templateflow.api.html">0.5.2</a></dd>
-            <dd><a href="../../0.6.0/api/templateflow.api.html">0.6.0</a></dd>
-            <dd><a href="../../0.6.0rc1/api/templateflow.api.html">0.6.0rc1</a></dd>
-            <dd><a href="../../0.6.0rc2/api/templateflow.api.html">0.6.0rc2</a></dd>
-            <dd><a href="../../0.6.1/api/templateflow.api.html">0.6.1</a></dd>
-            <dd><a href="../../0.6.2/api/templateflow.api.html">0.6.2</a></dd>
-            <dd><a href="../../0.6.3/api/templateflow.api.html">0.6.3</a></dd>
-            <dd><a href="../../0.7.0/api/templateflow.api.html">0.7.0</a></dd>
-            <dd><a href="templateflow.api.html">0.7.1</a></dd>
-            <dd><a href="../../0.7.1rc0/api/templateflow.api.html">0.7.1rc0</a></dd>
-        </dl>
-        <dl>
-            <dt>Branches</dt>
-            <dd><a href="../../master/api/templateflow.api.html">master</a></dd>
-        </dl>
-    </div>
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 0.7.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div id="version-switch" class="rst-other-versions">
+    <dt id="v-tags"></dt>
+    <dt id="v-branches"></dt>
+  </div>
 </div>
 
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location.pathname;
+    var cur_ver = "/0.7.1/"
+    var relpath = pathname.substring(pathname.indexOf(cur_ver) + 1).replace(/\/$/, '');
+    var levels = relpath.split("/").length - 1
+    if ( levels == 0 ) {
+        levels = 1
+	relpath += "/"
+    }
+    var versions_file = "../".repeat(levels) + "versions.json"
+    relpath = "../".repeat(levels) + relpath
+    console.log(`relative path: "${relpath}"`)
+
+    $.getJSON(versions_file, function (data) {
+
+        $.each(data["tags"], function( i, val ) {
+            $("#v-tags").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + val + "/") + "\">" + val + "</a></dd>")
+        });
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + data["tags"][data["tags"].length - 1]+ "/") + "\">latest</a></dd>")
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/master/") + "\">dev</a></dd>")
+    });
+});
+</script>
 
   <script type="text/javascript">
       jQuery(function () {
