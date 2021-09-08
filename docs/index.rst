@@ -10,10 +10,7 @@ Contents
 .. toctree::
     :maxdepth: 3
 
-    naming
-    tutorials
+    installation
+    datalad
     api
-
-What's new
-----------
-.. include:: ../CHANGES.rst
+    changes
