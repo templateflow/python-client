@@ -10,24 +10,22 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
 from packaging.version import Version
-
 from templateflow import __version__, __copyright__, __packagename__
-
-sys.path.append(os.path.abspath("sphinxext"))
 
 # -- Project information -----------------------------------------------------
 project = __packagename__
 copyright = __copyright__
 author = "The TemplateFlow Developers"
 
-# The short X.Y version
-version = Version(__version__).public
 # The full version, including alpha/beta/rc tags
 release = __version__
 
+# The short X.Y version
+version = (
+    __version__ if Version(release).public == release
+    else f"dev ({release.partition('+')[0]})"
+)
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -56,6 +54,7 @@ autodoc_mock_imports = [
     "svgutils",
     "transforms3d",
 ]
+autodoc_autoreload = True
 
 # Accept custom section names to be parsed for numpy-style docstrings
 # of parameters.
@@ -226,19 +225,19 @@ apidoc_extra_args = ["--module-first", "-d 1", "-T"]
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.python.org/": None}
+intersphinx_mapping = {
+    "bids": ("https://bids-standard.github.io/pybids/", None),
+    "matplotlib": ("https://matplotlib.org/", None),
+    "nibabel": ("https://nipy.org/nibabel/", None),
+    "nipype": ("https://nipype.readthedocs.io/en/latest/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("http://pandas.pydata.org/pandas-docs/dev", None),
+    "python": ("https://docs.python.org/3/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+}
 
 # -- Options for versioning extension ----------------------------------------
-html_sidebars = {"**": ["versioning.html"]}
-
 smv_branch_whitelist = r"^master$"
 smv_tag_whitelist = r"^\d+\.\d+\.\d+(?!rc|dev).*$"
-# smv_prebuild_command = f"""\
-# sphinx-apidoc \
-# {' '.join(apidoc_extra_args)} \
-# {'-e ' * apidoc_separate_modules} \
-# -o {apidoc_output_dir} \
-# {apidoc_module_dir} \
-# {' '.join([apidoc_module_dir + '/' + p for p in apidoc_excluded_paths])}
-# """
+smv_released_pattern = r'^tags/.*$'
 smv_rebuild_tags = False

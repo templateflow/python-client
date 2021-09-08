@@ -55,15 +55,17 @@ clean:
 	rm -rf api/*
 
 html:
-	PYTHONPATH=$(PYTHONPATH) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html/$(CURBRANCH)
+	mkdir -p $(BUILDDIR)
+	PYTHONPATH=$(PYTHONPATH) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/$(CURBRANCH)
 	@echo
-	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+	@echo "Build finished. The HTML pages are in $(BUILDDIR)/."
 
 
 versioned:
-	PYTHONPATH=$(PYTHONPATH) sphinx-multiversion -v . $(BUILDDIR)/html/
+	mkdir -p $(BUILDDIR)
+	PYTHONPATH=$(PYTHONPATH) sphinx-multiversion -v . $(BUILDDIR)/
 	@echo
-	@echo "Multi-version build finished. The HTML pages are in $(BUILDDIR)/html."	
+	@echo "Multi-version build finished. The HTML pages are in $(BUILDDIR)/."	
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
