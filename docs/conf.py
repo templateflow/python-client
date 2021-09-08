@@ -39,7 +39,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
-    "sphinx_multiversion",
     "nbsphinx",
 ]
 
