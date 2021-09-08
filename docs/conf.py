@@ -40,6 +40,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
     "sphinx_multiversion",
+    "nbsphinx",
 ]
 
 autodoc_mock_imports = [
