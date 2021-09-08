@@ -1,0 +1,36 @@
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: {{ version }}
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div id="version-switch" class="rst-other-versions">
+    <dt id="v-tags"></dt>
+    <dt id="v-branches"></dt>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location.pathname;
+    var cur_ver = "/{{ current_version.name if current_version else 'master' }}/"
+    var relpath = pathname.substring(pathname.indexOf(cur_ver) + 1).replace(/\/$/, '');
+    var levels = relpath.split("/").length - 1
+    if ( levels == 0 ) {
+        levels = 1
+	relpath += "/"
+    }
+    var versions_file = "../".repeat(levels) + "versions.json"
+    relpath = "../".repeat(levels) + relpath
+    console.log(`relative path: "${relpath}"`)
+
+    $.getJSON(versions_file, function (data) {
+
+        $.each(data["tags"], function( i, val ) {
+            $("#v-tags").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + val + "/") + "\">" + val + "</a></dd>")
+        });
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + data["tags"][data["tags"].length - 1]+ "/") + "\">latest</a></dd>")
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/master/") + "\">dev</a></dd>")
+    });
+});
+</script>

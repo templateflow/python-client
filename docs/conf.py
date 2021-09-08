@@ -10,37 +10,36 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
 from packaging.version import Version
-
 from templateflow import __version__, __copyright__, __packagename__
-
-sys.path.append(os.path.abspath("sphinxext"))
 
 # -- Project information -----------------------------------------------------
 project = __packagename__
 copyright = __copyright__
 author = "The TemplateFlow Developers"
 
-# The short X.Y version
-version = Version(__version__).public
 # The full version, including alpha/beta/rc tags
 release = __version__
 
+# The short X.Y version
+version = (
+    __version__ if Version(release).public == release
+    else f"dev ({release.partition('+')[0]})"
+)
 
 # -- General configuration ---------------------------------------------------
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.doctest",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.ifconfig",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.doctest",
     "sphinx.ext.githubpages",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
-    "sphinxcontrib.napoleon",
+    "sphinx_multiversion",
 ]
 
 autodoc_mock_imports = [
@@ -55,16 +54,17 @@ autodoc_mock_imports = [
     "svgutils",
     "transforms3d",
 ]
+autodoc_autoreload = True
 
 # Accept custom section names to be parsed for numpy-style docstrings
 # of parameters.
 # Requires pinning sphinxcontrib-napoleon to a specific commit while
 # https://github.com/sphinx-contrib/napoleon/pull/10 is merged.
-napoleon_use_param = False
-napoleon_custom_sections = [
-    ("Inputs", "Parameters"),
-    ("Outputs", "Parameters"),
-]
+# napoleon_use_param = False
+# napoleon_custom_sections = [
+#     ("Inputs", "Parameters"),
+#     ("Outputs", "Parameters"),
+# ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -213,14 +213,31 @@ epub_exclude_files = ["search.html"]
 
 apidoc_module_dir = "../templateflow"
 apidoc_output_dir = "api"
-apidoc_excluded_paths = ["conftest.py", "*/tests/*", "tests/*", "data/*"]
+apidoc_excluded_paths = [
+    "conftest.py",
+    "*/tests/*",
+    "tests/*",
+    "data/*",
+]
 apidoc_separate_modules = True
 apidoc_extra_args = ["--module-first", "-d 1", "-T"]
 
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.python.org/": None}
+intersphinx_mapping = {
+    "bids": ("https://bids-standard.github.io/pybids/", None),
+    "matplotlib": ("https://matplotlib.org/", None),
+    "nibabel": ("https://nipy.org/nibabel/", None),
+    "nipype": ("https://nipype.readthedocs.io/en/latest/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("http://pandas.pydata.org/pandas-docs/dev", None),
+    "python": ("https://docs.python.org/3/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+}
 
 # -- Options for versioning extension ----------------------------------------
-scv_show_banner = True
+smv_branch_whitelist = r"^master$"
+smv_tag_whitelist = r"^\d+\.\d+\.\d+(?!rc|dev).*$"
+smv_released_pattern = r'^tags/.*$'
+smv_rebuild_tags = False
