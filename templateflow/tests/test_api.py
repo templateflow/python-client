@@ -15,7 +15,7 @@ mni2009_urls = [
 mni2009_fbib = """\
 @article{Fonov_2011,
 \tdoi = {10.1016/j.neuroimage.2010.07.033},
-\turl = {https://doi.org/10.1016%2Fj.neuroimage.2010.07.033},
+\turl = {https://doi.org/10.1016/j.neuroimage.2010.07.033},
 \tyear = 2011,
 \tmonth = {jan},
 \tpublisher = {Elsevier {BV}},
@@ -31,7 +31,7 @@ Almli and Robert C. McKinstry and D. Louis Collins},
 mni2009_lbib = """\
 @incollection{Collins_1999,
 \tdoi = {10.1007/3-540-48714-x_16},
-\turl = {https://doi.org/10.1007%2F3-540-48714-x_16},
+\turl = {https://doi.org/10.1007/3-540-48714-x_16},
 \tyear = 1999,
 \tpublisher = {Springer Berlin Heidelberg},
 \tpages = {210--223},
@@ -48,7 +48,7 @@ fslr_urls = [
 fslr_fbib = """\
 @article{Van_Essen_2011,
 \tdoi = {10.1093/cercor/bhr291},
-\turl = {https://doi.org/10.1093%2Fcercor%2Fbhr291},
+\turl = {https://doi.org/10.1093/cercor%2Fbhr291},
 \tyear = 2011,
 \tmonth = {nov},
 \tpublisher = {Oxford University Press ({OUP})},
