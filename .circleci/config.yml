@@ -120,31 +120,62 @@ jobs:
             twine check dist/*
 
   build_docs:
-    docker:
-      - image: python:3.7.4
+    machine:
+      # https://discuss.circleci.com/t/linux-machine-executor-images-2021-april-q2-update/39928
+      # upgrade Docker version
+      image: ubuntu-2004:202104-01
     environment:
       - FSLOUTPUTTYPE: NIFTI
       - SUBJECTS_DIR: /tmp/subjects
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - env-v3-{{ .Branch }}-
+            - env-v3-master-
+            - env-v3-
+      - run:
+          name: Install base packages
+          command: |
+            export PATH="$HOME/.conda/bin:$PATH"
+            if ! [ -x "$(command -v curl)" ]; then
+              sudo apt-get update
+              sudo apt-get install -y --no-install-recommends curl
+            fi
+
+            if ! [ -x "$(command -v conda)" ]; then
+              curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
+              bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b -p $HOME/.conda
+            fi
+      - run:
+          name: Setup conda environment
+          command: |
+            $HOME/.conda/bin/conda install -y -c conda-forge -c anaconda graphviz pandoc curl "setuptools>=45" "setuptools_scm>=6.2" "pip>20" wheel sphinx=4 ipython
+            $HOME/.conda/bin/python -m pip install --no-cache-dir -r docs/requirements.txt
+      - save_cache:
+          key: env-v3-{{ .Branch }}-{{ .BuildNum }}
+          paths:
+            - ~/.conda
+
+      - run:
+          name: Check out git submodules
+          command: git submodule update --init
       - run:
           name: Create subjects folder
           command: mkdir -p $SUBJECTS_DIR
       - run:
-          name: Install Graphviz
-          command: apt update && apt -y install graphviz
-      - run:
           name: Install deps
           command: |
-            pip install --no-cache-dir "setuptools>=45" "setuptools_scm >= 6.2"
+            export PATH="$HOME/.conda/bin:$PATH"
             pip install --no-cache-dir -r docs/requirements.txt
       - run:
           name: Build only this commit
           command: |
+            export PATH="$HOME/.conda/bin:$PATH"
             python setup.py --version
-            make -C docs SPHINXOPTS="-W" BUILDDIR="/docs" CURBRANCH="${CIRCLE_TAG}" html
+            make -C docs SPHINXOPTS="-W" BUILDDIR="$HOME/html" CURBRANCH="${CIRCLE_TAG}" html
       - store_artifacts:
-          path: /docs/
+          path: ~/html
 
   deploy_pypi:
     docker:
