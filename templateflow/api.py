@@ -197,14 +197,15 @@ def _datalad_get(filepath):
     from datalad import api
     from datalad.support.exceptions import IncompleteResultsError
 
+    relpath = str(filepath.relative_to(TF_LAYOUT.root))
     try:
-        api.get(str(filepath))
+        api.get(path=str(relpath), dataset=str(TF_LAYOUT.root))
     except IncompleteResultsError as exc:
         if exc.failed[0]["message"] == "path not associated with any dataset":
             from .conf import TF_GITHUB_SOURCE
 
             api.install(path=TF_LAYOUT.root, source=TF_GITHUB_SOURCE, recursive=True)
-            api.get(str(filepath))
+            api.get(path=str(relpath), dataset=str(TF_LAYOUT.root))
         else:
             raise
 
