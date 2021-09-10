@@ -1,0 +1,896 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Visualisation of spatial resources with TemplateFlow &mdash; templateflow 0.7.2.dev31+g383766b9.d20210908 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DataLad" href="../datalad.html" />
+    <link rel="prev" title="Quick start with TemplateFlow Client API" href="01_quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev (0.7.2.dev31)
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_quickstart.html">Quick start with <em>TemplateFlow Client</em> API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Visualisation of spatial resources with <em>TemplateFlow</em></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Visualising-a-template">Visualising a template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Segmentation-overlay">Segmentation overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Atlas-overlay">Atlas overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Template-to-template-transformations">Template-to-template transformations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../datalad.html">DataLad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Library API (application program interface)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">What’s new</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../examples.html">Examples</a> &raquo;</li>
+        
+      <li>Visualisation of spatial resources with <em>TemplateFlow</em></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/notebooks/02_visualisation.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Visualisation-of-spatial-resources-with-TemplateFlow">
+<h1>Visualisation of spatial resources with <em>TemplateFlow</em><a class="headerlink" href="#Visualisation-of-spatial-resources-with-TemplateFlow" title="Permalink to this headline">¶</a></h1>
+<p>This notebook showcases how <em>TemplateFlow</em> can facilitate visualisation of spatially standardised data, including template and atlas resources. We begin by importing the <em>TemplateFlow</em> API, along with <code class="docutils literal notranslate"><span class="pre">nibabel</span></code> for reading neuroimaging data files, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for plotting, and a number of plotting functions from the <code class="docutils literal notranslate"><span class="pre">nilearn</span></code> and <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code> packages.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">templateflow.api</span> <span class="k">as</span> <span class="nn">tflow</span>
+<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nb</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">niworkflows.viz.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">plot_registration</span><span class="p">,</span>
+    <span class="n">plot_segs</span><span class="p">,</span>
+    <span class="n">compose_view</span><span class="p">,</span>
+    <span class="n">cuts_from_bbox</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">SVG</span><span class="p">,</span> <span class="n">display</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:30: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  method=&#39;lar&#39;, copy_X=True, eps=np.finfo(np.float).eps,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:167: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  method=&#39;lar&#39;, copy_X=True, eps=np.finfo(np.float).eps,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:284: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  eps=np.finfo(np.float).eps, copy_Gram=True, verbose=0,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:862: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  eps=np.finfo(np.float).eps, copy_X=True, fit_path=True,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:1101: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  eps=np.finfo(np.float).eps, copy_X=True, fit_path=True,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:1127: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  eps=np.finfo(np.float).eps, positive=False):
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:1362: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  max_n_alphas=1000, n_jobs=None, eps=np.finfo(np.float).eps,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:1602: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  max_n_alphas=1000, n_jobs=None, eps=np.finfo(np.float).eps,
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/least_angle.py:1738: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  eps=np.finfo(np.float).eps, copy_X=True, positive=False):
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/decomposition/online_lda.py:29: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  EPS = np.finfo(np.float).eps
+/usr/local/anaconda3/lib/python3.7/site-packages/sklearn/feature_extraction/image.py:167: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  dtype=np.int):
+/usr/local/anaconda3/lib/python3.7/site-packages/nilearn/datasets/__init__.py:89: FutureWarning: Fetchers from the nilearn.datasets module will be updated in version 0.9 to return python strings instead of bytes and Pandas dataframes instead of Numpy arrays.
+  &#34;Numpy arrays.&#34;, FutureWarning)
+</pre></div></div>
+</div>
+<div class="section" id="Visualising-a-template">
+<h2>Visualising a template<a class="headerlink" href="#Visualising-a-template" title="Permalink to this headline">¶</a></h2>
+<p>In addition to numerous human template resources, <em>TemplateFlow</em> includes the <code class="docutils literal notranslate"><span class="pre">Fischer344</span></code> rodent template for use with preclinical imaging workflows. Let’s start by creating a mosaic plot of this template. To do this, we begin by using the <em>TemplateFlow</em> client to retrieve the T2-weighted image (<code class="docutils literal notranslate"><span class="pre">suffix='T2w'</span></code>) of the Fischer template. We also retrieve a brain mask (<code class="docutils literal notranslate"><span class="pre">desc='brain',</span> <span class="pre">suffix='mask'</span></code>); this will be used to determine the sections of the brain to be visualised.</p>
+<p><em>Note:</em> Some templates might have several different resolutions; in this case, a <code class="docutils literal notranslate"><span class="pre">resolution</span></code> argument should be used to specify the desired resolution. (Resolutions are defined in the <code class="docutils literal notranslate"><span class="pre">template_description.json</span></code> metadata file.)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">uid</span> <span class="o">=</span> <span class="s1">&#39;Fischer344&#39;</span>
+<span class="n">nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;T2w&#39;</span><span class="p">))</span>
+<span class="n">mask_nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">hemi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;mask&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we use the <code class="docutils literal notranslate"><span class="pre">plot_registration</span></code> function from <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code> to create a mosaic SVG plot of the <code class="docutils literal notranslate"><span class="pre">Fischer344</span></code> brain. This plot will include axial, sagittal, and coronal slices. The number of slices is set by <code class="docutils literal notranslate"><span class="pre">n_cuts</span></code>, and the positions of the slices is determined by the <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code> utility function <code class="docutils literal notranslate"><span class="pre">cuts_from_bbox</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">n_cuts</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">cuts</span> <span class="o">=</span> <span class="n">cuts_from_bbox</span><span class="p">(</span><span class="n">mask_nii</span><span class="p">,</span> <span class="n">cuts</span><span class="o">=</span><span class="n">n_cuts</span><span class="p">)</span>
+<span class="n">figs</span> <span class="o">=</span> <span class="n">plot_registration</span><span class="p">(</span>
+    <span class="n">nii</span><span class="p">,</span>
+    <span class="s1">&#39;fixed-image&#39;</span><span class="p">,</span>
+    <span class="n">estimate_brightness</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cuts</span><span class="o">=</span><span class="n">cuts</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
+    <span class="n">contour</span><span class="o">=</span><span class="n">mask_nii</span><span class="p">,</span>
+    <span class="n">compress</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+    <span class="n">dismiss_affine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figs</span><span class="p">):</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/tmp/tpl-</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">_view</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;/tmp/tpl-</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">_view</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_6_0.svg" src="../_images/notebooks_02_visualisation_6_0.svg" /></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_6_1.svg" src="../_images/notebooks_02_visualisation_6_1.svg" /></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_6_2.svg" src="../_images/notebooks_02_visualisation_6_2.svg" /></div>
+</div>
+<hr></div>
+<div class="section" id="Segmentation-overlay">
+<h2>Segmentation overlay<a class="headerlink" href="#Segmentation-overlay" title="Permalink to this headline">¶</a></h2>
+<p>Most templates in <em>TemplateFlow</em> are distributed with segmentations. Discrete segmentations (<code class="docutils literal notranslate"><span class="pre">suffix='dseg'</span></code>) are voxelwise annotations that assign each voxel of the brain to a single region or tissue class. Probabilistic segmentations (<code class="docutils literal notranslate"><span class="pre">suffix='probseg'</span></code>) instead assign each voxel to a categorical distribution over tissue classes or regions.</p>
+<p>Let’s visualise the tissue classes present in the <code class="docutils literal notranslate"><span class="pre">Fischer344</span></code> brain. To do this, we’ll use a 4-way probabilistic segmentation into grey matter, white matter, cerebrospinal fluid, and a catch-all ‘other’ category to delineate boundary contours of each tissue class. We begin by retrieving the probabilistic segmentations using the <em>TemplateFlow</em> API. Now, we use another plotting function from <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code> designed for this purpose, <code class="docutils literal notranslate"><span class="pre">plot_segs</span></code>, again selecting the slices to be plotted with
+guidance from the mask (<code class="docutils literal notranslate"><span class="pre">bbox_nii</span></code> argument).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">probseg_nii</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Fischer344&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;probseg&#39;</span><span class="p">)]</span>
+
+<span class="n">figs</span> <span class="o">=</span> <span class="n">plot_segs</span><span class="p">(</span>
+    <span class="n">image_nii</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;T2w&#39;</span><span class="p">)),</span>
+    <span class="n">seg_niis</span><span class="o">=</span><span class="n">probseg_nii</span><span class="p">,</span>
+    <span class="n">bbox_nii</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">hemi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;mask&#39;</span><span class="p">)),</span>
+    <span class="n">out_file</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;/tmp/tpl-</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">_seg.svg&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figs</span><span class="p">):</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/tmp/tpl-</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">_seg</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;/tmp/tpl-</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">_seg</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_9_0.svg" src="../_images/notebooks_02_visualisation_9_0.svg" /></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_9_1.svg" src="../_images/notebooks_02_visualisation_9_1.svg" /></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_9_2.svg" src="../_images/notebooks_02_visualisation_9_2.svg" /></div>
+</div>
+</div>
+<div class="section" id="Atlas-overlay">
+<h2>Atlas overlay<a class="headerlink" href="#Atlas-overlay" title="Permalink to this headline">¶</a></h2>
+<p>In addition to tissue-class annotations, many templates are distributed with atlases, which associate with each spatial coordinate a particular annotation or set of annotations. Atlases include <em>inter alia</em> anatomical parcellations (e.g., annotations of gyri and sulci) and functional parcellations (e.g., annotations of brain networks, or regions displaying homogeneous activity or preferential connectivity).</p>
+<p>Here, we’ll visualise a functional atlas: the 100-region cortical parcellation of Schaefer and colleagues (2018), which is situated in the stereotaxic coordinate space of the <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code> template. We use the <code class="docutils literal notranslate"><span class="pre">atlas</span></code> argument to the <em>TemplateFlow</em> API to specify the atlas family, and here we additionally use the <code class="docutils literal notranslate"><span class="pre">desc</span></code> argument to disambiguate among atlases within the family. (The Schaefer parcellation has several different resolutions and parcel numbering schemes, so this
+disambiguation is required.) Finally, because the atlas deterministically assigns each voxel coordinate to a single parcel, we again specify <code class="docutils literal notranslate"><span class="pre">suffix='dseg'</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nilearn</span> <span class="kn">import</span> <span class="n">plotting</span>
+
+<span class="n">uid</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+<span class="n">nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;T1w&#39;</span><span class="p">))</span>
+<span class="n">atlas_nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="n">uid</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;100Parcels7Networks&#39;</span><span class="p">,</span>
+    <span class="n">atlas</span><span class="o">=</span><span class="s1">&#39;Schaefer2018&#39;</span><span class="p">,</span>
+    <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;dseg&#39;</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Now, we’ll use <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>’s <code class="docutils literal notranslate"><span class="pre">plot_roi</span></code> function to create a mosaic view of the atlas. This function is used for visualising regions of interest (ROIs). We set the background image to be the template T1 we retrieved above and the ROI image to be the atlas.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">plotting</span><span class="o">.</span><span class="n">plot_roi</span><span class="p">(</span><span class="n">roi_img</span><span class="o">=</span><span class="n">atlas_nii</span><span class="p">,</span> <span class="n">bg_img</span><span class="o">=</span><span class="n">nii</span><span class="p">,</span> <span class="n">display_mode</span><span class="o">=</span><span class="s1">&#39;mosaic&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;nilearn.plotting.displays.MosaicSlicer at 0x130e03c90&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_13_1.png" src="../_images/notebooks_02_visualisation_13_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Template-to-template-transformations">
+<h2>Template-to-template transformations<a class="headerlink" href="#Template-to-template-transformations" title="Permalink to this headline">¶</a></h2>
+<p>To support the flow of spatial knowledge and annotations among template spaces, <em>TemplateFlow</em> aims to compute template-to-template transformations. These transformations would map each coordinate in a particular template’s coordinate space to its analogue in the spaces engendered by all other suitable templates. Such transformations could, for instance, be used to move the Schaefer parcellation above into the coordinate space of a pediatric or infant template, thereby enabling its use with
+additional study populations.</p>
+<p>Here, we’ll visualise the product of such a template-to-template transformation. This transformation links the version of the MNI template distributed with FSL, <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code>, to the ICBM’s <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code> template. To visualise this registration, we’ll first use the template-to-template transform to warp the FSL template (<code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code>) into ICBM space (<code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>). For this, we use the command-line tool <code class="docutils literal notranslate"><span class="pre">antsApplyTransforms</span></code>. We can use inline calls to the
+<em>TemplateFlow</em> API to retrieve the template-to-template transform, the input template, and the reference template, and then use these to populate the call to <code class="docutils literal notranslate"><span class="pre">antsApplyTransforms</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre>
+<span></span>%%bash
+
+<span class="nv">template_src</span><span class="o">=</span><span class="s1">&#39;MNI152NLin6Asym&#39;</span>
+<span class="nv">template_dst</span><span class="o">=</span><span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+
+<span class="nv">transform</span><span class="o">=</span><span class="k">$(</span>
+    python -c <span class="s2">&quot;</span>
+<span class="s2">import templateflow.api as tflow</span>
+<span class="s2">import re</span>
+<span class="s2">xfm = [</span>
+<span class="s2">    path for path in tflow.get(&#39;</span><span class="si">${</span><span class="nv">template_dst</span><span class="si">}</span><span class="s2">&#39;,  mode=&#39;image&#39;, suffix=&#39;xfm&#39;)</span>
+<span class="s2">    if re.search(&#39;.*from-</span><span class="si">${</span><span class="nv">template_src</span><span class="si">}</span><span class="s2">.*&#39;, str(path))</span>
+<span class="s2">]</span>
+<span class="s2">print(xfm[0])</span>
+<span class="s2">    &quot;</span>
+<span class="k">)</span>
+
+<span class="nv">input</span><span class="o">=</span><span class="k">$(</span>
+    python -c <span class="s2">&quot;</span>
+<span class="s2">import templateflow.api as tflow</span>
+<span class="s2">print(tflow.get(&#39;</span><span class="si">${</span><span class="nv">template_src</span><span class="si">}</span><span class="s2">&#39;, desc=None, resolution=1, suffix=&#39;T1w&#39;))</span>
+<span class="s2">    &quot;</span>
+<span class="k">)</span>
+
+<span class="nv">reference</span><span class="o">=</span><span class="k">$(</span>
+    python -c <span class="s2">&quot;</span>
+<span class="s2">import templateflow.api as tflow</span>
+<span class="s2">print(tflow.get(&#39;</span><span class="si">${</span><span class="nv">template_dst</span><span class="si">}</span><span class="s2">&#39;, desc=None, resolution=1, suffix=&#39;T1w&#39;))</span>
+<span class="s2">    &quot;</span>
+<span class="k">)</span>
+
+<span class="nv">output</span><span class="o">=</span>/tmp/tpl-<span class="si">${</span><span class="nv">template_src</span><span class="si">}</span>_space-<span class="si">${</span><span class="nv">template_dst</span><span class="si">}</span>_res-01_T1w.nii.gz
+
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">ANTSPATH</span><span class="si">}</span>/antsApplyTransforms <span class="se">\</span>
+    -d <span class="m">3</span> -e <span class="m">0</span> <span class="se">\</span>
+    -i <span class="si">${</span><span class="nv">input</span><span class="si">}</span> <span class="se">\</span>
+    -r <span class="si">${</span><span class="nv">reference</span><span class="si">}</span> <span class="se">\</span>
+    -o <span class="si">${</span><span class="nv">output</span><span class="si">}</span> <span class="se">\</span>
+    -n LanczosWindowedSinc <span class="se">\</span>
+    -t <span class="si">${</span><span class="nv">transform</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+/antsApplyTransforms -d 3 -e 0 -i /Users/rastko/.cache/templateflow/tpl-MNI152NLin6Asym/tpl-MNI152NLin6Asym_res-01_T1w.nii.gz -r /Users/rastko/.cache/templateflow/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz -o /tmp/tpl-MNI152NLin6Asym_space-MNI152NLin2009cAsym_res-01_T1w.nii.gz -n LanczosWindowedSinc -t /Users/rastko/.cache/templateflow/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_from-MNI152NLin6Asym_mode-image_xfm.h5
+</pre></div></div>
+</div>
+<p>(We’ve conveniently placed the output of this transformation in the <code class="docutils literal notranslate"><span class="pre">data</span></code> subdirectory.)</p>
+<p>Next, we’ll overlay the warped <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code> template (the moving image) and the <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code> template (the fixed image or target of transformation) to facilitate assessment of the quality of the transformation. Once again, we can use the client to obtain the fixed image and its corresponding mask.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fixed_uid</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+<span class="n">moving_uid</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin6Asym&#39;</span>
+
+<span class="n">fixed_nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fixed_uid</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;T1w&#39;</span><span class="p">))</span>
+<span class="n">moving_nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/tpl-MNI152NLin6Asym_space-MNI152NLin2009cAsym_res-01_T1w.nii.gz&#39;</span><span class="p">)</span>
+<span class="n">mask_nii</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tflow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fixed_uid</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;mask&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>As above, we use the <code class="docutils literal notranslate"><span class="pre">plot_registration</span></code> utility from <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code>, calling the utility on both the fixed and the moving image. This time, we pass both plots to the <code class="docutils literal notranslate"><span class="pre">compose_view</span></code> function from <code class="docutils literal notranslate"><span class="pre">niworkflows</span></code>,</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">n_cuts</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">cuts</span> <span class="o">=</span> <span class="n">cuts_from_bbox</span><span class="p">(</span><span class="n">mask_nii</span><span class="p">,</span> <span class="n">cuts</span><span class="o">=</span><span class="n">n_cuts</span><span class="p">)</span>
+<span class="n">reg_fig</span> <span class="o">=</span> <span class="n">compose_view</span><span class="p">(</span>
+    <span class="n">plot_registration</span><span class="p">(</span>
+        <span class="n">fixed_nii</span><span class="p">,</span>
+        <span class="s1">&#39;fixed-image&#39;</span><span class="p">,</span>
+        <span class="n">estimate_brightness</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cuts</span><span class="o">=</span><span class="n">cuts</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">fixed_uid</span><span class="p">,</span>
+        <span class="n">contour</span><span class="o">=</span><span class="n">mask_nii</span><span class="p">,</span>
+        <span class="n">compress</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+        <span class="n">dismiss_affine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">plot_registration</span><span class="p">(</span>
+        <span class="n">moving_nii</span><span class="p">,</span>
+        <span class="s1">&#39;moving-image&#39;</span><span class="p">,</span>
+        <span class="n">estimate_brightness</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cuts</span><span class="o">=</span><span class="n">cuts</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">moving_uid</span><span class="p">,</span>
+        <span class="n">contour</span><span class="o">=</span><span class="n">mask_nii</span><span class="p">,</span>
+        <span class="n">compress</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+        <span class="n">dismiss_affine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">display</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">reg_fig</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_02_visualisation_20_0.svg" src="../_images/notebooks_02_visualisation_20_0.svg" /></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../datalad.html" class="btn btn-neutral float-right" title="DataLad" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="01_quickstart.html" class="btn btn-neutral float-left" title="Quick start with TemplateFlow Client API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The TemplateFlow developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev (0.7.2.dev31)
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div id="version-switch" class="rst-other-versions">
+    <dt id="v-tags"></dt>
+    <dt id="v-branches"></dt>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location.pathname;
+    var cur_ver = "/master/"
+    var relpath = pathname.substring(pathname.indexOf(cur_ver) + 1).replace(/\/$/, '');
+    var levels = relpath.split("/").length - 1
+    if ( levels == 0 ) {
+        levels = 1
+	relpath += "/"
+    }
+    var versions_file = "../".repeat(levels) + "versions.json"
+    relpath = "../".repeat(levels) + relpath
+    console.log(`relative path: "${relpath}"`)
+
+    $.getJSON(versions_file, function (data) {
+
+        $.each(data["tags"], function( i, val ) {
+            $("#v-tags").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + val + "/") + "\">" + val + "</a></dd>")
+        });
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + data["tags"][data["tags"].length - 1]+ "/") + "\">latest</a></dd>")
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/master/") + "\">dev</a></dd>")
+    });
+});
+</script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

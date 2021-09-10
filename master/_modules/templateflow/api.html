@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>templateflow.api &mdash; templateflow master documentation</title>
+  <title>templateflow.api &mdash; templateflow 0.7.2.dev31+g383766b9.d20210908 documentation</title>
   
 
   
@@ -35,6 +35,7 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -64,7 +65,7 @@
             
             
               <div class="version">
-                development
+                dev (0.7.2.dev31)
               </div>
             
           
@@ -90,9 +91,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../naming.html">TemplateFlow Naming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Publishing in TemplateFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datalad.html">DataLad</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Library API (application program interface)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">What’s new</a></li>
 </ul>
 
             
@@ -359,13 +362,13 @@
     <span class="kn">from</span> <span class="nn">datalad.support.exceptions</span> <span class="kn">import</span> <span class="n">IncompleteResultsError</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">IncompleteResultsError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">failed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;path not associated with any dataset&quot;</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">.conf</span> <span class="kn">import</span> <span class="n">TF_GITHUB_SOURCE</span>
 
             <span class="n">api</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">TF_GITHUB_SOURCE</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+            <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">TF_LAYOUT</span><span class="o">.</span><span class="n">root</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span>
 
@@ -453,7 +456,7 @@
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
   <span class="rst-current-version" data-toggle="rst-current-version">
     <span class="fa fa-book"> Other Versions</span>
-    v: development
+    v: dev (0.7.2.dev31)
     <span class="fa fa-caret-down"></span>
   </span>
   <div id="version-switch" class="rst-other-versions">

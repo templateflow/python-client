@@ -8,12 +8,10 @@ About
 Contents
 --------
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
-    naming
-    tutorials
+    installation
+    examples
+    datalad
     api
-
-What's new
-----------
-.. include:: ../CHANGES.rst
+    changes

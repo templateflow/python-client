@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>What’s new &mdash; templateflow 0.7.2.dev31+g383766b9.d20210908 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="templateflow.conf.bids module" href="api/templateflow.conf.bids.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev (0.7.2.dev31)
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datalad.html">DataLad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Library API (application program interface)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What’s new</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#december-9-2020">0.7.1 (December 9, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#withdrawn">0.7.0 - Withdrawn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-06-2020">0.6.3 (July 06, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-09-2020">0.6.2 (May 09, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.6.1 (May 09, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-1st-2020">0.6.0 (May 1st, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-20-2020">0.5.2 (March 20, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.5.1 (March 20, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-12-2020">0.5.0 (March 12, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-2-january-28-2020">Version 0.4.2 (January 28, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-1-july-22-2019">Version 0.4.1 (July 22, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-0-july-9-2019">Version 0.4.0 (July 9, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-3-0-june-4-2019">Version 0.3.0 (June 4, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-0-june-4-2019">Version 0.2.0 (June 4, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-9-may-28-2019">Version 0.1.9 (May 28, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-8-may-9-2019">Version 0.1.8 (May 9, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-7-april-3-2019">Version 0.1.7 (April 3, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-6-march-29-2019">Version 0.1.6 (March 29, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-5-march-29-2019">Version 0.1.5 (March 29, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-4-march-28-2019">Version 0.1.4 (March 28, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-3-march-14-2019">Version 0.1.3 (March 14, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-2-march-12-2019">Version 0.1.2 (March 12, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-1-march-12-2019">Version 0.1.1 (March 12, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-0-post1-march-05-2019">Version 0.1.0.post1 (March 05, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-0-march-05-2019">Version 0.1.0 (March 05, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-5-post1-march-04-2019">Version 0.0.5.post1 (March 04, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-5-march-04-2019">Version 0.0.5 (March 04, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-4-january-18-2019">Version 0.0.4 (January 18, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-3-january-16-2019">Version 0.0.3 (January 16, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-2-january-16-2019">Version 0.0.2 (January 16, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-1-january-16-2019">Version 0.0.1 (January 16, 2019)</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>What’s new</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/changes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="what-s-new">
+<h1>What’s new<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="december-9-2020">
+<h2>0.7.1 (December 9, 2020)<a class="headerlink" href="#december-9-2020" title="Permalink to this headline">¶</a></h2>
+<p>Minor release with improvements to the template fetching experience.
+With thanks to Lea Waller for the contribution.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>FIX: Use <code class="docutils literal notranslate"><span class="pre">BIDSLayoutIndexer</span></code> when initiating <code class="docutils literal notranslate"><span class="pre">BIDSLayout</span></code> (#61)</p></li>
+<li><p>FIX: Display correct units when downloading templates (#63)</p></li>
+<li><p>FIX: GitHub Actions build (#64)</p></li>
+<li><p>ENH: Add option to raise exception on empty <code class="docutils literal notranslate"><span class="pre">get</span></code> queries (#57)</p></li>
+<li><p>ENH: Ensure templates layout is re-indexed when updated (#59)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="withdrawn">
+<h2>0.7.0 - Withdrawn<a class="headerlink" href="#withdrawn" title="Permalink to this headline">¶</a></h2>
+<p>Release 0.7.0 was withdrawn because of inconsistencies in deployment.</p>
+</div>
+<div class="section" id="july-06-2020">
+<h2>0.6.3 (July 06, 2020)<a class="headerlink" href="#july-06-2020" title="Permalink to this headline">¶</a></h2>
+<p>Patch release including an updated PyBIDS configuration file for the PyBIDS 0.11.x series.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>FIX: Include leading dots in extensions (#56)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="may-09-2020">
+<h2>0.6.2 (May 09, 2020)<a class="headerlink" href="#may-09-2020" title="Permalink to this headline">¶</a></h2>
+<p>Patch release including some minimal improvements to package building and CI.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>MAINT: Some additional distribution improvements (#51)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h2>0.6.1 (May 09, 2020)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Patch release to generate and distribute wheels.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>MAINT: Run <code class="docutils literal notranslate"><span class="pre">black</span></code> (#50)</p></li>
+<li><p>MAINT: Distribute wheel + Revise CI framework (#49)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="may-1st-2020">
+<h2>0.6.0 (May 1st, 2020)<a class="headerlink" href="#may-1st-2020" title="Permalink to this headline">¶</a></h2>
+<p>Minor release in preparation of a new CalVer versioning following the lead of <em>fMRIPrep</em>.
+This release contains a fair amount of maintenance work to ensure synchronicity with the TemplateFlow Archive (<a class="reference external" href="https://github.com/templateflow/templateflow">https://github.com/templateflow/templateflow</a>). These maintenance actions drive the development towards establishing a peer-reviewed, lightweight template submission protocol. The release includes an update mechanism, enabling users of the <em>S3-backed mode of operation</em> (default) to update their local Archive structure without reinstalling the client. This feature is enabled by default on import time, to disable it make sure you export <code class="docutils literal notranslate"><span class="pre">TEMPLATEFLOW_AUTOUPDATE=off</span></code>.
+With thanks to Yarik for a datalad-related bug-fix.
+With thanks to V. Fonov for contributing with the new <code class="docutils literal notranslate"><span class="pre">tpl-MNI152NLin2009cSym</span></code>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>FIX: Provide path to the dataset as <code class="docutils literal notranslate"><span class="pre">dataset</span></code> argument (#48)</p></li>
+<li><p>ENH: Run an automatic S3-skeleton update on import by default (#45)</p></li>
+<li><p>ENH: Update the internal index of <em>TemplateFlow</em> (#40)</p></li>
+<li><p>ENH: Automatic generation of template citations (#35)</p></li>
+<li><p>MAINT: Set-up a GitHub action to test installation alternatives (see #23).</p></li>
+<li><p>MAINT: Migrate to <code class="docutils literal notranslate"><span class="pre">setuptools_scm</span></code> (#42)</p></li>
+<li><p>MAINT: Run <code class="docutils literal notranslate"><span class="pre">black</span></code> on the whole tree (#41)</p></li>
+<li><p>MAINT: Transfer the burden of keeping the S3-skeleton updated over to the archive (#39)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="march-20-2020">
+<h2>0.5.2 (March 20, 2020)<a class="headerlink" href="#march-20-2020" title="Permalink to this headline">¶</a></h2>
+<p>Patch release in the 0.5 series, adding a soft brainmask for numerical stability in
+floating-point rounding of atlas-based brain-extraction methods using the
+<code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code> template.</p>
+</div>
+<div class="section" id="id2">
+<h2>0.5.1 (March 20, 2020)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Patch of the new 0.5.x series, including a <a class="reference external" href="https://github.com/templateflow/tpl-WHS/tree/eee3069910cdaa2a4a7e2f880485ad0e67f031d3">new rodent template</a>
+and file fixes for <code class="docutils literal notranslate"><span class="pre">fsaverage</span></code> and <code class="docutils literal notranslate"><span class="pre">fsLR</span></code> templates.
+With thanks to E. MacNicol for contributing the new <code class="docutils literal notranslate"><span class="pre">tpl-WHS</span></code>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>MAINT: Drop Python 3.5 (#36)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="march-12-2020">
+<h2>0.5.0 (March 12, 2020)<a class="headerlink" href="#march-12-2020" title="Permalink to this headline">¶</a></h2>
+<p>This release has been removed and should not be used.</p>
+</div>
+<div class="section" id="version-0-4-2-january-28-2020">
+<h2>Version 0.4.2 (January 28, 2020)<a class="headerlink" href="#version-0-4-2-january-28-2020" title="Permalink to this headline">¶</a></h2>
+<p>Patch release including a bugfix, adding a DataLad pin, and making PyBIDS pin more flexible.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>MAINT: Update PyBIDS pin and DataLad pin</p></li>
+<li><p>FIX: Density key (#31)</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-4-1-july-22-2019">
+<h2>Version 0.4.1 (July 22, 2019)<a class="headerlink" href="#version-0-4-1-july-22-2019" title="Permalink to this headline">¶</a></h2>
+<p>First release after a deep revision of the tests and the continuous integration setup.
+Also includes minor reliability improvements over the previous release and some bugfixes.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)</p></li>
+<li><p>MAINT: Enable code coverage collection (#25)</p></li>
+<li><p>MAINT: Switch to a <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>-style of installation (#24)</p></li>
+<li><p>FIX: Check and update <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> if needed with every installation (#20)</p></li>
+<li><p>FIX: Do not merge branches into master when pushing back skell (#19)</p></li>
+<li><p>FIX: Commit newly generated S3 skeletons back to repo (#17)</p></li>
+<li><p>FIX: Add <code class="docutils literal notranslate"><span class="pre">extension</span></code> entity for selection (#16) &#64;effigies</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-4-0-july-9-2019">
+<h2>Version 0.4.0 (July 9, 2019)<a class="headerlink" href="#version-0-4-0-july-9-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>MAINT: Use PyBIDS 0.9.x (#15) &#64;effigies</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-3-0-june-4-2019">
+<h2>Version 0.3.0 (June 4, 2019)<a class="headerlink" href="#version-0-3-0-june-4-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Add <code class="docutils literal notranslate"><span class="pre">MNIInfant</span></code> template.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-2-0-june-4-2019">
+<h2>Version 0.2.0 (June 4, 2019)<a class="headerlink" href="#version-0-2-0-june-4-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Added <code class="docutils literal notranslate"><span class="pre">MNIPediatricAsym</span></code> template.</p></li>
+<li><p>ENH: Updated spec to allow several <em>cohorts</em> (<code class="docutils literal notranslate"><span class="pre">cohort-</span></code>).</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-9-may-28-2019">
+<h2>Version 0.1.9 (May 28, 2019)<a class="headerlink" href="#version-0-1-9-may-28-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Added the <a class="reference external" href="https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI">Schaefer 2018 atlas</a>) to <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code>.</p></li>
+<li><p>ENH: Mapped the Schaefer atlas and the Harvard-Oxford atlas into <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-8-may-9-2019">
+<h2>Version 0.1.8 (May 9, 2019)<a class="headerlink" href="#version-0-1-8-may-9-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Added FSL’s Harvard-Oxford template to <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-7-april-3-2019">
+<h2>Version 0.1.7 (April 3, 2019)<a class="headerlink" href="#version-0-1-7-april-3-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: New release including bugfixes for <code class="docutils literal notranslate"><span class="pre">MNI152NLin2009cAsym</span></code> (particularly <a class="reference external" href="https://github.com/templateflow/tpl-MNI152NLin2009cAsym/commit/6e6d5915c7d8055d4af5efbf5e5457a0ab3246b9">https://github.com/templateflow/tpl-MNI152NLin2009cAsym/commit/6e6d5915c7d8055d4af5efbf5e5457a0ab3246b9</a>)</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-6-march-29-2019">
+<h2>Version 0.1.6 (March 29, 2019)<a class="headerlink" href="#version-0-1-6-march-29-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Finish adding <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Sym</span></code> after curation of NIfTI volumes and exporting to S3.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-5-march-29-2019">
+<h2>Version 0.1.5 (March 29, 2019)<a class="headerlink" href="#version-0-1-5-march-29-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Add volumetric data to the <code class="docutils literal notranslate"><span class="pre">fsLR</span></code> template.</p></li>
+<li><p>ENH: Rename the segmentation of subcortical structures to be consistent with the new files.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-4-march-28-2019">
+<h2>Version 0.1.4 (March 28, 2019)<a class="headerlink" href="#version-0-1-4-march-28-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: New release to include the new <code class="docutils literal notranslate"><span class="pre">MNI152NLin6Asym</span></code> template (the default MNI template of FSL).</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-3-march-14-2019">
+<h2>Version 0.1.3 (March 14, 2019)<a class="headerlink" href="#version-0-1-3-march-14-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>FIX: Update TemplateFlow skeleton to include <code class="docutils literal notranslate"><span class="pre">tpl-fsaverage/tpl-fsaverage_dseg.tsv</span></code>, after TemplateFlow update.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-2-march-12-2019">
+<h2>Version 0.1.2 (March 12, 2019)<a class="headerlink" href="#version-0-1-2-march-12-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>FIX: <code class="docutils literal notranslate"><span class="pre">api.get</span></code> - robuster fetcher algorithm (allows S3 download on DL repos) and better error messages (#10)</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-1-march-12-2019">
+<h2>Version 0.1.1 (March 12, 2019)<a class="headerlink" href="#version-0-1-1-march-12-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>FIX: Require environment variable to use DataLad (#8)</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-0-post1-march-05-2019">
+<h2>Version 0.1.0.post1 (March 05, 2019)<a class="headerlink" href="#version-0-1-0-post1-march-05-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Testing a better <code class="docutils literal notranslate"><span class="pre">.zenodo.json</span></code> settings.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-1-0-march-05-2019">
+<h2>Version 0.1.0 (March 05, 2019)<a class="headerlink" href="#version-0-1-0-march-05-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: First minimally functional TemplateFlow client release.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-5-post1-march-04-2019">
+<h2>Version 0.0.5.post1 (March 04, 2019)<a class="headerlink" href="#version-0-0-5-post1-march-04-2019" title="Permalink to this headline">¶</a></h2>
+<p>Hotfix release to retrieve correct version when pip installed.</p>
+<ul class="simple">
+<li><p>MAINT: Add a <code class="docutils literal notranslate"><span class="pre">.zenodo.json</span></code> file.</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-5-march-04-2019">
+<h2>Version 0.0.5 (March 04, 2019)<a class="headerlink" href="#version-0-0-5-march-04-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Datalad-free alternative for TemplateFlow (#7)</p></li>
+<li><p>ENH: Use a BIDSLayout to index TemplateFlow (#6)</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-4-january-18-2019">
+<h2>Version 0.0.4 (January 18, 2019)<a class="headerlink" href="#version-0-0-4-january-18-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Add a <code class="docutils literal notranslate"><span class="pre">get_metadata</span></code> utility</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-3-january-16-2019">
+<h2>Version 0.0.3 (January 16, 2019)<a class="headerlink" href="#version-0-0-3-january-16-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Add <code class="docutils literal notranslate"><span class="pre">api.templates()</span></code> + one doctest</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-2-january-16-2019">
+<h2>Version 0.0.2 (January 16, 2019)<a class="headerlink" href="#version-0-0-2-january-16-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: Add one doctest</p></li>
+</ul>
+</div>
+<div class="section" id="version-0-0-1-january-16-2019">
+<h2>Version 0.0.1 (January 16, 2019)<a class="headerlink" href="#version-0-0-1-january-16-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENH: First functional release</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api/templateflow.conf.bids.html" class="btn btn-neutral float-left" title="templateflow.conf.bids module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The TemplateFlow developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev (0.7.2.dev31)
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div id="version-switch" class="rst-other-versions">
+    <dt id="v-tags"></dt>
+    <dt id="v-branches"></dt>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location.pathname;
+    var cur_ver = "/master/"
+    var relpath = pathname.substring(pathname.indexOf(cur_ver) + 1).replace(/\/$/, '');
+    var levels = relpath.split("/").length - 1
+    if ( levels == 0 ) {
+        levels = 1
+	relpath += "/"
+    }
+    var versions_file = "../".repeat(levels) + "versions.json"
+    relpath = "../".repeat(levels) + relpath
+    console.log(`relative path: "${relpath}"`)
+
+    $.getJSON(versions_file, function (data) {
+
+        $.each(data["tags"], function( i, val ) {
+            $("#v-tags").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + val + "/") + "\">" + val + "</a></dd>")
+        });
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + data["tags"][data["tags"].length - 1]+ "/") + "\">latest</a></dd>")
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/master/") + "\">dev</a></dd>")
+    });
+});
+</script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

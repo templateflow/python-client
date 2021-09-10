@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DataLad &mdash; templateflow 0.7.2.dev31+g383766b9.d20210908 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Library API (application program interface)" href="api.html" />
+    <link rel="prev" title="Visualisation of spatial resources with TemplateFlow" href="notebooks/02_visualisation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> templateflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev (0.7.2.dev31)
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DataLad</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-archive">Installing the Archive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-templates">Accessing templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Library API (application program interface)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">What’s new</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">templateflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>DataLad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/datalad.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="datalad">
+<h1>DataLad<a class="headerlink" href="#datalad" title="Permalink to this headline">¶</a></h1>
+<p>The <em>TemplateFlow</em> Archive is an infrastructure reliant on DataLad.
+Therefore, it is possible (and recommended for those who want to
+leverage the power of DataLad) to access the Archive using just
+DataLad.</p>
+<div class="section" id="installing-the-archive">
+<h2>Installing the Archive<a class="headerlink" href="#installing-the-archive" title="Permalink to this headline">¶</a></h2>
+<p>The archive is indexed by a superdataset, which can be installed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ datalad install -r https://github.com/templateflow/templateflow.git
+</pre></div>
+</div>
+<p>or just:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ datalad install -r ///templateflow
+</pre></div>
+</div>
+<p>Please note the <code class="docutils literal notranslate"><span class="pre">-r</span></code> modifier, which will automatically install all the
+subdatasets.
+In this case, subdatasets (sub-folders) are the individual templates
+(signified by the <code class="docutils literal notranslate"><span class="pre">tpl-</span></code> prefix).
+If the operation finished successfully, you should be able to change directories
+into templateflow and see something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd templateflow/
+$ ls -lh
+total 76K
+-rw-rw-r--  1 oesteban oesteban  122 Sep  8 10:42 dataset_description.json
+drwxrwxr-x  4 oesteban oesteban 4.0K Sep  8 10:43 tpl-fsaverage
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:43 tpl-fsLR
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:42 tpl-MNI152Lin
+drwxrwxr-x  5 oesteban oesteban  16K Sep  8 10:42 tpl-MNI152NLin2009cAsym
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:42 tpl-MNI152NLin2009cSym
+drwxrwxr-x  5 oesteban oesteban  12K Sep  8 10:42 tpl-MNI152NLin6Asym
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:42 tpl-MNI152NLin6Sym
+drwxrwxr-x 16 oesteban oesteban 4.0K Sep  8 10:43 tpl-MNIInfant
+drwxrwxr-x 11 oesteban oesteban 4.0K Sep  8 10:43 tpl-MNIPediatricAsym
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:43 tpl-NKI
+drwxrwxr-x  4 oesteban oesteban 4.0K Sep  8 10:43 tpl-OASIS30ANTs
+drwxrwxr-x  4 oesteban oesteban 4.0K Sep  8 10:43 tpl-PNC
+drwxrwxr-x  5 oesteban oesteban 4.0K Sep  8 10:43 tpl-WHS
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The DataLad install operation DOES NOT download the data.
+Please see how to get the data below.</p>
+</div>
+</div>
+<div class="section" id="accessing-templates">
+<h2>Accessing templates<a class="headerlink" href="#accessing-templates" title="Permalink to this headline">¶</a></h2>
+<p>Before going ahead, make sure you understand how DataLad works.
+Once the TemplateFlow superdataset has been installed, as well as all or
+some of the subdatasets, it is possible to access data.
+For example, pulling down all T1-weighted NIfTI images of all datasets
+would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ find . -name &quot;*_T1w.nii.gz&quot; -exec datalad get {} +
+</pre></div>
+</div>
+<p>Let’s unpack what happened.
+DataLad (or more precisely, the <em>git-annex</em> working under the hood)
+replaces large files with symbolic links which point to files that
+permit the location of the actual resource.
+This technique (“annexing” to git) permits keeping the actual files
+outside the version control system that (unless set up with some
+special extension such as LFS) is not adequate to track large data
+files.
+Because annexed files are indeed in the file tree, it is possible to
+search with tools like <code class="docutils literal notranslate"><span class="pre">find</span></code> or <code class="docutils literal notranslate"><span class="pre">tree</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tree tpl-MNI152Lin
+tpl-MNI152Lin
+├── CHANGES
+├── LICENSE
+├── scripts
+│   ├── headmask.py
+│   ├── normalize.py
+│   └── sanitize.py
+├── template_description.json
+├── tpl-MNI152Lin_res-01_desc-brain_mask.nii.gz -&gt; .git/annex/objects/J4/J9/URL-s131839--https&amp;c%%files.osf.io%v1%resourc-4a92beb360af57cc397642c99e4f34ee/URL-s131839--https&amp;c%%files.osf.io%v1%resourc-4a92beb360af57cc397642c99e4f34ee
+├── tpl-MNI152Lin_res-01_desc-head_mask.nii.gz -&gt; .git/annex/objects/j3/Jw/URL-s168509--https&amp;c%%files.osf.io%v1%resourc-2e366aff039e485ce73875dd1fc912fd/URL-s168509--https&amp;c%%files.osf.io%v1%resourc-2e366aff039e485ce73875dd1fc912fd
+├── tpl-MNI152Lin_res-01_PD.nii.gz -&gt; .git/annex/objects/5m/4z/URL-s10250635--https&amp;c%%files.osf.io%v1%resourc-d38cc6938c26e9389a1a9acf03f5a4b6/URL-s10250635--https&amp;c%%files.osf.io%v1%resourc-d38cc6938c26e9389a1a9acf03f5a4b6
+├── tpl-MNI152Lin_res-01_T1w.nii.gz -&gt; .git/annex/objects/pM/Fm/URL-s10669511--https&amp;c%%files.osf.io%v1%resourc-2e59511114a1686f937e0127af887b83/URL-s10669511--https&amp;c%%files.osf.io%v1%resourc-2e59511114a1686f937e0127af887b83
+├── tpl-MNI152Lin_res-01_T2w.nii.gz -&gt; .git/annex/objects/63/jK/URL-s10096230--https&amp;c%%files.osf.io%v1%resourc-7ee9c493542a55d96d28d55d57a3ee52/URL-s10096230--https&amp;c%%files.osf.io%v1%resourc-7ee9c493542a55d96d28d55d57a3ee52
+├── tpl-MNI152Lin_res-02_desc-brain_mask.nii.gz -&gt; .git/annex/objects/vj/pW/URL-s25649--https&amp;c%%files.osf.io%v1%resourc-ebe0f869bd33c9dd7d983a73f7704326/URL-s25649--https&amp;c%%files.osf.io%v1%resourc-ebe0f869bd33c9dd7d983a73f7704326
+├── tpl-MNI152Lin_res-02_desc-head_mask.nii.gz -&gt; .git/annex/objects/7q/gF/URL-s32857--https&amp;c%%files.osf.io%v1%resourc-4c79972ef82dfaa9070522b558a8411c/URL-s32857--https&amp;c%%files.osf.io%v1%resourc-4c79972ef82dfaa9070522b558a8411c
+├── tpl-MNI152Lin_res-02_PD.nii.gz -&gt; .git/annex/objects/1m/jq/URL-s1411464--https&amp;c%%files.osf.io%v1%resourc-95c7dabef32603e9f1d4f3f9cb92b800/URL-s1411464--https&amp;c%%files.osf.io%v1%resourc-95c7dabef32603e9f1d4f3f9cb92b800
+├── tpl-MNI152Lin_res-02_T1w.nii.gz -&gt; .git/annex/objects/Wf/Fx/URL-s1448817--https&amp;c%%files.osf.io%v1%resourc-2ba5a81206dff8bbf84fb319ed1d7201/URL-s1448817--https&amp;c%%files.osf.io%v1%resourc-2ba5a81206dff8bbf84fb319ed1d7201
+└── tpl-MNI152Lin_res-02_T2w.nii.gz -&gt; .git/annex/objects/X8/Fv/URL-s1375781--https&amp;c%%files.osf.io%v1%resourc-6f1f3ad0441ef1200307a70b32b4f303/URL-s1375781--https&amp;c%%files.osf.io%v1%resourc-6f1f3ad0441ef1200307a70b32b4f303
+
+1 directory, 16 files
+</pre></div>
+</div>
+<p>If your terminal has advanced coloring, you will also see that only the two
+links ending with <code class="docutils literal notranslate"><span class="pre">_T1w.nii.gz</span></code> are not “broken” links.
+This is because we did <code class="docutils literal notranslate"><span class="pre">datalad</span> <span class="pre">get</span></code> on both of them in the previous step.
+DataLad only pulls the actual file objects when they are requested.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="Library API (application program interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="notebooks/02_visualisation.html" class="btn btn-neutral float-left" title="Visualisation of spatial resources with TemplateFlow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, The TemplateFlow developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev (0.7.2.dev31)
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div id="version-switch" class="rst-other-versions">
+    <dt id="v-tags"></dt>
+    <dt id="v-branches"></dt>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var pathname = window.location.pathname;
+    var cur_ver = "/master/"
+    var relpath = pathname.substring(pathname.indexOf(cur_ver) + 1).replace(/\/$/, '');
+    var levels = relpath.split("/").length - 1
+    if ( levels == 0 ) {
+        levels = 1
+	relpath += "/"
+    }
+    var versions_file = "../".repeat(levels) + "versions.json"
+    relpath = "../".repeat(levels) + relpath
+    console.log(`relative path: "${relpath}"`)
+
+    $.getJSON(versions_file, function (data) {
+
+        $.each(data["tags"], function( i, val ) {
+            $("#v-tags").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + val + "/") + "\">" + val + "</a></dd>")
+        });
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/" + data["tags"][data["tags"].length - 1]+ "/") + "\">latest</a></dd>")
+        $("#v-branches").append("<dd><a href=\"" + relpath.replace(cur_ver, "/master/") + "\">dev</a></dd>")
+    });
+});
+</script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
