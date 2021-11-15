@@ -30,7 +30,8 @@ jobs:
           command: |
             if [[ ! -e "/tmp/cache/git-annex-standalone.tar.gz" ]]; then
               wget -O- http://neuro.debian.net/lists/focal.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-              sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+              sudo apt-key add /tmp/src/templateflow/.neurodebian/neurodebian.gpg
+              sudo apt-key adv --recv-keys --keyserver hkps://keys.openpgp.org 0xA5D32F012649A5A9 || true
               sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
               mkdir -p /tmp/cache
               tar czvf /tmp/cache/git-annex-standalone.tar.gz /usr/bin/git-annex /usr/bin/git-annex-shell /usr/lib/git-annex.linux
