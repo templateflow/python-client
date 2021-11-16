@@ -13,7 +13,7 @@ mni2009_urls = [
 ]
 
 mni2009_fbib = """\
-@article{2011,
+@article{Fonov_2011,
 \tdoi = {10.1016/j.neuroimage.2010.07.033},
 \turl = {https://doi.org/10.1016%2Fj.neuroimage.2010.07.033},
 \tyear = 2011,
@@ -24,18 +24,20 @@ mni2009_fbib = """\
 \tpages = {313--327},
 \tauthor = {Vladimir Fonov and Alan C. Evans and Kelly Botteron and C. Robert \
 Almli and Robert C. McKinstry and D. Louis Collins},
-\ttitle = {Unbiased average age-appropriate atlases for pediatric studies}
+\ttitle = {Unbiased average age-appropriate atlases for pediatric studies},
+\tjournal = {{NeuroImage}}
 }"""
 
 mni2009_lbib = """\
-@incollection{1999,
+@incollection{Collins_1999,
 \tdoi = {10.1007/3-540-48714-x_16},
 \turl = {https://doi.org/10.1007%2F3-540-48714-x_16},
 \tyear = 1999,
 \tpublisher = {Springer Berlin Heidelberg},
 \tpages = {210--223},
 \tauthor = {D. Louis Collins and Alex P. Zijdenbos and Wim F. C. Baar{\\'{e}} and Alan C. Evans},
-\ttitle = {{ANIMAL}$\\mathplus${INSECT}: Improved Cortical Structure Segmentation}
+\ttitle = {{ANIMAL}$\\mathplus${INSECT}: Improved Cortical Structure Segmentation},
+\tbooktitle = {Lecture Notes in Computer Science}
 }"""
 
 fslr_urls = [
@@ -44,7 +46,7 @@ fslr_urls = [
 ]
 
 fslr_fbib = """\
-@article{2011,
+@article{Van_Essen_2011,
 \tdoi = {10.1093/cercor/bhr291},
 \turl = {https://doi.org/10.1093%2Fcercor%2Fbhr291},
 \tyear = 2011,
@@ -55,7 +57,8 @@ fslr_fbib = """\
 \tpages = {2241--2262},
 \tauthor = {D. C. Van Essen and M. F. Glasser and D. L. Dierker and J. Harwell and T. Coalson},
 \ttitle = {Parcellations and Hemispheric Asymmetries of Human Cerebral Cortex Analyzed on \
-Surface-Based Atlases}
+Surface-Based Atlases},
+\tjournal = {Cerebral Cortex}
 }"""
 
 fslr_lbib = (
