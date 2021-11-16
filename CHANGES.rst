@@ -1,3 +1,13 @@
+0.7.2 (November 16, 2021)
+=========================
+Minor release with a substantially documentation update, as well as usage improvements.
+Additionally, new surface meshes were added for the `fsLR` template.
+
+ * DOC: Substantial update and re-structuring to the documentation (#77) (#79)
+ * FIX: layout is ``None`` when PyBIDS not correctly installed (#72)
+ * FIX: Drop ``doi2bib`` and query doi.org directly (#76)
+ * MAINT: Pin ``setuptools >=45``, new dependency as of ``setuptools_scm>=6.0.1`` (#73)
+
 0.7.1 (December 9, 2020)
 ========================
 Minor release with improvements to the template fetching experience.
