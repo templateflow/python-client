@@ -1,23 +1,33 @@
+0.8.0 (March 31, 2022)
+======================
+Minor release including the feedback received through peer-review of the preprint.
+Please note that this release is supported by Python +3.7.
+
+* FIX: Normalize extensions for leading dot & update doctests to new resources (#92)
+* ENH: Add a ``wipe()`` utility to clear up the cache (#91)
+* DOC: Update notebooks submodule (#94)
+* MAINT: Drop Python 3.6 (#93)
+
 0.7.2 (November 16, 2021)
 =========================
-Minor release with a substantially documentation update, as well as usage improvements.
+Patch release with a substantially documentation update, as well as usage improvements.
 Additionally, new surface meshes were added for the `fsLR` template.
 
- * DOC: Substantial update and re-structuring to the documentation (#77) (#79)
- * FIX: layout is ``None`` when PyBIDS not correctly installed (#72)
- * FIX: Drop ``doi2bib`` and query doi.org directly (#76)
- * MAINT: Pin ``setuptools >=45``, new dependency as of ``setuptools_scm>=6.0.1`` (#73)
+* DOC: Substantial update and re-structuring to the documentation (#77) (#79)
+* FIX: layout is ``None`` when PyBIDS not correctly installed (#72)
+* FIX: Drop ``doi2bib`` and query doi.org directly (#76)
+* MAINT: Pin ``setuptools >=45``, new dependency as of ``setuptools_scm>=6.0.1`` (#73)
 
 0.7.1 (December 9, 2020)
 ========================
-Minor release with improvements to the template fetching experience.
+Patch release with improvements to the template fetching experience.
 With thanks to Lea Waller for the contribution.
 
-  * FIX: Use ``BIDSLayoutIndexer`` when initiating ``BIDSLayout`` (#61)
-  * FIX: Display correct units when downloading templates (#63)
-  * FIX: GitHub Actions build (#64)
-  * ENH: Add option to raise exception on empty ``get`` queries (#57)
-  * ENH: Ensure templates layout is re-indexed when updated (#59)
+* FIX: Use ``BIDSLayoutIndexer`` when initiating ``BIDSLayout`` (#61)
+* FIX: Display correct units when downloading templates (#63)
+* FIX: GitHub Actions build (#64)
+* ENH: Add option to raise exception on empty ``get`` queries (#57)
+* ENH: Ensure templates layout is re-indexed when updated (#59)
 
 0.7.0 - Withdrawn
 =================
@@ -27,21 +37,21 @@ Release 0.7.0 was withdrawn because of inconsistencies in deployment.
 =====================
 Patch release including an updated PyBIDS configuration file for the PyBIDS 0.11.x series.
 
-  * FIX: Include leading dots in extensions (#56)
+* FIX: Include leading dots in extensions (#56)
 
 0.6.2 (May 09, 2020)
 ====================
 Patch release including some minimal improvements to package building and CI.
 
-  * MAINT: Some additional distribution improvements (#51)
+* MAINT: Some additional distribution improvements (#51)
 
 
 0.6.1 (May 09, 2020)
 ====================
 Patch release to generate and distribute wheels.
 
-  * MAINT: Run ``black`` (#50)
-  * MAINT: Distribute wheel + Revise CI framework (#49)
+* MAINT: Run ``black`` (#50)
+* MAINT: Distribute wheel + Revise CI framework (#49)
 
 
 0.6.0 (May 1st, 2020)
@@ -51,14 +61,14 @@ This release contains a fair amount of maintenance work to ensure synchronicity 
 With thanks to Yarik for a datalad-related bug-fix.
 With thanks to V. Fonov for contributing with the new ``tpl-MNI152NLin2009cSym``.
 
-  * FIX: Provide path to the dataset as ``dataset`` argument (#48)
-  * ENH: Run an automatic S3-skeleton update on import by default (#45)
-  * ENH: Update the internal index of *TemplateFlow* (#40)
-  * ENH: Automatic generation of template citations (#35)
-  * MAINT: Set-up a GitHub action to test installation alternatives (see #23).
-  * MAINT: Migrate to ``setuptools_scm`` (#42)
-  * MAINT: Run ``black`` on the whole tree (#41)
-  * MAINT: Transfer the burden of keeping the S3-skeleton updated over to the archive (#39)
+* FIX: Provide path to the dataset as ``dataset`` argument (#48)
+* ENH: Run an automatic S3-skeleton update on import by default (#45)
+* ENH: Update the internal index of *TemplateFlow* (#40)
+* ENH: Automatic generation of template citations (#35)
+* MAINT: Set-up a GitHub action to test installation alternatives (see #23).
+* MAINT: Migrate to ``setuptools_scm`` (#42)
+* MAINT: Run ``black`` on the whole tree (#41)
+* MAINT: Transfer the burden of keeping the S3-skeleton updated over to the archive (#39)
 
 0.5.2 (March 20, 2020)
 ======================
@@ -73,7 +83,7 @@ Patch of the new 0.5.x series, including a `new rodent template
 and file fixes for ``fsaverage`` and ``fsLR`` templates.
 With thanks to E. MacNicol for contributing the new ``tpl-WHS``.
 
-  * MAINT: Drop Python 3.5 (#36)
+* MAINT: Drop Python 3.5 (#36)
 
 0.5.0 (March 12, 2020)
 ======================
@@ -91,13 +101,13 @@ Version 0.4.1 (July 22, 2019)
 First release after a deep revision of the tests and the continuous integration setup.
 Also includes minor reliability improvements over the previous release and some bugfixes.
 
-  * MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)
-  * MAINT: Enable code coverage collection (#25)
-  * MAINT: Switch to a ``setup.cfg``-style of installation (#24)
-  * FIX: Check and update ``$HOME`` if needed with every installation (#20)
-  * FIX: Do not merge branches into master when pushing back skell (#19)
-  * FIX: Commit newly generated S3 skeletons back to repo (#17)
-  * FIX: Add ``extension`` entity for selection (#16) @effigies
+* MAINT: Testing Automatically update CHANGES after merge (51988f8) (#27)
+* MAINT: Enable code coverage collection (#25)
+* MAINT: Switch to a ``setup.cfg``-style of installation (#24)
+* FIX: Check and update ``$HOME`` if needed with every installation (#20)
+* FIX: Do not merge branches into master when pushing back skell (#19)
+* FIX: Commit newly generated S3 skeletons back to repo (#17)
+* FIX: Add ``extension`` entity for selection (#16) @effigies
 
 Version 0.4.0 (July 9, 2019)
 ============================
