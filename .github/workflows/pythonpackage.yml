@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
-        pip: ["pip~=20.0", "pip~=21.0"]
+        pip: ["pip==21.2", "pip~=22.0"]
 
     steps:
     - uses: actions/checkout@v2
@@ -142,6 +142,7 @@ jobs:
         source /tmp/setup_install/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
+        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -174,6 +175,7 @@ jobs:
         source /tmp/setup_develop/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
+        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
