@@ -65,13 +65,26 @@ fslr_lbib = (
     "https://github.com/Washington-University/HCPpipelines/tree/master/global/templates"
 )
 
+fsaverage_fbib = """\
+@article{Fischl_1999,
+\tdoi = {10.1002/(sici)1097-0193(1999)8:4<272::aid-hbm10>3.0.co;2-4},
+\turl = {https://doi.org/10.1002%2F%28sici%291097-0193%281999%298%3A4%3C272%3A%3Aaid-hbm10%3E3.0.co%3B2-4},
+\tyear = 1999,
+\tpublisher = {Wiley},
+\tvolume = {8},
+\tnumber = {4},
+\tpages = {272--284},
+\tauthor = {Bruce Fischl and Martin I. Sereno and Roger B.H. Tootell and Anders M. Dale},
+\ttitle = {High-resolution intersubject averaging and a coordinate system for the cortical surface},
+\tjournal = {Human Brain Mapping}
+}"""
 
 @pytest.mark.parametrize(
     "template,urls,fbib,lbib",
     [
         ("MNI152NLin2009cAsym", mni2009_urls, mni2009_fbib, mni2009_lbib),
         ("fsLR", fslr_urls, fslr_fbib, fslr_lbib),
-        ("fsaverage", [], None, None),
+        ("fsaverage", ["https://doi.org/10.1002/(sici)1097-0193(1999)8:4%3C272::aid-hbm10%3E3.0.co;2-4"], fsaverage_fbib, None),
     ],
 )
 def test_citations(tmp_path, template, urls, fbib, lbib):
@@ -80,7 +93,7 @@ def test_citations(tmp_path, template, urls, fbib, lbib):
     bibs = api.get_citations(template, bibtex=True)
     if bibs:
         assert "".join(bibs[0]) == fbib
-        assert "".join(bibs[-1]) == lbib
+        assert len(bibs) == 1 if lbib is None else "".join(bibs[-1]) == lbib
     else:
         # no citations currently
-        assert template == "fsaverage"
+        assert False
