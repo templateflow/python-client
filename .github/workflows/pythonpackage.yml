@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
-        pip: ["pip~=20.0", "pip~=21.0"]
+        pip: ["pip==21.2", "pip~=22.0"]
 
     steps:
     - uses: actions/checkout@v2
@@ -87,7 +87,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
     - name: Re-install in confined environment [sdist - missing template]
       env:
@@ -95,7 +95,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
         diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
@@ -118,7 +118,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
     - name: Re-install in confined environment [wheel - missing template]
       env:
@@ -126,7 +126,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
         # Wheels do not run post-install hooks:
         test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         python -c "import templateflow; templateflow.update(overwrite=False)"
@@ -142,6 +142,7 @@ jobs:
         source /tmp/setup_install/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
+        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
         python setup.py install
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -174,6 +175,7 @@ jobs:
         source /tmp/setup_develop/bin/activate
         python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
                               setuptools_scm_git_archive "${{ matrix.pip }}"
+        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
         python setup.py develop
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""

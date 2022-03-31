@@ -38,14 +38,14 @@ def get(template, raise_empty=False, **kwargs):
 
     Examples
     --------
-    >>> str(get('MNI152Lin', resolution=1, suffix='T1w'))  # doctest: +ELLIPSIS
+    >>> str(get('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
     '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
 
-    >>> str(get('MNI152Lin', resolution=2, suffix='T1w'))  # doctest: +ELLIPSIS
+    >>> str(get('MNI152Lin', resolution=2, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
     '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz'
 
     >>> [str(p) for p in get(
-    ...     'MNI152Lin', suffix='T1w')]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    ...     'MNI152Lin', suffix='T1w', desc=None)]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
      '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
 
@@ -62,6 +62,10 @@ def get(template, raise_empty=False, **kwargs):
     ...
 
     """
+    # Normalize extensions to always have leading dot
+    if "extension" in kwargs:
+        kwargs["extension"] = _normalize_ext(kwargs["extension"])
+
     out_file = [
         Path(p) for p in TF_LAYOUT.get(template=template, return_type="file", **kwargs)
     ]
@@ -135,8 +139,8 @@ def templates(**kwargs):
     >>> all([t in tpls for t in base])
     True
 
-    >>> templates(suffix='PD')
-    ['MNI152Lin', 'MNI152NLin2009cAsym', 'MNI152NLin2009cSym', 'MNIInfant', 'MNIPediatricAsym']
+    >>> sorted(set(base).intersection(templates(suffix='PD')))
+    ['MNI152Lin', 'MNI152NLin2009cAsym']
 
     """
     return sorted(TF_LAYOUT.get_templates(**kwargs))
@@ -247,8 +251,7 @@ def _to_bibtex(doi, template, idx):
     import requests
 
     response = requests.post(
-        doi,
-        headers={"Accept": "application/x-bibtex; charset=utf-8"}
+        doi, headers={"Accept": "application/x-bibtex; charset=utf-8"}
     )
     if not response.ok:
         print(
@@ -258,3 +261,32 @@ def _to_bibtex(doi, template, idx):
         return doi
 
     return response.text
+
+
+def _normalize_ext(value):
+    """
+    Normalize extensions to have a leading dot.
+
+    Examples
+    --------
+    >>> _normalize_ext(".nii.gz")
+    '.nii.gz'
+    >>> _normalize_ext("nii.gz")
+    '.nii.gz'
+    >>> _normalize_ext(("nii", ".nii.gz"))
+    ['.nii', '.nii.gz']
+    >>> _normalize_ext(("", ".nii.gz"))
+    ['', '.nii.gz']
+    >>> _normalize_ext((None, ".nii.gz"))
+    [None, '.nii.gz']
+    >>> _normalize_ext([])
+    []
+
+    """
+
+    if not value:
+        return value
+
+    if isinstance(value, str):
+        return f"{'' if value.startswith('.') else '.'}{value}"
+    return [_normalize_ext(v) for v in value]
