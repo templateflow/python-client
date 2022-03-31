@@ -87,7 +87,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
     - name: Re-install in confined environment [sdist - missing template]
       env:
@@ -95,7 +95,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz
+        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
         diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
@@ -118,7 +118,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
     - name: Re-install in confined environment [wheel - missing template]
       env:
@@ -126,7 +126,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl
+        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
         # Wheels do not run post-install hooks:
         test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         python -c "import templateflow; templateflow.update(overwrite=False)"
