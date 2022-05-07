@@ -132,9 +132,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - env-v3-{{ .Branch }}-
-            - env-v3-master-
-            - env-v3-
+            - env-v7-{{ .Branch }}
+            - env-v7-master
+            - env-v7-
       - run:
           name: Install base packages
           command: |
@@ -145,15 +145,13 @@ jobs:
             fi
 
             if ! [ -x "$(command -v conda)" ]; then
-              curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
-              bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b -p $HOME/.conda
+              curl -sSLO https://repo.anaconda.com/miniconda/Miniconda3-py39_4.11.0-Linux-x86_64.sh 
+              bash Miniconda3-py39_4.11.0-Linux-x86_64.sh -b -p $HOME/.conda
+              $HOME/.conda/bin/conda env update -f docs/environment.yml --prune
             fi
-      - run:
-          name: Setup conda environment
-          command: |
-            $HOME/.conda/bin/conda env create -f docs/environment.yml
+
       - save_cache:
-          key: env-v3-{{ .Branch }}-{{ .BuildNum }}
+          key: env-v7-{{ .Branch }}
           paths:
             - ~/.conda
 
@@ -167,7 +165,6 @@ jobs:
           name: Build only this commit
           command: |
             export PATH="$HOME/.conda/bin:$PATH"
-            conda activate templateflow-docs
             python setup.py --version
             make -C docs SPHINXOPTS="-W" BUILDDIR="$HOME/html" CURBRANCH="${CIRCLE_TAG}" html
       - store_artifacts:
