@@ -151,8 +151,7 @@ jobs:
       - run:
           name: Setup conda environment
           command: |
-            $HOME/.conda/bin/conda install -y -c conda-forge -c anaconda graphviz pandoc curl "setuptools>=45" "setuptools_scm>=6.2" "pip>20" wheel sphinx=4 ipython
-            $HOME/.conda/bin/python -m pip install --no-cache-dir -r docs/requirements.txt
+            $HOME/.conda/bin/conda env create -f docs/environment.yml
       - save_cache:
           key: env-v3-{{ .Branch }}-{{ .BuildNum }}
           paths:
@@ -165,14 +164,10 @@ jobs:
           name: Create subjects folder
           command: mkdir -p $SUBJECTS_DIR
       - run:
-          name: Install deps
-          command: |
-            export PATH="$HOME/.conda/bin:$PATH"
-            pip install --no-cache-dir -r docs/requirements.txt
-      - run:
           name: Build only this commit
           command: |
             export PATH="$HOME/.conda/bin:$PATH"
+            conda activate templateflow-docs
             python setup.py --version
             make -C docs SPHINXOPTS="-W" BUILDDIR="$HOME/html" CURBRANCH="${CIRCLE_TAG}" html
       - store_artifacts:
