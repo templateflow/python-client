@@ -132,9 +132,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - env-v3-{{ .Branch }}-
-            - env-v3-master-
-            - env-v3-
+            - env-v7-{{ .Branch }}
+            - env-v7-master
+            - env-v7-
       - run:
           name: Install base packages
           command: |
@@ -145,16 +145,13 @@ jobs:
             fi
 
             if ! [ -x "$(command -v conda)" ]; then
-              curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
-              bash Miniconda3-py38_4.10.3-Linux-x86_64.sh -b -p $HOME/.conda
+              curl -sSLO https://repo.anaconda.com/miniconda/Miniconda3-py39_4.11.0-Linux-x86_64.sh 
+              bash Miniconda3-py39_4.11.0-Linux-x86_64.sh -b -p $HOME/.conda
+              $HOME/.conda/bin/conda env update -f docs/environment.yml --prune
             fi
-      - run:
-          name: Setup conda environment
-          command: |
-            $HOME/.conda/bin/conda install -y -c conda-forge -c anaconda graphviz pandoc curl "setuptools>=45" "setuptools_scm>=6.2" "pip>20" wheel sphinx=4 ipython
-            $HOME/.conda/bin/python -m pip install --no-cache-dir -r docs/requirements.txt
+
       - save_cache:
-          key: env-v3-{{ .Branch }}-{{ .BuildNum }}
+          key: env-v7-{{ .Branch }}
           paths:
             - ~/.conda
 
@@ -164,11 +161,6 @@ jobs:
       - run:
           name: Create subjects folder
           command: mkdir -p $SUBJECTS_DIR
-      - run:
-          name: Install deps
-          command: |
-            export PATH="$HOME/.conda/bin:$PATH"
-            pip install --no-cache-dir -r docs/requirements.txt
       - run:
           name: Build only this commit
           command: |

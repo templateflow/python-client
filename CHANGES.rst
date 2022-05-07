@@ -1,3 +1,7 @@
+0.8.1 (May 7, 2022)
+===================
+Patch release updating the S3 skeleton to include the fixed version of ``tpl-MouseIn``.
+
 0.8.0 (March 31, 2022)
 ======================
 Minor release including the feedback received through peer-review of the preprint.
