@@ -35,20 +35,19 @@ def ls(template, **kwargs):
 
     Examples
     --------
-    >>> str(ls('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
-    '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
+    >>> ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz')]
 
-    >>> str(ls('MNI152Lin', resolution=2, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
-    '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz'
+    >>> ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-    >>> [str(p) for p in ls(
-    ...     'MNI152Lin', suffix='T1w', desc=None)]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-    ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
-     '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
+    >>> ls('MNI152Lin', suffix='T1w', desc=None)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'),
+     PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-    >>> str(ls('fsLR', space=None, hemi='L',
-    ...         density='32k', suffix='sphere'))  # doctest: +ELLIPSIS
-    '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
+    >>> ls('fsLR', space=None, hemi='L',
+    ...    density='32k', suffix='sphere')  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii')]
 
     >>> ls('fsLR', space='madeup')
     []
