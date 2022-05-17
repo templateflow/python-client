@@ -2,6 +2,7 @@
 from json import loads
 from pathlib import Path
 import sys
+from bids.layout import Query
 
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
 
@@ -58,7 +59,11 @@ def ls(template, **kwargs):
         kwargs["extension"] = _normalize_ext(kwargs["extension"])
 
     return [
-        Path(p) for p in TF_LAYOUT.get(template=template, return_type="file", **kwargs)
+        Path(p) for p in TF_LAYOUT.get(
+            template=Query.ANY if template is None else template,
+            return_type="file",
+            **kwargs
+        )
     ]
 
 
