@@ -1,16 +1,76 @@
 """TemplateFlow's Python Client."""
 from json import loads
 from pathlib import Path
-import re
 import sys
+from bids.layout import Query
 
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
 
 
 @requires_layout
+def ls(template, **kwargs):
+    """
+    List files pertaining to one or more templates.
+
+    Parameters
+    ----------
+    template : str
+        A template identifier (e.g., ``MNI152NLin2009cAsym``).
+
+    Keyword Arguments
+    -----------------
+    resolution: int or None
+        Index to an specific spatial resolution of the template.
+    suffix : str or None
+        BIDS suffix
+    atlas : str or None
+        Name of a particular atlas
+    hemi : str or None
+        Hemisphere
+    space : str or None
+        Space template is mapped to
+    density : str or None
+        Surface density
+    desc : str or None
+        Description field
+
+    Examples
+    --------
+    >>> ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz')]
+
+    >>> ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
+
+    >>> ls('MNI152Lin', suffix='T1w', desc=None)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'),
+     PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
+
+    >>> ls('fsLR', space=None, hemi='L',
+    ...    density='32k', suffix='sphere')  # doctest: +ELLIPSIS
+    [PosixPath('.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii')]
+
+    >>> ls('fsLR', space='madeup')
+    []
+
+    """
+    # Normalize extensions to always have leading dot
+    if "extension" in kwargs:
+        kwargs["extension"] = _normalize_ext(kwargs["extension"])
+
+    return [
+        Path(p) for p in TF_LAYOUT.get(
+            template=Query.ANY if template is None else template,
+            return_type="file",
+            **kwargs
+        )
+    ]
+
+
+@requires_layout
 def get(template, raise_empty=False, **kwargs):
     """
-    Fetch one file from one particular template.
+    Pull files pertaining to one or more templates down.
 
     Parameters
     ----------
@@ -62,13 +122,11 @@ def get(template, raise_empty=False, **kwargs):
     ...
 
     """
-    # Normalize extensions to always have leading dot
-    if "extension" in kwargs:
-        kwargs["extension"] = _normalize_ext(kwargs["extension"])
+    # List files available
+    out_file = ls(template, **kwargs)
 
-    out_file = [
-        Path(p) for p in TF_LAYOUT.get(template=template, return_type="file", **kwargs)
-    ]
+    if raise_empty and not out_file:
+        raise Exception("No results found")
 
     # Try DataLad first
     dl_missing = [p for p in out_file if not p.is_file()]
@@ -107,9 +165,6 @@ off (possible values: false, off, 0)."""
             )
 
         raise RuntimeError(msg)
-
-    if not out_file and raise_empty:
-        raise Exception("No results found")
 
     if len(out_file) == 1:
         return out_file[0]
