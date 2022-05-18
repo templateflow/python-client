@@ -1,5 +1,6 @@
 """Configuration and settings."""
 from os import getenv
+import re
 from warnings import warn
 from pathlib import Path
 from contextlib import suppress
@@ -151,12 +152,9 @@ def init_layout():
         indexer=BIDSLayoutIndexer(
             validate=False,
             ignore=(
-                ".git",
-                ".datalad",
-                ".gitannex",
-                ".gitattributes",
-                ".github",
-                "scripts",
+                re.compile(r"scripts/"),
+                re.compile(r"/\."),
+                re.compile(r"^\."),
             ),
         ),
     )
