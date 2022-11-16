@@ -1,4 +1,4 @@
-pybids>=0.12.1
+pybids>=0.15.2
 requests
 tqdm
 pytest
