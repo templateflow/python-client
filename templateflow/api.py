@@ -1,7 +1,8 @@
 """TemplateFlow's Python Client."""
+import sys
+from importlib import import_module
 from json import loads
 from pathlib import Path
-import sys
 from bids.layout import Query
 
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
@@ -247,6 +248,16 @@ def get_citations(template, bibtex=False):
         return refs
 
     return [_to_bibtex(ref, template, idx).rstrip() for idx, ref in enumerate(refs, 1)]
+
+
+@requires_layout
+def __getattr__(key: str):
+    key = key.replace("ls_", "get_")
+    if key.startswith("get_") and key not in ("get_metadata", "get_citations"):
+        return TF_LAYOUT.__getattr__(key)
+
+    # Spit out default message if we get this far
+    raise AttributeError(f"module '{__name__}' has no attribute '{key}'")
 
 
 def _datalad_get(filepath):

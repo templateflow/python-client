@@ -97,3 +97,14 @@ def test_citations(tmp_path, template, urls, fbib, lbib):
     else:
         # no citations currently
         assert False
+
+
+def test_pybids_magic_get():
+    """Check automatic entity expansion of the layout."""
+    assert sorted(api.ls_atlases()) == sorted(api.TF_LAYOUT.get_atlases())
+    assert sorted(api.ls_atlases(template="MNI152NLin6ASym")) == sorted(
+        api.TF_LAYOUT.get_atlases(template="MNI152NLin6ASym")
+    )
+
+    with pytest.raises(TypeError):
+        api.ls_atlases("MNI152NLin6ASym")
