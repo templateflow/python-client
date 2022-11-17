@@ -108,3 +108,8 @@ def test_pybids_magic_get():
 
     with pytest.raises(TypeError):
         api.ls_atlases("MNI152NLin6ASym")
+    
+    # Existing layout.get_* should not be bubbled to the layout
+    # (that means, raise an AttributeError instead of a BIDSEntityError)
+    with pytest.raises(AttributeError):
+        api.get_fieldmap

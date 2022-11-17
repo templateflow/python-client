@@ -7,6 +7,9 @@ from bids.layout import Query
 
 from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
 
+_layout_dir = tuple(
+    item for item in dir(TF_LAYOUT) if item.startswith("get_")
+)
 
 @requires_layout
 def ls(template, **kwargs):
@@ -253,7 +256,11 @@ def get_citations(template, bibtex=False):
 @requires_layout
 def __getattr__(key: str):
     key = key.replace("ls_", "get_")
-    if key.startswith("get_") and key not in ("get_metadata", "get_citations"):
+    if (
+        key.startswith("get_")
+        and key not in ("get_metadata", "get_citations")
+        and key not in _layout_dir
+    ):
         return TF_LAYOUT.__getattr__(key)
 
     # Spit out default message if we get this far
