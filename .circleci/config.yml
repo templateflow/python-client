@@ -2,7 +2,7 @@ version: 2
 jobs:
   tests:
     docker:
-      - image: circleci/python:3.7.6
+      - image: cimg/python:3.9
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PAT    
@@ -15,9 +15,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v9-
+            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v10-
       - run:
           name: Prepare environment
           command: |
@@ -45,7 +45,7 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
           paths:
             - "/tmp/cache"
             - "/tmp/venv"
@@ -175,7 +175,7 @@ jobs:
 
   deploy_pypi:
     docker:
-      - image: circleci/python:3.7.6
+      - image: cimg/python:3.9
     working_directory: /tmp/src/templateflow
     steps:
       - attach_workspace:
@@ -186,9 +186,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v9-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v9-
+            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v10-
 
       - run:
           name: Deploy to PyPi
