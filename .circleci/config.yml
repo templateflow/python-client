@@ -3,6 +3,9 @@ jobs:
   tests:
     docker:
       - image: circleci/python:3.7.6
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PAT    
     working_directory: /tmp/tests
     environment:
       - OSF_MIRROR_PATH: /tmp/data/templateflow
@@ -201,6 +204,8 @@ workflows:
   build_test_deploy:
     jobs:
       - tests:
+          context:
+            - nipreps-common
           filters:
             branches:
               ignore:
@@ -208,6 +213,8 @@ workflows:
             tags:
               only: /.*/
       - deploy_pypi:
+          context:
+            - nipreps-common
           requires:
             - build_docs
           filters:
@@ -233,4 +240,6 @@ workflows:
               only:
                 - master
     jobs:
-      - tests
+      - tests:
+          context:
+            - nipreps-common
