@@ -12,49 +12,45 @@ on:
 
 jobs:
   build:
-    if: "!startsWith(github.ref, 'refs/tags/') && !contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
-        pip: ["pip==21.2", "pip~=22.0"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Fetch all tags (for setuptools_scm to work)
-      run: |
-        /usr/bin/git -c protocol.version=2 fetch --tags --prune --unshallow origin
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
+    - uses: actions/cache@v3
       with:
         path: $HOME/.cache/pip
         key: pip-cache-v1
         restore-keys: |
           pip-cache-
 
-    - name: Build in confined environment and interpolate version
+    - name: Interpolate version in confined environment
       run: |
         python -m venv /tmp/buildenv
         source /tmp/buildenv/bin/activate
-        python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
-                              setuptools_scm_git_archive pip twine docutils
-        python setup.py sdist bdist_wheel
-        python -m twine check dist/templateflow*
-
-        mv dist /tmp/package
-        rm -rf templateflow.egg-info/
-
-        # Interpolate version
+        python -m pip install --upgrade setuptools setuptools_scm nipreps-versions
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           TAG=${GITHUB_REF##*/}
         fi
-        THISVERSION=$( python setup.py --version )
+        THISVERSION=$( python -m setuptools_scm )
         THISVERSION=${TAG:-$THISVERSION}
         echo "Expected VERSION: \"${THISVERSION}\""
         echo "THISVERSION=${THISVERSION}" >> $GITHUB_ENV
+
+    - name: Build packages
+      run: |
+        pip install build twine
+        python -m build
+        twine check dist/templateflow*
+        mv dist /tmp/package
 
     - name: Install in confined environment [pip]
       env:
@@ -62,8 +58,8 @@ jobs:
       run: |
         python -m venv /tmp/pip
         source /tmp/pip/bin/activate
-        python -m pip install -U "setuptools >= 45" "setuptools_scm >= 6.2" "${{ matrix.pip }}"
-        python -m pip install .
+        pip install --upgrade pip wheel
+        pip install .
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -75,8 +71,8 @@ jobs:
       run: |
         python -m venv /tmp/install_sdist
         source /tmp/install_sdist/bin/activate
-        python -m pip install -U "setuptools >= 45" "${{ matrix.pip }}"
-        python -m pip install /tmp/package/templateflow*.tar.gz
+        pip install --upgrade pip wheel
+        pip install /tmp/package/templateflow*.tar.gz
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
@@ -87,7 +83,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/sdist
       run: |
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
+        pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
     - name: Re-install in confined environment [sdist - missing template]
       env:
@@ -95,7 +91,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_sdist/bin/activate
-        python -m pip install /tmp/package/templateflow*.tar.gz --force-reinstall
+        pip install /tmp/package/templateflow*.tar.gz --force-reinstall
         python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
         diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
@@ -107,8 +103,8 @@ jobs:
       run: |
         python -m venv /tmp/install_wheel
         source /tmp/install_wheel/bin/activate
-        python -m pip install -U "setuptools >= 45" "${{ matrix.pip }}"
-        python -m pip install /tmp/package/templateflow*.whl
+        pip install --upgrade pip wheel
+        pip install /tmp/package/templateflow*.whl
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
@@ -118,7 +114,7 @@ jobs:
         TEMPLATEFLOW_HOME: /tmp/home/wheel
       run: |
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
+        pip install /tmp/package/templateflow*.whl --force-reinstall
         find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
     - name: Re-install in confined environment [wheel - missing template]
       env:
@@ -126,7 +122,7 @@ jobs:
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/install_wheel/bin/activate
-        python -m pip install /tmp/package/templateflow*.whl --force-reinstall
+        pip install /tmp/package/templateflow*.whl --force-reinstall
         # Wheels do not run post-install hooks:
         test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         python -c "import templateflow; templateflow.update(overwrite=False)"
@@ -134,68 +130,33 @@ jobs:
         diff /tmp/.wheel-install.txt /tmp/.wheel-install-2.txt
         exit $?
 
-    - name: Install in confined environment [setup.py - install]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_install
-      run: |
-        python -m venv /tmp/setup_install
-        source /tmp/setup_install/bin/activate
-        python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
-                              setuptools_scm_git_archive "${{ matrix.pip }}"
-        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
-        python setup.py install
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "INSTALLED: \"${INSTALLED_VERSION}\""
-        test "${INSTALLED_VERSION}" = "${THISVERSION}"
-
-    - name: Re-install in confined environment [setup.py - install]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_install
-      run: |
-        source /tmp/setup_install/bin/activate
-        python setup.py install
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-install.txt
-    - name: Re-install in confined environment [setup.py - install - missing template]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_install
-      run: |
-        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
-        source /tmp/setup_install/bin/activate
-        python setup.py install
-        python -c "import templateflow; templateflow.update(overwrite=False)"
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-install-2.txt
-        diff /tmp/.setup-install.txt /tmp/.setup-install-2.txt
-        exit $?
-
-    - name: Install in confined environment [setup.py - develop]
+    - name: Install in confined environment [editable]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_develop
       run: |
         python -m venv /tmp/setup_develop
         source /tmp/setup_develop/bin/activate
-        python -m pip install -U "setuptools >= 45" wheel "setuptools_scm >= 6.2" \
-                              setuptools_scm_git_archive "${{ matrix.pip }}"
-        python -m pip install "numpy==1.20" Cython "pandas==1.3" "scipy==1.7"
-        python setup.py develop
+        pip install --upgrade pip wheel
+        pip install -e .
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
-    - name: Re-install in confined environment [setup.py - develop]
+    - name: Re-install in confined environment [editable]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_develop
       run: |
         source /tmp/setup_develop/bin/activate
-        python setup.py develop
+        pip install -e .
         find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop.txt
 
-    - name: Re-install in confined environment [setup.py - develop - missing template]
+    - name: Re-install in confined environment [editable - missing template]
       env:
         TEMPLATEFLOW_HOME: /tmp/home/setup_develop
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
         source /tmp/setup_develop/bin/activate
-        python setup.py develop
+        pip install -e .
         python -c "import templateflow; templateflow.update(overwrite=False)"
         find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop-2.txt
         diff /tmp/.setup-develop.txt /tmp/.setup-develop-2.txt
