@@ -20,151 +20,109 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: pip-cache-v1
+          restore-keys: |
+            pip-cache-
+      - run: pip install --upgrade build twine
+      - name: Build sdist and wheel
+        run: python -m build
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+      - name: Interpolate version in confined environment
+        id: get_version
+        run: |
+          python -m venv /tmp/buildenv
+          source /tmp/buildenv/bin/activate
+          python -m pip install --upgrade setuptools setuptools_scm nipreps-versions
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            TAG=${GITHUB_REF##*/}
+          fi
+          THISVERSION=$( python -m setuptools_scm )
+          THISVERSION=${TAG:-$THISVERSION}
+          echo "Expected VERSION: \"${THISVERSION}\""
+          echo "version=${THISVERSION}" >> $GITHUB_OUTPUT
+
+  test-install:
+    runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
+        mode: ['repo', 'sdist', 'wheel', 'editable']
 
+    env:
+      TEMPLATEFLOW_HOME: /tmp/home
+      THISVERSION: ${{ needs.build.outputs.version }}
     steps:
     - uses: actions/checkout@v3
+      if: matrix.mode == 'repo'  || matrix.mode == 'editable'
       with:
         fetch-depth: 0
+    - uses: actions/download-artifact@v3
+      if: matrix.mode == 'sdist'  || matrix.mode == 'wheel'
+      with:
+        name: dist
+        path: /tmp/package/
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - uses: actions/cache@v3
       with:
-        path: $HOME/.cache/pip
+        path: ~/.cache/pip
         key: pip-cache-v1
         restore-keys: |
           pip-cache-
-
-    - name: Interpolate version in confined environment
+    - name: Upgrade pip
+      run: pip install --upgrade pip wheel
+    - name: Set install command
       run: |
-        python -m venv /tmp/buildenv
-        source /tmp/buildenv/bin/activate
-        python -m pip install --upgrade setuptools setuptools_scm nipreps-versions
-        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          TAG=${GITHUB_REF##*/}
-        fi
-        THISVERSION=$( python -m setuptools_scm )
-        THISVERSION=${TAG:-$THISVERSION}
-        echo "Expected VERSION: \"${THISVERSION}\""
-        echo "THISVERSION=${THISVERSION}" >> $GITHUB_ENV
-
-    - name: Build packages
+        case ${{ matrix.mode }} in
+          repo)
+            echo "TARGET=." >> $GITHUB_ENV
+            ;;
+          editable)
+            echo "TARGET=-e ." >> $GITHUB_ENV
+            ;;
+          sdist)
+            echo "TARGET=$( ls /tmp/package/templateflow*.tar.gz )" >> $GITHUB_ENV
+            ;;
+          wheel)
+            echo "TARGET=$( ls /tmp/package/templateflow*.whl )" >> $GITHUB_ENV
+            ;;
+        esac
+    - name: Install and check version
       run: |
-        pip install build twine
-        python -m build
-        twine check dist/templateflow*
-        mv dist /tmp/package
-
-    - name: Install in confined environment [pip]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/pip
-      run: |
-        python -m venv /tmp/pip
-        source /tmp/pip/bin/activate
-        pip install --upgrade pip wheel
-        pip install .
+        pip install $TARGET
         INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
         echo "VERSION: \"${THISVERSION}\""
         echo "INSTALLED: \"${INSTALLED_VERSION}\""
         test "${INSTALLED_VERSION}" = "${THISVERSION}"
 
-    - name: Install in confined environment [sdist]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/sdist
+    - name: Re-install
       run: |
-        python -m venv /tmp/install_sdist
-        source /tmp/install_sdist/bin/activate
-        pip install --upgrade pip wheel
-        pip install /tmp/package/templateflow*.tar.gz
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "VERSION: \"${THISVERSION}\""
-        echo "INSTALLED: \"${INSTALLED_VERSION}\""
-        test "${INSTALLED_VERSION}" = "${THISVERSION}"
-
-    - name: Re-install in confined environment [sdist]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/sdist
-      run: |
-        source /tmp/install_sdist/bin/activate
-        pip install /tmp/package/templateflow*.tar.gz --force-reinstall
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install.txt
-    - name: Re-install in confined environment [sdist - missing template]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/sdist
+        pip install $TARGET --force-reinstall
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.install.txt
+    - name: Re-install [missing template]
       run: |
         rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
-        source /tmp/install_sdist/bin/activate
-        pip install /tmp/package/templateflow*.tar.gz --force-reinstall
+        pip install $TARGET --force-reinstall
         python -c "import templateflow; templateflow.update(overwrite=False)"
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.sdist-install-2.txt
-        diff /tmp/.sdist-install.txt /tmp/.sdist-install-2.txt
-        exit $?
-
-    - name: Install in confined environment [wheel]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/wheel
-      run: |
-        python -m venv /tmp/install_wheel
-        source /tmp/install_wheel/bin/activate
-        pip install --upgrade pip wheel
-        pip install /tmp/package/templateflow*.whl
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "INSTALLED: \"${INSTALLED_VERSION}\""
-        test "${INSTALLED_VERSION}" = "${THISVERSION}"
-
-    - name: Re-install in confined environment [wheel]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/wheel
-      run: |
-        source /tmp/install_wheel/bin/activate
-        pip install /tmp/package/templateflow*.whl --force-reinstall
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install.txt
-    - name: Re-install in confined environment [wheel - missing template]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/wheel
-      run: |
-        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
-        source /tmp/install_wheel/bin/activate
-        pip install /tmp/package/templateflow*.whl --force-reinstall
-        # Wheels do not run post-install hooks:
-        test ! -d ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
-        python -c "import templateflow; templateflow.update(overwrite=False)"
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.wheel-install-2.txt
-        diff /tmp/.wheel-install.txt /tmp/.wheel-install-2.txt
-        exit $?
-
-    - name: Install in confined environment [editable]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
-      run: |
-        python -m venv /tmp/setup_develop
-        source /tmp/setup_develop/bin/activate
-        pip install --upgrade pip wheel
-        pip install -e .
-        INSTALLED_VERSION=$(python -c 'import templateflow as tf; print(tf.__version__, end="")')
-        echo "INSTALLED: \"${INSTALLED_VERSION}\""
-        test "${INSTALLED_VERSION}" = "${THISVERSION}"
-
-    - name: Re-install in confined environment [editable]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
-      run: |
-        source /tmp/setup_develop/bin/activate
-        pip install -e .
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop.txt
-
-    - name: Re-install in confined environment [editable - missing template]
-      env:
-        TEMPLATEFLOW_HOME: /tmp/home/setup_develop
-      run: |
-        rm -rf ${TEMPLATEFLOW_HOME}/tpl-MNI152NLin2009cAsym
-        source /tmp/setup_develop/bin/activate
-        pip install -e .
-        python -c "import templateflow; templateflow.update(overwrite=False)"
-        find ${TEMPLATEFLOW_HOME} >> /tmp/.setup-develop-2.txt
-        diff /tmp/.setup-develop.txt /tmp/.setup-develop-2.txt
+        find ${TEMPLATEFLOW_HOME} >> /tmp/.install-2.txt
+        diff /tmp/.install.txt /tmp/.install-2.txt
         exit $?
