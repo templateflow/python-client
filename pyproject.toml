@@ -2,7 +2,7 @@
 requires = [
     "setuptools >= 45",
     "setuptools_scm >= 6.2",
-    "wheel"
+    "nipreps-versions",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -13,3 +13,4 @@ write_to_template = """\
 __version__ = "{version}"
 """
 fallback_version = "0.0"
+version_scheme = "nipreps-calver"
