@@ -62,8 +62,12 @@ jobs:
     needs: build
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
-        mode: ['repo', 'sdist', 'wheel', 'editable']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        mode: ['wheel']
+        include:
+          - {python-version: '3.9', mode: 'repo'}
+          - {python-version: '3.9', mode: 'sdist'}
+          - {python-version: '3.9', mode: 'editable'}
 
     env:
       TEMPLATEFLOW_HOME: /tmp/home
