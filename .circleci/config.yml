@@ -26,7 +26,7 @@ jobs:
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install "datalad ~= 0.11.8"
-            pip install "setuptools>=45" "setuptools_scm >= 6.2" twine codecov
+            pip install "setuptools>=45" "setuptools_scm >= 6.2" nipreps-versions build twine codecov
 
       - run:
           name: Install git and git-annex
@@ -120,7 +120,7 @@ jobs:
           command: |
             source /tmp/venv/bin/activate
             cd /tmp/src/templateflow
-            python setup.py sdist
+            python -m build
             twine check dist/*
 
   build_docs:
@@ -194,8 +194,8 @@ jobs:
           name: Deploy to PyPi
           command: |
             source /tmp/venv/bin/activate
-            pip install "setuptools>=45" "setuptools_scm >= 6.2" wheel twine
-            python setup.py sdist bdist_wheel
+            pip install build twine
+            python -m build
             twine check dist/*
             twine upload dist/*
 
