@@ -1,3 +1,15 @@
+23.0.0 (February 2, 2023)
+=========================
+Minor release including additional API features and an updated skeleton.
+
+* FIX: Preempt ``BIDSLayout`` from indexing dot-folders (#99)
+* ENH: Make sure existing ``layout.get_*`` are not bubbled in (#102)
+* ENH: Allow access to PyBIDS' magic ``get_*`` (#101)
+* ENH: Add an ``api.ls()`` function to list (without getting) files (#97)
+* MAINT: Discontinue legacy docker runners of CircleCI (#104)
+* MAINT: Rotate CircleCI secrets and setup up org-level context (#103)
+* MAINT: Fix docs build environment in CircleCI (#96)
+
 0.8.1 (May 7, 2022)
 ===================
 Patch release updating the S3 skeleton to include the fixed version of ``tpl-MouseIn``.
