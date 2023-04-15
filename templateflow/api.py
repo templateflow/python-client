@@ -292,7 +292,7 @@ def _s3_get(filepath):
     import requests
 
     path = str(filepath.relative_to(TF_LAYOUT.root))
-    url = "%s/%s" % (TF_S3_ROOT, path)
+    url = "%s/%s" % (TF_S3_ROOT, path.replace("\\", "/"))
 
     print("Downloading %s" % url, file=stderr)
     # Streaming, so we can iterate over the response.
