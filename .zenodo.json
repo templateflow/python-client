@@ -19,6 +19,11 @@
     },
     {
       "affiliation": "Department of Psychology, Stanford University",
+      "name": "Goncalves, Mathias",
+      "orcid": "0000-0002-7252-7771"
+    },
+    {
+      "affiliation": "Department of Psychology, Stanford University",
       "name": "Poldrack, Russell A.",
       "orcid": "0000-0001-6755-0259"
     },
@@ -36,15 +41,27 @@
       "type": "Researcher"
     },
     {
-      "affiliation": "MIT",
-      "name": "Goncalves, Mathias",
-      "orcid": "0000-0002-7252-7771",
-      "type": "Researcher"
-    },
-    {
       "affiliation": "MIT, HMS",
       "name": "Ghosh, Satrajit",
       "orcid": "0000-0002-5312-6729",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "University of Gothenburg, Sweden",
+      "name": "Thompson, William H.",
+      "orcid": "0000-0002-0533-6035",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Charite Universitatsmedizin Berlin, Germany",
+      "name": "Waller, Lea",
+      "orcid": "0000-0002-3239-6957",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Department of Psychiatry, Columbia University",
+      "name": "Schmidt, Mike F.",
+      "orcid": "0000-0003-4721-1457",
       "type": "Researcher"
     }
   ],
