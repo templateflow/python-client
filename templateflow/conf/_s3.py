@@ -1,16 +1,15 @@
 """Tooling to handle S3 downloads."""
 from pathlib import Path
 from tempfile import mkstemp
-from pkg_resources import resource_filename
+
+from . import load_data
 
 TF_SKEL_URL = (
     "https://raw.githubusercontent.com/templateflow/python-client/"
     "{release}/templateflow/conf/templateflow-skel.{ext}"
 ).format
-TF_SKEL_PATH = Path(resource_filename("templateflow", "conf/templateflow-skel.zip"))
-TF_SKEL_MD5 = Path(
-    resource_filename("templateflow", "conf/templateflow-skel.md5")
-).read_text()
+TF_SKEL_PATH = load_data("templateflow-skel.zip")
+TF_SKEL_MD5 = load_data.readable("templateflow-skel.md5").read_text()
 
 
 def update(dest, local=True, overwrite=True, silent=False):
