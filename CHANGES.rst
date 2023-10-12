@@ -1,3 +1,12 @@
+23.1.0 (October 12, 2023)
+=========================
+Minor release including support for Python 3.12.
+
+Python 3.7 support has been removed.
+
+* FIX: Use Path.as_posix() and f-strings to build correct URLs on Windows (#107)
+* MNT: Python 3.12 support, drop Python 3.7 and pkg_resources (#109)
+
 23.0.0 (February 2, 2023)
 =========================
 Minor release including additional API features and an updated skeleton.
