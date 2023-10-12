@@ -14,17 +14,17 @@ from typing import Union
 
 try:
     from functools import cache
-except ImportError:  # PY38
+except ImportError:  # PY38  # pragma: no cover
     from functools import lru_cache as cache
 
 try:  # Prefer backport to leave consistency to dependency spec
     from importlib_resources import as_file, files
-except ImportError:
+except ImportError:  # pragma: no cover
     from importlib.resources import as_file, files  # type: ignore
 
 try:  # Prefer stdlib so Sphinx can link to authoritative documentation
     from importlib.resources.abc import Traversable
-except ImportError:
+except ImportError:  # pragma: no cover
     from importlib_resources.abc import Traversable
 
 __all__ = ["Loader"]
