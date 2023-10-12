@@ -291,8 +291,8 @@ def _s3_get(filepath):
     from tqdm import tqdm
     import requests
 
-    path = str(filepath.relative_to(TF_LAYOUT.root))
-    url = "%s/%s" % (TF_S3_ROOT, path.replace("\\", "/"))
+    path = filepath.relative_to(TF_LAYOUT.root).as_posix()
+    url = f"{TF_S3_ROOT}/{path}"
 
     print("Downloading %s" % url, file=stderr)
     # Streaming, so we can iterate over the response.
