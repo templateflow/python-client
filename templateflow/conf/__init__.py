@@ -5,6 +5,9 @@ from warnings import warn
 from pathlib import Path
 from contextlib import suppress
 from functools import wraps
+from .._loader import Loader
+
+load_data = Loader(__package__)
 
 TF_DEFAULT_HOME = Path.home() / ".cache" / "templateflow"
 TF_HOME = Path(getenv("TEMPLATEFLOW_HOME", str(TF_DEFAULT_HOME)))
