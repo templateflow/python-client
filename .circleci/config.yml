@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3.3.0
+
 jobs:
   tests:
     docker:
@@ -26,7 +30,7 @@ jobs:
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
-            pip install "setuptools>=45" "setuptools_scm >= 6.2" nipreps-versions build twine codecov
+            pip install "setuptools>=45" "setuptools_scm >= 6.2" nipreps-versions build twine
 
       - run:
           name: Install git and git-annex
@@ -58,12 +62,10 @@ jobs:
             pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
-                --flags api,datalad -e CIRCLE_JOB
+      - codecov/upload:
+          file: /tmp/cov_api_dl.xml
+          flags: api,datalad
+          upload_name: Datalad tests
 
       - run:
           name: Run tests (pulling from S3)
@@ -74,12 +76,10 @@ jobs:
             pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_s3.xml --root /tmp/src/templateflow \
-                --flags api,s3 -e CIRCLE_JOB
+      - codecov/upload:
+          file: /tmp/cov_api_s3.xml
+          flags: api,s3
+          upload_name: S3 tests
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
@@ -91,12 +91,10 @@ jobs:
             pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
                    --doctest-modules /tmp/src/templateflow/templateflow/api.py
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
-                --flags api,dls3 -e CIRCLE_JOB
+      - codecov/upload:
+          file: /tmp/cov_api_dl_s3.xml
+          flags: api,dls3
+          upload_name: Datalad-S3-bypass
 
       - run:
           name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
@@ -105,12 +103,10 @@ jobs:
             pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
                    /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
 
-      - run:
-          name: Submit config test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_config.xml --root /tmp/src/templateflow \
-                --flags config -e CIRCLE_JOB
+      - codecov/upload:
+          file: /tmp/cov_config.xml
+          flags: config
+          upload_name: Config
 
       - store_test_results:
           path: /tmp/tests
