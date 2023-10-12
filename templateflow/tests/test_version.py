@@ -1,7 +1,7 @@
 """Test _version.py."""
 import sys
 from collections import namedtuple
-from pkg_resources import DistributionNotFound
+from importlib.metadata import PackageNotFoundError
 from importlib import reload
 import templateflow
 
@@ -18,14 +18,13 @@ def test_version_scm0(monkeypatch):
 
 
 def test_version_scm1(monkeypatch):
-    """Retrieve the version via pkg_resources."""
+    """Retrieve the version via importlib.metadata."""
     monkeypatch.setitem(sys.modules, "templateflow._version", None)
 
-    def _dist(name):
-        Distribution = namedtuple("Distribution", ["name", "version"])
-        return Distribution(name, "success")
+    def _ver(name):
+        return "success"
 
-    monkeypatch.setattr("pkg_resources.get_distribution", _dist)
+    monkeypatch.setattr("importlib.metadata.version", _ver)
     reload(templateflow)
     assert templateflow.__version__ == "success"
 
@@ -35,8 +34,8 @@ def test_version_scm2(monkeypatch):
     monkeypatch.setitem(sys.modules, "templateflow._version", None)
 
     def _raise(name):
-        raise DistributionNotFound("No get_distribution mock")
+        raise PackageNotFoundError("No get_distribution mock")
 
-    monkeypatch.setattr("pkg_resources.get_distribution", _raise)
+    monkeypatch.setattr("importlib.metadata.version", _raise)
     reload(templateflow)
-    assert templateflow.__version__ == "unknown"
+    assert templateflow.__version__ == "0+unknown"
