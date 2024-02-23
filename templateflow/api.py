@@ -333,7 +333,9 @@ def _to_bibtex(doi, template, idx):
         )
         return doi
 
-    return response.text
+    # doi.org may not honor requested charset, to safeguard force a bytestream with
+    # response.content, then decode into UTF-8.
+    return response.content.decode()
 
 
 def _normalize_ext(value):
