@@ -333,7 +333,12 @@ def _to_bibtex(doi, template, idx):
         )
         return doi
 
-    return response.text
+    # doi.org may not honor requested charset, to safeguard force a bytestream with
+    # response.content, then decode into UTF-8.
+    bibtex = response.content.decode()
+
+    # doi.org / crossref may still point to the no longer preferred proxy service
+    return bibtex.replace('http://dx.doi.org/', 'https://doi.org/')
 
 
 def _normalize_ext(value):
