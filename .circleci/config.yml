@@ -5,7 +5,7 @@ jobs:
       - image: cimg/python:3.9
         auth:
           username: $DOCKER_USER
-          password: $DOCKER_PAT    
+          password: $DOCKER_PAT
     working_directory: /tmp/tests
     environment:
       - OSF_MIRROR_PATH: /tmp/data/templateflow
@@ -127,7 +127,7 @@ jobs:
     machine:
       # https://discuss.circleci.com/t/linux-machine-executor-images-2021-april-q2-update/39928
       # upgrade Docker version
-      image: ubuntu-2004:202104-01
+      image: default
     environment:
       - FSLOUTPUTTYPE: NIFTI
       - SUBJECTS_DIR: /tmp/subjects
@@ -148,7 +148,7 @@ jobs:
             fi
 
             if ! [ -x "$(command -v conda)" ]; then
-              curl -sSLO https://repo.anaconda.com/miniconda/Miniconda3-py39_4.11.0-Linux-x86_64.sh 
+              curl -sSLO https://repo.anaconda.com/miniconda/Miniconda3-py39_4.11.0-Linux-x86_64.sh
               bash Miniconda3-py39_4.11.0-Linux-x86_64.sh -b -p $HOME/.conda
             fi
             $HOME/.conda/bin/conda env update -f docs/environment.yml --prune
