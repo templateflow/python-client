@@ -23,7 +23,7 @@
 """Extending pyBIDS for querying TemplateFlow."""
 from bids.layout import BIDSLayout, add_config_paths
 
-from . import load_data
+from templateflow.conf import load_data
 
 add_config_paths(templateflow=load_data('config.json'))
 
