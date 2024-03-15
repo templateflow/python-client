@@ -1,6 +1,5 @@
 """TemplateFlow's Python Client."""
 import sys
-from importlib import import_module
 from json import loads
 from pathlib import Path
 from bids.layout import Query
@@ -10,6 +9,7 @@ from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
 _layout_dir = tuple(
     item for item in dir(TF_LAYOUT) if item.startswith("get_")
 )
+
 
 @requires_layout
 def ls(template, **kwargs):
