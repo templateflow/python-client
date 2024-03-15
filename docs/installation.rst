@@ -34,7 +34,7 @@ of any available template set.
 The lazy-loading implementation of the client requires some folder on the host
 where template resources can be stored (therefore, write permissions are
 required). By default, the home folder will be ``$HOME/.cache/templateflow``.
-This setting can be overriden by defining the environment variable ``TEMPLATEFLOW_HOME``
+This setting can be overridden by defining the environment variable ``TEMPLATEFLOW_HOME``
 before running the client, for example::
 
   $ export TEMPLATEFLOW_HOME=$DATA/.templateflow

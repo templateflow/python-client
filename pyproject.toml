@@ -179,3 +179,10 @@ inline-quotes = "single"
 
 [tool.ruff.format]
 quote-style = "single"
+
+[tool.codespell]
+# Ref: https://github.com/codespell-project/codespell#using-a-config-file
+skip = '.git,*.pdf,*.svg,venvs,*.css'
+check-hidden = true
+# ignore-regex = ''
+# ignore-words-list = ''
