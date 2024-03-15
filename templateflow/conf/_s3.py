@@ -2,14 +2,14 @@
 from pathlib import Path
 from tempfile import mkstemp
 
-from . import load_data
+from templateflow.conf import TF_GET_TIMEOUT, load_data
 
 TF_SKEL_URL = (
-    "https://raw.githubusercontent.com/templateflow/python-client/"
-    "{release}/templateflow/conf/templateflow-skel.{ext}"
+    'https://raw.githubusercontent.com/templateflow/python-client/'
+    '{release}/templateflow/conf/templateflow-skel.{ext}'
 ).format
-TF_SKEL_PATH = load_data("templateflow-skel.zip")
-TF_SKEL_MD5 = load_data.readable("templateflow-skel.md5").read_text()
+TF_SKEL_PATH = load_data('templateflow-skel.zip')
+TF_SKEL_MD5 = load_data.readable('templateflow-skel.md5').read_text()
 
 
 def update(dest, local=True, overwrite=True, silent=False):
@@ -26,7 +26,11 @@ def _get_skeleton_file():
     import requests
 
     try:
-        r = requests.get(TF_SKEL_URL(release="master", ext="md5"), allow_redirects=True)
+        r = requests.get(
+            TF_SKEL_URL(release='master', ext='md5'),
+            allow_redirects=True,
+            timeout=TF_GET_TIMEOUT,
+        )
     except requests.exceptions.ConnectionError:
         return
 
@@ -34,11 +38,15 @@ def _get_skeleton_file():
         return
 
     if r.content.decode().split()[0] != TF_SKEL_MD5:
-        r = requests.get(TF_SKEL_URL(release="master", ext="zip"), allow_redirects=True)
+        r = requests.get(
+            TF_SKEL_URL(release='master', ext='zip'),
+            allow_redirects=True,
+            timeout=TF_GET_TIMEOUT,
+        )
         if r.ok:
             from os import close
 
-            fh, skel_file = mkstemp(suffix=".zip")
+            fh, skel_file = mkstemp(suffix='.zip')
             Path(skel_file).write_bytes(r.content)
             close(fh)
             return skel_file
@@ -49,25 +57,25 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
 
     dest = Path(dest)
     dest.mkdir(exist_ok=True, parents=True)
-    with ZipFile(skel_file, "r") as zipref:
+    with ZipFile(skel_file, 'r') as zipref:
         if overwrite:
             zipref.extractall(str(dest))
             return True
 
         allfiles = zipref.namelist()
-        current_files = [s.relative_to(dest) for s in dest.glob("**/*")]
-        existing = sorted(set(["%s/" % s.parent for s in current_files])) + [
+        current_files = [s.relative_to(dest) for s in dest.glob('**/*')]
+        existing = sorted({'%s/' % s.parent for s in current_files}) + [
             str(s) for s in current_files
         ]
         newfiles = sorted(set(allfiles) - set(existing))
         if newfiles:
             if not silent:
                 print(
-                    "Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s"
-                    % "\n".join(newfiles)
+                    'Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s'
+                    % '\n'.join(newfiles)
                 )
             zipref.extractall(str(dest), members=newfiles)
             return True
     if not silent:
-        print("TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.")
+        print('TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
     return False

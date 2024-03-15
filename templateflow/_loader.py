@@ -27,7 +27,7 @@ try:  # Prefer stdlib so Sphinx can link to authoritative documentation
 except ImportError:  # pragma: no cover
     from importlib_resources.abc import Traversable
 
-__all__ = ["Loader"]
+__all__ = ['Loader']
 
 
 class Loader:
@@ -119,19 +119,19 @@ class Loader:
         directory.
         """
         top_level = sorted(
-            os.path.relpath(p, self.files) + "/"[: p.is_dir()]
+            os.path.relpath(p, self.files) + '/'[: p.is_dir()]
             for p in self.files.iterdir()
-            if p.name[0] not in (".", "_") and p.name != "tests"
+            if p.name[0] not in ('.', '_') and p.name != 'tests'
         )
         doclines = [
-            f"Load package files relative to ``{self._anchor}``.",
-            "",
-            "This package contains the following (top-level) files/directories:",
-            "",
-            *(f"* ``{path}``" for path in top_level),
+            f'Load package files relative to ``{self._anchor}``.',
+            '',
+            'This package contains the following (top-level) files/directories:',
+            '',
+            *(f'* ``{path}``' for path in top_level),
         ]
 
-        return "\n".join(doclines)
+        return '\n'.join(doclines)
 
     def readable(self, *segments) -> Traversable:
         """Provide read access to a resource through a Path-like interface.

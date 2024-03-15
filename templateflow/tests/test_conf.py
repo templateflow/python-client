@@ -1,9 +1,11 @@
 from pathlib import Path
+
 import pytest
-from .. import conf, api
+
+from .. import api, conf
 
 
-@pytest.mark.skipif(conf.TF_USE_DATALAD, reason="S3 only")
+@pytest.mark.skipif(conf.TF_USE_DATALAD, reason='S3 only')
 def test_update_s3(tmp_path):
     conf.TF_HOME = tmp_path / 'templateflow'
     conf.TF_HOME.mkdir(exist_ok=True)
@@ -11,8 +13,8 @@ def test_update_s3(tmp_path):
     # replace TF_SKEL_URL with the path of a legacy skeleton
     _skel_url = conf._s3.TF_SKEL_URL
     conf._s3.TF_SKEL_URL = (
-        "https://github.com/templateflow/python-client/raw/0.5.0/"
-        "templateflow/conf/templateflow-skel.{ext}".format
+        'https://github.com/templateflow/python-client/raw/0.5.0/'
+        'templateflow/conf/templateflow-skel.{ext}'.format
     )
     # initialize templateflow home, making sure to pull the legacy skeleton
     conf.update(local=False)
