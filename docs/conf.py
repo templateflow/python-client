@@ -16,7 +16,7 @@ from templateflow import __version__, __copyright__, __packagename__
 # -- Project information -----------------------------------------------------
 project = __packagename__
 copyright = __copyright__
-author = "The TemplateFlow Developers"
+author = "The NiPreps Developers"
 
 # The full version, including alpha/beta/rc tags
 release = __version__
@@ -40,6 +40,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
     "nbsphinx",
+    "sphinx_click",
 ]
 
 autodoc_mock_imports = [

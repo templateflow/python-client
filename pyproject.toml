@@ -50,7 +50,7 @@ doc = [
     "packaging",
     "pydot>=1.2.3",
     "pydotplus",
-    "sphinx-argparse",
+    "sphinx-click",
     "sphinx ~= 4.0",
     "sphinx_rtd_theme >= 0.4.3",
     "sphinxcontrib-apidoc",
@@ -60,6 +60,9 @@ doc = [
 tests = ["templateflow[test]"]
 docs = ["templateflow[doc]"]
 all = ["templateflow[datalad,doc,test]"]
+
+[project.scripts]
+templateflow = "templateflow.cli:main"
 
 #
 # Hatch configurations
