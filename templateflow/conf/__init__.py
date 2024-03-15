@@ -1,26 +1,28 @@
 """Configuration and settings."""
-from os import getenv
 import re
-from warnings import warn
-from pathlib import Path
 from contextlib import suppress
 from functools import wraps
+from os import getenv
+from pathlib import Path
+from warnings import warn
+
 from .._loader import Loader
 
 load_data = Loader(__package__)
 
-TF_DEFAULT_HOME = Path.home() / ".cache" / "templateflow"
-TF_HOME = Path(getenv("TEMPLATEFLOW_HOME", str(TF_DEFAULT_HOME)))
-TF_GITHUB_SOURCE = "https://github.com/templateflow/templateflow.git"
-TF_S3_ROOT = "https://templateflow.s3.amazonaws.com"
-TF_USE_DATALAD = getenv("TEMPLATEFLOW_USE_DATALAD", "false").lower() in (
-    "true",
-    "on",
-    "1",
-    "yes",
-    "y",
+TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
+TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
+TF_GITHUB_SOURCE = 'https://github.com/templateflow/templateflow.git'
+TF_S3_ROOT = 'https://templateflow.s3.amazonaws.com'
+TF_USE_DATALAD = getenv('TEMPLATEFLOW_USE_DATALAD', 'false').lower() in (
+    'true',
+    'on',
+    '1',
+    'yes',
+    'y',
 )
 TF_CACHED = True
+TF_GET_TIMEOUT = 10
 
 
 def _init_cache():
@@ -34,6 +36,7 @@ TemplateFlow: repository not found at <{TF_HOME}>. Populating a new TemplateFlow
 If the path reported above is not the desired location for TemplateFlow, \
 please set the TEMPLATEFLOW_HOME environment variable.""",
             ResourceWarning,
+            stacklevel=2,
         )
         if TF_USE_DATALAD:
             try:
@@ -64,7 +67,7 @@ def requires_layout(func):
             from bids import __version__
 
             raise RuntimeError(
-                f"A layout with PyBIDS <{__version__}> could not be initiated"
+                f'A layout with PyBIDS <{__version__}> could not be initiated'
             )
         return func(*args, **kwargs)
 
@@ -85,6 +88,7 @@ def update(local=False, overwrite=True, silent=False):
         init_layout()
         # ensure the api uses the updated layout
         import importlib
+
         from .. import api
 
         importlib.reload(api)
@@ -96,11 +100,12 @@ def wipe():
     global TF_USE_DATALAD, TF_HOME
 
     if TF_USE_DATALAD:
-        print("TemplateFlow is configured in DataLad mode, wipe() has no effect")
+        print('TemplateFlow is configured in DataLad mode, wipe() has no effect')
         return
 
     import importlib
     from shutil import rmtree
+
     from templateflow import api
 
     def _onerror(func, path, excinfo):
@@ -108,7 +113,7 @@ def wipe():
 
         if Path(path).exists():
             print(
-                f"Warning: could not delete <{path}>, please clear the cache manually."
+                f'Warning: could not delete <{path}>, please clear the cache manually.'
             )
 
     rmtree(TF_HOME, onerror=_onerror)
@@ -132,11 +137,15 @@ a fresh initialization was done."""
 def _update_datalad():
     from datalad.api import update
 
-    print("Updating TEMPLATEFLOW_HOME using DataLad ...")
+    print('Updating TEMPLATEFLOW_HOME using DataLad ...')
     try:
         update(dataset=str(TF_HOME), recursive=True, merge=True)
-    except Exception as e:
-        warn(f"Error updating TemplateFlow's home directory (using DataLad): {e}")
+    except Exception as e:  # noqa: BLE001
+        warn(
+            f"Error updating TemplateFlow's home directory (using DataLad): {e}",
+            stacklevel=2,
+        )
+        return False
     return True
 
 
@@ -144,20 +153,21 @@ TF_LAYOUT = None
 
 
 def init_layout():
-    from templateflow.conf.bids import Layout
     from bids.layout.index import BIDSLayoutIndexer
+
+    from templateflow.conf.bids import Layout
 
     global TF_LAYOUT
     TF_LAYOUT = Layout(
         TF_HOME,
         validate=False,
-        config="templateflow",
+        config='templateflow',
         indexer=BIDSLayoutIndexer(
             validate=False,
             ignore=(
-                re.compile(r"scripts/"),
-                re.compile(r"/\."),
-                re.compile(r"^\."),
+                re.compile(r'scripts/'),
+                re.compile(r'/\.'),
+                re.compile(r'^\.'),
             ),
         ),
     )

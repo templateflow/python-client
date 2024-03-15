@@ -14,7 +14,7 @@ class Bibtex:
         self.pairs = {}
 
         # DOI could not be converted
-        if self.text.startswith("http"):
+        if self.text.startswith('http'):
             self.url_only = True
         else:
             self._parse_bibtex()
@@ -23,15 +23,15 @@ class Bibtex:
         import re
 
         try:
-            self.etype = re.search(r"@(\w+)", self.text).group(1)
+            self.etype = re.search(r'@(\w+)', self.text).group(1)
         except AttributeError:
-            raise TypeError(f"Invalid bibtex: {self.text}")
+            raise TypeError(f'Invalid bibtex: {self.text}')
         try:
-            self.citekey = re.search(r"@[^{]*{([^,\s]+)", self.text).group(1)
+            self.citekey = re.search(r'@[^{]*{([^,\s]+)', self.text).group(1)
         except AttributeError:
-            raise TypeError(f"Invalid bibtex: {self.text}")
+            raise TypeError(f'Invalid bibtex: {self.text}')
         self.pairs = {
-            key: val for key, val in re.findall(r"(\w+)=(\{[^{}]+\})", self.text)
+            key: val for key, val in re.findall(r'(\w+)=(\{[^{}]+\})', self.text)
         }
 
     def get(self, val):
@@ -61,26 +61,26 @@ class Bibtex:
     def assert_same(self, other):
         """Convenience method to find deviations between two Bibtex objects"""
         assert isinstance(other, Bibtex)
-        assert self.etype == other.etype, "Mismatched entry types"
-        assert self.citekey == other.citekey, "Mismatched citekeys"
+        assert self.etype == other.etype, 'Mismatched entry types'
+        assert self.citekey == other.citekey, 'Mismatched citekeys'
         for key in self.pairs.keys():
-            assert key in other.pairs, f"Key ({key}) missing from other"
+            assert key in other.pairs, f'Key ({key}) missing from other'
             assert (
                 self.pairs[key] == other.pairs[key]
-            ), f"Key ({key}) mismatched\n\n{self.pairs[key]}\n\n{other.pairs[key]}"
+            ), f'Key ({key}) mismatched\n\n{self.pairs[key]}\n\n{other.pairs[key]}'
 
         for key in other.pairs.keys():
-            assert key in self.pairs, f"Key ({key}) missing from pairs"
+            assert key in self.pairs, f'Key ({key}) missing from pairs'
 
-        assert self.pairs == other.pairs, "Dictionaries do not match"
+        assert self.pairs == other.pairs, 'Dictionaries do not match'
 
 
 # test setup to avoid cluttering pytest parameterize
 mni2009_urls = [
-    "https://doi.org/10.1016/j.neuroimage.2010.07.033",
-    "https://doi.org/10.1016/S1053-8119(09)70884-5",
-    "http://nist.mni.mcgill.ca/?p=904",
-    "https://doi.org/10.1007/3-540-48714-X_16",
+    'https://doi.org/10.1016/j.neuroimage.2010.07.033',
+    'https://doi.org/10.1016/S1053-8119(09)70884-5',
+    'http://nist.mni.mcgill.ca/?p=904',
+    'https://doi.org/10.1007/3-540-48714-X_16',
 ]
 
 mni2009_fbib = """\
@@ -114,8 +114,8 @@ booktitle={Information Processing in Medical Imaging}
 }"""
 
 fslr_urls = [
-    "https://doi.org/10.1093/cercor/bhr291",
-    "https://github.com/Washington-University/HCPpipelines/tree/master/global/templates",
+    'https://doi.org/10.1093/cercor/bhr291',
+    'https://github.com/Washington-University/HCPpipelines/tree/master/global/templates',
 ]
 
 fslr_fbib = """\
@@ -135,7 +135,7 @@ journal={Cerebral Cortex}
 }"""
 
 fslr_lbib = (
-    "https://github.com/Washington-University/HCPpipelines/tree/master/global/templates"
+    'https://github.com/Washington-University/HCPpipelines/tree/master/global/templates'
 )
 
 fsaverage_fbib = """\
@@ -155,14 +155,14 @@ journal={Human Brain Mapping}
 
 
 @pytest.mark.parametrize(
-    "template,urls,fbib,lbib",
+    'template,urls,fbib,lbib',
     [
-        ("MNI152NLin2009cAsym", mni2009_urls, mni2009_fbib, mni2009_lbib),
-        ("fsLR", fslr_urls, fslr_fbib, fslr_lbib),
+        ('MNI152NLin2009cAsym', mni2009_urls, mni2009_fbib, mni2009_lbib),
+        ('fsLR', fslr_urls, fslr_fbib, fslr_lbib),
         (
-            "fsaverage",
+            'fsaverage',
             [
-                "https://doi.org/10.1002/(sici)1097-0193(1999)8:4%3C272::aid-hbm10%3E3.0.co;2-4"
+                'https://doi.org/10.1002/(sici)1097-0193(1999)8:4%3C272::aid-hbm10%3E3.0.co;2-4'
             ],
             fsaverage_fbib,
             None,
@@ -192,12 +192,12 @@ def test_citations(tmp_path, template, urls, fbib, lbib):
 def test_pybids_magic_get():
     """Check automatic entity expansion of the layout."""
     assert sorted(api.ls_atlases()) == sorted(api.TF_LAYOUT.get_atlases())
-    assert sorted(api.ls_atlases(template="MNI152NLin6ASym")) == sorted(
-        api.TF_LAYOUT.get_atlases(template="MNI152NLin6ASym")
+    assert sorted(api.ls_atlases(template='MNI152NLin6ASym')) == sorted(
+        api.TF_LAYOUT.get_atlases(template='MNI152NLin6ASym')
     )
 
     with pytest.raises(TypeError):
-        api.ls_atlases("MNI152NLin6ASym")
+        api.ls_atlases('MNI152NLin6ASym')
 
     # Existing layout.get_* should not be bubbled to the layout
     # (that means, raise an AttributeError instead of a BIDSEntityError)
