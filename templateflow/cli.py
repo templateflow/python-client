@@ -115,13 +115,15 @@ def wipe():
 
 
 @main.command()
-def update():
+@click.option('--local', is_flag=True)
+@click.option('--overwrite/--no-overwrite', default=True)
+def update(local, overwrite):
     """Update the local TemplateFlow Archive."""
     from templateflow.conf import update as _update
 
     click.echo(
         f'Successfully updated local TemplateFlow Archive: {TF_HOME}.'
-        if _update()
+        if _update(local=local, overwrite=overwrite)
         else 'TemplateFlow Archive not updated.'
     )
 
