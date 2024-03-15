@@ -1,5 +1,5 @@
-# setuptools_scm
-templateflow/_version.py
+# hatchling
+_version.py
 
 # circleci hash checking
 requirements.txt

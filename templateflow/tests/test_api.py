@@ -1,3 +1,25 @@
+# emacs: -*- mode: python; py-indent-offset: 4; indent-tabs-mode: nil -*-
+# vi: set ft=python sts=4 ts=4 sw=4 et:
+#
+# Copyright 2024 The NiPreps Developers <nipreps@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# We support and encourage derived works from this project, please read
+# about our expectations at
+#
+#     https://www.nipreps.org/community/licensing/
+#
 """Test citations."""
 
 import pytest
@@ -24,15 +46,13 @@ class Bibtex:
 
         try:
             self.etype = re.search(r'@(\w+)', self.text).group(1)
-        except AttributeError:
-            raise TypeError(f'Invalid bibtex: {self.text}')
+        except AttributeError as err:
+            raise TypeError(f'Invalid bibtex: {self.text}') from err
         try:
             self.citekey = re.search(r'@[^{]*{([^,\s]+)', self.text).group(1)
-        except AttributeError:
-            raise TypeError(f'Invalid bibtex: {self.text}')
-        self.pairs = {
-            key: val for key, val in re.findall(r'(\w+)=(\{[^{}]+\})', self.text)
-        }
+        except AttributeError as err:
+            raise TypeError(f'Invalid bibtex: {self.text}') from err
+        self.pairs = dict(re.findall(r'(\w+)=(\{[^{}]+\})', self.text))
 
     def get(self, val):
         return self.pairs.get(val)
@@ -155,7 +175,7 @@ journal={Human Brain Mapping}
 
 
 @pytest.mark.parametrize(
-    'template,urls,fbib,lbib',
+    ('template', 'urls', 'fbib', 'lbib'),
     [
         ('MNI152NLin2009cAsym', mni2009_urls, mni2009_fbib, mni2009_lbib),
         ('fsLR', fslr_urls, fslr_fbib, fslr_lbib),
@@ -185,8 +205,7 @@ def test_citations(tmp_path, template, urls, fbib, lbib):
             assert len(bibs) == 1
 
     else:
-        # no citations currently
-        assert False
+        pytest.fail('no citations currently')
 
 
 def test_pybids_magic_get():
@@ -202,4 +221,4 @@ def test_pybids_magic_get():
     # Existing layout.get_* should not be bubbled to the layout
     # (that means, raise an AttributeError instead of a BIDSEntityError)
     with pytest.raises(AttributeError):
-        api.get_fieldmap
+        _ = api.get_fieldmap
