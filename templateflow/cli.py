@@ -71,7 +71,7 @@ def entity_opts():
 
     def decorator(f: FC) -> FC:
         for arg in reversed(args):
-            _param_memo(f, Option(arg, type=str, default=''))
+            _param_memo(f, Option(arg, type=str, default=[], multiple=True))
         return f
 
     return decorator
