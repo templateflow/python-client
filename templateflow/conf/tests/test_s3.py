@@ -39,7 +39,7 @@ def test_get_skel_file(monkeypatch):
     assert Path(new_skel).stat().st_size > 0
 
     latest_md5 = (
-        requests.get(s3.TF_SKEL_URL(release='master', ext='md5', allow_redirects=True))
+        requests.get(s3.TF_SKEL_URL(release='master', ext='md5', allow_redirects=True), timeout=10)
         .content.decode()
         .split()[0]
     )

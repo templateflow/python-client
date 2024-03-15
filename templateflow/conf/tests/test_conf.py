@@ -124,7 +124,7 @@ def test_layout_errors(monkeypatch):
     def myfunc():
         return 'okay'
 
-    def mock_import(name, globals=None, locals=None, fromlist=tuple(), level=0):
+    def mock_import(name, globals=None, locals=None, fromlist=(), level=0):  # noqa: A002
         if name == 'bids':
             raise ModuleNotFoundError
         return oldimport(name, globals=globals, locals=locals, fromlist=fromlist, level=level)
