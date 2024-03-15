@@ -1,3 +1,17 @@
+24.1.0 (March 15, 2024)
+=======================
+Minor release updating *PyBIDS*'s configuration to enable new entities
+that allow the selection of recently added *FreeSurfer*'s surface parcellations in
+`templateflow/tpl-fsaverage#5 <https://github.com/templateflow/tpl-fsaverage/pull/5>`__.
+
+* ENH: Add `seg-<label>` and `scale-<number>` entities (#114)
+
+24.0.0 (March 4, 2024)
+======================
+Minor release to update skeleton to include recently added templates.
+
+* CI: Add manual trigger, bump action versions (#113)
+
 23.1.0 (October 12, 2023)
 =========================
 Minor release including support for Python 3.12.

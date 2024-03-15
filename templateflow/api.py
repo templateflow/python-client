@@ -1,15 +1,44 @@
+# emacs: -*- mode: python; py-indent-offset: 4; indent-tabs-mode: nil -*-
+# vi: set ft=python sts=4 ts=4 sw=4 et:
+#
+# Copyright 2024 The NiPreps Developers <nipreps@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# We support and encourage derived works from this project, please read
+# about our expectations at
+#
+#     https://www.nipreps.org/community/licensing/
+#
 """TemplateFlow's Python Client."""
 import sys
-from importlib import import_module
 from json import loads
 from pathlib import Path
+
 from bids.layout import Query
 
-from .conf import TF_LAYOUT, TF_S3_ROOT, TF_USE_DATALAD, requires_layout
+from templateflow.conf import (
+    TF_GET_TIMEOUT,
+    TF_LAYOUT,
+    TF_S3_ROOT,
+    TF_USE_DATALAD,
+    requires_layout,
+)
 
 _layout_dir = tuple(
-    item for item in dir(TF_LAYOUT) if item.startswith("get_")
+    item for item in dir(TF_LAYOUT) if item.startswith('get_')
 )
+
 
 @requires_layout
 def ls(template, **kwargs):
@@ -59,13 +88,13 @@ def ls(template, **kwargs):
 
     """
     # Normalize extensions to always have leading dot
-    if "extension" in kwargs:
-        kwargs["extension"] = _normalize_ext(kwargs["extension"])
+    if 'extension' in kwargs:
+        kwargs['extension'] = _normalize_ext(kwargs['extension'])
 
     return [
         Path(p) for p in TF_LAYOUT.get(
             template=Query.ANY if template is None else template,
-            return_type="file",
+            return_type='file',
             **kwargs
         )
     ]
@@ -130,7 +159,7 @@ def get(template, raise_empty=False, **kwargs):
     out_file = ls(template, **kwargs)
 
     if raise_empty and not out_file:
-        raise Exception("No results found")
+        raise Exception('No results found')
 
     # Try DataLad first
     dl_missing = [p for p in out_file if not p.is_file()]
@@ -147,7 +176,7 @@ def get(template, raise_empty=False, **kwargs):
     not_fetched = [str(p) for p in out_file if not p.is_file() or p.stat().st_size == 0]
 
     if not_fetched:
-        msg = "Could not fetch template files: %s." % ", ".join(not_fetched)
+        msg = 'Could not fetch template files: %s.' % ', '.join(not_fetched)
         if dl_missing and not TF_USE_DATALAD:
             msg += (
                 """\
@@ -222,7 +251,7 @@ def get_metadata(template):
 
     """
     tf_home = Path(TF_LAYOUT.root)
-    filepath = tf_home / ("tpl-%s" % template) / "template_description.json"
+    filepath = tf_home / ('tpl-%s' % template) / 'template_description.json'
 
     # Ensure that template is installed and file is available
     if not filepath.is_file():
@@ -243,9 +272,9 @@ def get_citations(template, bibtex=False):
 
     """
     data = get_metadata(template)
-    refs = data.get("ReferencesAndLinks", [])
+    refs = data.get('ReferencesAndLinks', [])
     if isinstance(refs, dict):
-        refs = [x for x in refs.values()]
+        refs = list(refs.values())
 
     if not bibtex:
         return refs
@@ -255,10 +284,10 @@ def get_citations(template, bibtex=False):
 
 @requires_layout
 def __getattr__(key: str):
-    key = key.replace("ls_", "get_")
+    key = key.replace('ls_', 'get_')
     if (
-        key.startswith("get_")
-        and key not in ("get_metadata", "get_citations")
+        key.startswith('get_')
+        and key not in ('get_metadata', 'get_citations')
         and key not in _layout_dir
     ):
         return TF_LAYOUT.__getattr__(key)
@@ -277,7 +306,7 @@ def _datalad_get(filepath):
     try:
         api.get(filepath, dataset=str(TF_LAYOUT.root))
     except IncompleteResultsError as exc:
-        if exc.failed[0]["message"] == "path not associated with any dataset":
+        if exc.failed[0]['message'] == 'path not associated with any dataset':
             from .conf import TF_GITHUB_SOURCE
 
             api.install(path=TF_LAYOUT.root, source=TF_GITHUB_SOURCE, recursive=True)
@@ -288,47 +317,50 @@ def _datalad_get(filepath):
 
 def _s3_get(filepath):
     from sys import stderr
-    from tqdm import tqdm
+
     import requests
+    from tqdm import tqdm
 
     path = filepath.relative_to(TF_LAYOUT.root).as_posix()
-    url = f"{TF_S3_ROOT}/{path}"
+    url = f'{TF_S3_ROOT}/{path}'
 
-    print("Downloading %s" % url, file=stderr)
+    print('Downloading %s' % url, file=stderr)
     # Streaming, so we can iterate over the response.
-    r = requests.get(url, stream=True)
+    r = requests.get(url, stream=True, timeout=TF_GET_TIMEOUT)
 
     # Total size in bytes.
-    total_size = int(r.headers.get("content-length", 0))
+    total_size = int(r.headers.get('content-length', 0))
     block_size = 1024
     wrote = 0
     if not filepath.is_file():
         filepath.unlink()
 
-    with filepath.open("wb") as f:
-        with tqdm(total=total_size, unit="B", unit_scale=True) as t:
+    with filepath.open('wb') as f:
+        with tqdm(total=total_size, unit='B', unit_scale=True) as t:
             for data in r.iter_content(block_size):
                 wrote = wrote + len(data)
                 f.write(data)
                 t.update(len(data))
 
     if total_size != 0 and wrote != total_size:
-        raise RuntimeError("ERROR, something went wrong")
+        raise RuntimeError('ERROR, something went wrong')
 
 
 def _to_bibtex(doi, template, idx):
-    if "doi.org" not in doi:
+    if 'doi.org' not in doi:
         return doi
 
     # Is a DOI URL
     import requests
 
     response = requests.post(
-        doi, headers={"Accept": "application/x-bibtex; charset=utf-8"}
+        doi,
+        headers={'Accept': 'application/x-bibtex; charset=utf-8'},
+        timeout=TF_GET_TIMEOUT,
     )
     if not response.ok:
         print(
-            f"Failed to convert DOI <{doi}> to bibtex, returning URL.",
+            f'Failed to convert DOI <{doi}> to bibtex, returning URL.',
             file=sys.stderr,
         )
         return doi

@@ -1,3 +1,25 @@
+# emacs: -*- mode: python; py-indent-offset: 4; indent-tabs-mode: nil -*-
+# vi: set ft=python sts=4 ts=4 sw=4 et:
+#
+# Copyright 2024 The NiPreps Developers <nipreps@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# We support and encourage derived works from this project, please read
+# about our expectations at
+#
+#     https://www.nipreps.org/community/licensing/
+#
 """Resource loader module
 
 .. autoclass:: Loader
@@ -10,7 +32,6 @@ from contextlib import AbstractContextManager, ExitStack
 from functools import cached_property
 from pathlib import Path
 from types import ModuleType
-from typing import Union
 
 try:
     from functools import cache
@@ -27,7 +48,7 @@ try:  # Prefer stdlib so Sphinx can link to authoritative documentation
 except ImportError:  # pragma: no cover
     from importlib_resources.abc import Traversable
 
-__all__ = ["Loader"]
+__all__ = ['Loader']
 
 
 class Loader:
@@ -102,7 +123,7 @@ class Loader:
     .. automethod:: cached
     """
 
-    def __init__(self, anchor: Union[str, ModuleType]):
+    def __init__(self, anchor: str | ModuleType):
         self._anchor = anchor
         self.files = files(anchor)
         self.exit_stack = ExitStack()
@@ -119,19 +140,19 @@ class Loader:
         directory.
         """
         top_level = sorted(
-            os.path.relpath(p, self.files) + "/"[: p.is_dir()]
+            os.path.relpath(p, self.files) + '/'[: p.is_dir()]
             for p in self.files.iterdir()
-            if p.name[0] not in (".", "_") and p.name != "tests"
+            if p.name[0] not in ('.', '_') and p.name != 'tests'
         )
         doclines = [
-            f"Load package files relative to ``{self._anchor}``.",
-            "",
-            "This package contains the following (top-level) files/directories:",
-            "",
-            *(f"* ``{path}``" for path in top_level),
+            f'Load package files relative to ``{self._anchor}``.',
+            '',
+            'This package contains the following (top-level) files/directories:',
+            '',
+            *(f'* ``{path}``' for path in top_level),
         ]
 
-        return "\n".join(doclines)
+        return '\n'.join(doclines)
 
     def readable(self, *segments) -> Traversable:
         """Provide read access to a resource through a Path-like interface.
@@ -155,7 +176,7 @@ class Loader:
         """
         return as_file(self.files.joinpath(*segments))
 
-    @cache
+    @cache  # noqa: B019
     def cached(self, *segments) -> Path:
         """Ensure data is available as a :class:`~pathlib.Path`.
 

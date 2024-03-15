@@ -1,8 +1,0 @@
-pybids>=0.15.2
-importlib_resources >= 5.7; python_version < '3.11'
-requests
-tqdm
-pytest
-pytest-xdist
-pytest-cov==2.5.1
-coverage

@@ -12,6 +12,7 @@ Contents
 
     installation
     examples
+    cli
     datalad
     api
     changes

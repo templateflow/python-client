@@ -49,11 +49,11 @@ jobs:
         run: |
           python -m venv /tmp/buildenv
           source /tmp/buildenv/bin/activate
-          python -m pip install --upgrade setuptools setuptools_scm nipreps-versions
+          python -m pip install -U build hatch hatchling nipreps-versions
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             TAG=${GITHUB_REF##*/}
           fi
-          THISVERSION=$( python -m setuptools_scm )
+          THISVERSION=$( python -m hatch version | tail -n1 | xargs )
           THISVERSION=${TAG:-$THISVERSION}
           echo "Expected VERSION: \"${THISVERSION}\""
           echo "version=${THISVERSION}" >> $GITHUB_OUTPUT
@@ -131,3 +131,11 @@ jobs:
         find ${TEMPLATEFLOW_HOME} >> /tmp/.install-2.txt
         diff /tmp/.install.txt /tmp/.install-2.txt
         exit $?
+
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+    - run: pipx run flake8-pyproject templateflow/
