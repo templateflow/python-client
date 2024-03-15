@@ -1,7 +1,6 @@
 recursive-exclude templateflow/tests *
 recursive-exclude templateflow/conf/tests *
 recursive-exclude docs/ *
-
 recursive-exclude .circleci/ *
 recursive-exclude .github/ *
 

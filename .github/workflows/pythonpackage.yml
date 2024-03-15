@@ -131,3 +131,11 @@ jobs:
         find ${TEMPLATEFLOW_HOME} >> /tmp/.install-2.txt
         diff /tmp/.install.txt /tmp/.install-2.txt
         exit $?
+
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+    - run: pipx run flake8-pyproject templateflow/
