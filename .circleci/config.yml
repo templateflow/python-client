@@ -31,7 +31,7 @@ jobs:
             pip install -U pip
             pip install -r /tmp/src/templateflow/requirements.txt
             pip install datalad
-            pip install "setuptools>=45" "setuptools_scm >= 6.2" nipreps-versions build twine codecov
+            pip install -U build hatch hatchling nipreps-versions build twine codecov
 
       - run:
           name: Install git and git-annex
@@ -173,8 +173,8 @@ jobs:
           name: Build only this commit
           command: |
             export PATH="$HOME/.conda/bin:$PATH"
-            python -m pip install "setuptools_scm>=8"
-            python -m setuptools_scm
+            python -m pip install -U build hatch hatchling
+            python -m hatch version
             make -C docs SPHINXOPTS="-W" BUILDDIR="$HOME/html" CURBRANCH="${CIRCLE_TAG}" html
       - store_artifacts:
           path: ~/html
