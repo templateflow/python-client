@@ -4,6 +4,7 @@ _version.py
 # circleci hash checking
 requirements.txt
 min-requirements.txt
+dev-requirements.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
