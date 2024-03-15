@@ -20,8 +20,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
+            - deps-v10-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
+            - deps-v10-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
             - deps-v10-
       - run:
           name: Prepare environment
@@ -29,7 +29,7 @@ jobs:
             python -m venv /tmp/venv
             source /tmp/venv/bin/activate
             pip install -U pip
-            pip install -r /tmp/src/templateflow/requirements.txt
+            pip install -r /tmp/src/templateflow/dev-requirements.txt
             pip install datalad
             pip install -U build hatch hatchling nipreps-versions build twine codecov
 
