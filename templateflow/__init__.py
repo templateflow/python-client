@@ -22,9 +22,10 @@
 #
 """TemplateFlow is the Zone of Templates."""
 from datetime import datetime as _dt
+from datetime import timezone as _tz
 
 __packagename__ = 'templateflow'
-__copyright__ = f'{_dt.now().year} The NiPreps Developers'
+__copyright__ = f'{_dt.now(tz=_tz.utc).year} The NiPreps Developers'
 try:
     from ._version import __version__
 except ModuleNotFoundError:
