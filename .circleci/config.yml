@@ -13,6 +13,11 @@ jobs:
       - checkout:
           path: /tmp/src/templateflow
 
+      - run:
+          name: Generate requirements.txt
+          command: |
+            python /tmp/src/templateflow/.maint/update_requirements.py
+
       - restore_cache:
           keys:
             - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}

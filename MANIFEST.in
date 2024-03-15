@@ -1,7 +1,9 @@
 recursive-exclude templateflow/tests *
 recursive-exclude templateflow/conf/tests *
 recursive-exclude docs/ *
+
 recursive-exclude .circleci/ *
 recursive-exclude .github/ *
+recursive-exclude .maint/ *
 
-exclude .gitignore .gitattributes .git_archival.txt .travis.yml .zenodo.json codecov.yml update_changes.sh
+exclude .gitignore .gitattributes .git_archival.txt .travis.yml .zenodo.json codecov.yml

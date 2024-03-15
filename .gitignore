@@ -1,6 +1,10 @@
 # setuptools_scm
 templateflow/_version.py
 
+# circleci hash checking
+requirements.txt
+min-requirements.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
