@@ -1,6 +1,6 @@
 24.1.0 (March 15, 2024)
 =======================
-Minor relase updating *PyBIDS*'s configuration to enable new entities
+Minor release updating *PyBIDS*'s configuration to enable new entities
 that allow the selection of recently added *FreeSurfer*'s surface parcellations in
 `templateflow/tpl-fsaverage#5 <https://github.com/templateflow/tpl-fsaverage/pull/5>`__.
 
