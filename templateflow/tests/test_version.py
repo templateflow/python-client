@@ -1,6 +1,5 @@
 """Test _version.py."""
 import sys
-from collections import namedtuple
 from importlib.metadata import PackageNotFoundError
 from importlib import reload
 import templateflow

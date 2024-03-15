@@ -41,7 +41,10 @@ class Bibtex:
         return self.text
 
     def __repr__(self):
-        return f'@{self.etype}{{{self.citekey}, {", ".join([f"{key} = {val}" for key, val in self.pairs.items()])}}}'
+        return (
+            f'@{self.etype}{{{self.citekey}, '
+            f'{", ".join([f"{key} = {val}" for key, val in self.pairs.items()])}}}'
+        )
 
     def __eq__(self, other):
         if isinstance(other, Bibtex):

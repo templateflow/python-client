@@ -13,6 +13,11 @@ jobs:
       - checkout:
           path: /tmp/src/templateflow
 
+      - run:
+          name: Generate requirements.txt
+          command: |
+            python /tmp/src/templateflow/.maint/update_requirements.py
+
       - restore_cache:
           keys:
             - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
@@ -168,7 +173,8 @@ jobs:
           name: Build only this commit
           command: |
             export PATH="$HOME/.conda/bin:$PATH"
-            python setup.py --version
+            python -m pip install "setuptools_scm>=8"
+            python -m setuptools_scm
             make -C docs SPHINXOPTS="-W" BUILDDIR="$HOME/html" CURBRANCH="${CIRCLE_TAG}" html
       - store_artifacts:
           path: ~/html
