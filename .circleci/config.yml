@@ -56,6 +56,14 @@ jobs:
             - "/tmp/venv"
 
       - run:
+          name: Test packaging
+          command: |
+            source /tmp/venv/bin/activate
+            cd /tmp/src/templateflow
+            python -m build
+            python -m twine check dist/*
+
+      - run:
           name: Run tests (w/ DataLad)
           command: |
             source /tmp/venv/bin/activate
@@ -119,14 +127,6 @@ jobs:
 
       - store_test_results:
           path: /tmp/tests
-
-      - run:
-          name: Test packaging
-          command: |
-            source /tmp/venv/bin/activate
-            cd /tmp/src/templateflow
-            python -m build
-            python -m twine check dist/*
 
   build_docs:
     machine:
