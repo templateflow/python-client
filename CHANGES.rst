@@ -1,3 +1,16 @@
+24.2.0 (March 18, 2024)
+=======================
+Minor release including a new command line interface for the Client.
+
+* ENH: Add a command line interface (#123)
+* MAINT: Generate a requirements file with ``test`` dependencies (#125)
+* MAINT: Add codespell and make it fix some typos (#121)
+* MAINT: Revise code style according to ruff (#124)
+* MAINT: Add license header in all Python files (#122)
+* MAINT: Migrate to hatchling packaging (#120)
+* MAINT: Run ruff and address some issues (#119)
+* MAINT: Finalize migration of package build to PEP517/8 (#117)
+
 24.1.0 (March 15, 2024)
 =======================
 Minor release updating *PyBIDS*'s configuration to enable new entities
