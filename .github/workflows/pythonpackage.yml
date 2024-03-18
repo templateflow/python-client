@@ -49,7 +49,7 @@ jobs:
         run: |
           python -m venv /tmp/buildenv
           source /tmp/buildenv/bin/activate
-          python -m pip install -U build hatch hatchling nipreps-versions
+          python -m pip install -U build hatch
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             TAG=${GITHUB_REF##*/}
           fi
