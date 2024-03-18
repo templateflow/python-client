@@ -6,7 +6,7 @@ orbs:
 jobs:
   tests:
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PAT
@@ -24,18 +24,18 @@ jobs:
 
       - restore_cache:
           keys:
-            - deps-v10-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
-            - deps-v10-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
-            - deps-v10-
+            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
+            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
+            - deps-v11-
       - run:
           name: Prepare environment
           command: |
             python -m venv /tmp/venv
             source /tmp/venv/bin/activate
-            pip install -U pip
-            pip install -r /tmp/src/templateflow/dev-requirements.txt
-            pip install datalad
-            pip install -U build hatch hatchling nipreps-versions build twine
+            python -m pip install -U pip
+            python -m pip install -r /tmp/src/templateflow/dev-requirements.txt
+            python -m pip install -U "datalad ~= 0.19.0"
+            python -m pip install -U build hatch twine pkginfo
 
       - run:
           name: Install git and git-annex
@@ -54,10 +54,18 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
+          key: deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
           paths:
             - "/tmp/cache"
             - "/tmp/venv"
+
+      - run:
+          name: Test packaging
+          command: |
+            source /tmp/venv/bin/activate
+            cd /tmp/src/templateflow
+            python -m build
+            python -m twine check dist/*
 
       - run:
           name: Run tests (w/ DataLad)
@@ -115,14 +123,6 @@ jobs:
 
       - store_test_results:
           path: /tmp/tests
-
-      - run:
-          name: Test packaging
-          command: |
-            source /tmp/venv/bin/activate
-            cd /tmp/src/templateflow
-            python -m build
-            twine check dist/*
 
   build_docs:
     machine:
@@ -186,20 +186,25 @@ jobs:
       - checkout:
           path: /tmp/src/templateflow
 
+      - run:
+          name: Generate requirements.txt
+          command: |
+            python /tmp/src/templateflow/.maint/update_requirements.py
+
       - restore_cache:
           keys:
-            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-{{ epoch }}
-            - deps-v10-{{ checksum "/tmp/src/templateflow/requirements.txt"}}-
-            - deps-v10-
+            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
+            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
+            - deps-v11-
 
       - run:
           name: Deploy to PyPi
           command: |
             source /tmp/venv/bin/activate
-            pip install build twine
+            python -m pip install build -U twine pkginfo
             python -m build
-            twine check dist/*
-            twine upload dist/*
+            python -m twine check dist/*
+            python -m twine upload dist/*
 
 workflows:
   version: 2
