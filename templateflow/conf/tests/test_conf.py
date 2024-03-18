@@ -28,6 +28,16 @@ import pytest
 from templateflow import conf as tfc
 
 
+def _find_message(lines, msg, reverse=True):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
+
+    for line in reversed(lines):
+        if line.strip().startswith(msg):
+            return True
+    return False
+
+
 @pytest.mark.parametrize('use_datalad', ['off', 'on'])
 def test_conf_init(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of config set-up."""
@@ -56,53 +66,54 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     # First execution, the S3 stub is created (or datalad install)
     assert tfc.TF_CACHED is False
     assert tfc.setup_home() is False
-    out = capsys.readouterr()[0]
-    assert out.startswith('TemplateFlow was not cached')
+
+    out = capsys.readouterr().out
+    assert _find_message(out, 'TemplateFlow was not cached')
     assert ('TEMPLATEFLOW_HOME=%s' % home) in out
     assert home.exists()
     assert len(list(home.iterdir())) > 0
 
     updated = tfc.setup_home(force=True)  # Templateflow is now cached
     out = capsys.readouterr()[0]
-    assert not out.startswith('TemplateFlow was not cached')
+    assert _find_message(out, 'TemplateFlow was not cached') is False
 
     if use_datalad == 'on':
-        assert out.startswith('Updating TEMPLATEFLOW_HOME using DataLad')
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
         assert updated is True
 
     elif use_datalad == 'off':
         # At this point, S3 should be up-to-date
         assert updated is False
-        assert out.startswith('TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
+        assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
 
         # Let's force an update
         rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.setup_home(force=True)
         out = capsys.readouterr()[0]
         assert updated is True
-        assert out.startswith('Updating TEMPLATEFLOW_HOME using S3.')
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
 
     reload(tfc)
     assert tfc.TF_CACHED is True
     updated = tfc.setup_home()  # Templateflow is now cached
     out = capsys.readouterr()[0]
-    assert not out.startswith('TemplateFlow was not cached')
+    assert not _find_message(out, 'TemplateFlow was not cached')
 
     if use_datalad == 'on':
-        assert out.startswith('Updating TEMPLATEFLOW_HOME using DataLad')
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
         assert updated is True
 
     elif use_datalad == 'off':
         # At this point, S3 should be up-to-date
         assert updated is False
-        assert out.startswith('TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
+        assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
 
         # Let's force an update
         rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.setup_home()
         out = capsys.readouterr()[0]
         assert updated is True
-        assert out.startswith('Updating TEMPLATEFLOW_HOME using S3.')
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
 
 
 def test_layout(monkeypatch, tmp_path):
