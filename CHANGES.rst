@@ -3,6 +3,8 @@
 Minor release including a new command line interface for the Client.
 
 * ENH: Add a command line interface (#123)
+* MAINT: Update *DataLad*'s pinned version (#128)
+* MAINT: Revise failing *Pypi* deployment and ``twine check`` (#127)
 * MAINT: Generate a requirements file with ``test`` dependencies (#125)
 * MAINT: Add codespell and make it fix some typos (#121)
 * MAINT: Revise code style according to ruff (#124)
