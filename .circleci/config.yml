@@ -30,7 +30,7 @@ jobs:
             source /tmp/venv/bin/activate
             python -m pip install -U pip
             python -m pip install -r /tmp/src/templateflow/dev-requirements.txt
-            python -m pip install datalad
+            python -m pip install -U "datalad ~= 0.19.0"
             python -m pip install -U build hatch twine pkginfo codecov
 
       - run:
