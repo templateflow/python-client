@@ -10,6 +10,7 @@ from .._loader import Loader
 
 load_data = Loader(__package__)
 
+
 def _env_to_bool(envvar: str, default: bool) -> bool:
     """Check for environment variable switches and convert to booleans."""
     switches = {

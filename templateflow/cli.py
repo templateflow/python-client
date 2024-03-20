@@ -31,7 +31,7 @@ from click.decorators import FC, Option, _param_memo
 
 from templateflow import __package__, api
 from templateflow._loader import Loader as _Loader
-from templateflow.conf import TF_HOME, TF_USE_DATALAD
+from templateflow.conf import TF_HOME, TF_USE_DATALAD, TF_AUTOUPDATE
 
 load_data = _Loader(__package__)
 
@@ -91,6 +91,7 @@ def config():
 
     TEMPLATEFLOW_HOME={TF_HOME}
     TEMPLATEFLOW_USE_DATALAD={'on' if TF_USE_DATALAD else 'off'}
+    TEMPLATEFLOW_AUTOUPDATE={'on' if TF_AUTOUPDATE else 'off'}
 """)
 
 
