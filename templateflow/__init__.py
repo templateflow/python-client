@@ -37,20 +37,8 @@ except ModuleNotFoundError:
     del version
     del PackageNotFoundError
 
-import os
-
 from . import api
-from .conf import TF_USE_DATALAD, update
-
-if not TF_USE_DATALAD and os.getenv('TEMPLATEFLOW_AUTOUPDATE', '1') not in (
-    'false',
-    'off',
-    '0',
-    'no',
-    'n',
-):
-    # trigger skeleton autoupdate
-    update(local=True, overwrite=False, silent=True)
+from .conf import update
 
 __all__ = [
     '__copyright__',
