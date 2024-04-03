@@ -99,9 +99,13 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
                 )
             for fl in newfiles:
                 localpath = dest / fl
-                if localpath.is_dir():  # avoid extracting existing directories
+                if localpath.exists():
                     continue
-                zipref.extract(fl, path=dest)
+                try:
+                    zipref.extract(fl, path=dest)
+                except FileExistsError:
+                    # If there is a conflict, do not clobber
+                    pass
             return True
     if not silent:
         print('TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
