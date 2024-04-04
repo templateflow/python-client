@@ -41,7 +41,7 @@ def _find_message(lines, msg, reverse=True):
 @pytest.mark.parametrize('use_datalad', ['off', 'on'])
 def test_conf_init(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of config set-up."""
-    home = (tmp_path / '-'.join(('tf', 'dl', use_datalad))).resolve()
+    home = (tmp_path / f'conf-init-{use_datalad}').resolve()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
 
@@ -55,10 +55,10 @@ def test_conf_init(monkeypatch, tmp_path, capsys, use_datalad):
     assert str(tfc.TF_HOME) == str(home)
 
 
-@pytest.mark.parametrize('use_datalad', ['on', 'off'])
+@pytest.mark.parametrize('use_datalad', ['off', 'on'])
 def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of the installation hook."""
-    home = (tmp_path / '-'.join(('tf', 'dl', use_datalad))).resolve()
+    home = (tmp_path / f'setup-home-{use_datalad}').resolve()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
 
