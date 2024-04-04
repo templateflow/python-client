@@ -55,7 +55,7 @@ def test_conf_init(monkeypatch, tmp_path, capsys, use_datalad):
     assert str(tfc.TF_HOME) == str(home)
 
 
-@pytest.mark.parametrize('use_datalad', ['off', 'on'])
+@pytest.mark.parametrize('use_datalad', ['on', 'off'])
 def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of the installation hook."""
     home = (tmp_path / '-'.join(('tf', 'dl', use_datalad))).resolve()
