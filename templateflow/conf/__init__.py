@@ -10,17 +10,36 @@ from .._loader import Loader
 
 load_data = Loader(__package__)
 
+
+def _env_to_bool(envvar: str, default: bool) -> bool:
+    """Check for environment variable switches and convert to booleans."""
+    switches = {
+        'on': {'true', 'on', '1', 'yes', 'y'},
+        'off': {'false', 'off', '0', 'no', 'n'},
+    }
+
+    val = getenv(envvar, default)
+    if isinstance(val, str):
+        if val.lower() in switches['on']:
+            return True
+        elif val.lower() in switches['off']:
+            return False
+        else:
+            # TODO: Create templateflow logger
+            print(
+                f'{envvar} is set to unknown value <{val}>. '
+                f'Falling back to default value <{default}>'
+            )
+            return default
+    return bool(val)
+
+
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
 TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
 TF_GITHUB_SOURCE = 'https://github.com/templateflow/templateflow.git'
 TF_S3_ROOT = 'https://templateflow.s3.amazonaws.com'
-TF_USE_DATALAD = getenv('TEMPLATEFLOW_USE_DATALAD', 'false').lower() in (
-    'true',
-    'on',
-    '1',
-    'yes',
-    'y',
-)
+TF_USE_DATALAD = _env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+TF_AUTOUPDATE = _env_to_bool('TEMPLATEFLOW_AUTOUPDATE', True)
 TF_CACHED = True
 TF_GET_TIMEOUT = 10
 
@@ -50,7 +69,7 @@ please set the TEMPLATEFLOW_HOME environment variable.""",
         if not TF_USE_DATALAD:
             from ._s3 import update as _update_s3
 
-            _update_s3(TF_HOME, local=True, overwrite=True)
+            _update_s3(TF_HOME, local=True, overwrite=TF_AUTOUPDATE, silent=True)
 
 
 _init_cache()

@@ -80,23 +80,32 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
     dest = Path(dest)
     dest.mkdir(exist_ok=True, parents=True)
     with ZipFile(skel_file, 'r') as zipref:
-        if overwrite:
-            zipref.extractall(str(dest))
-            return True
+        allfiles = sorted(zipref.namelist())
 
-        allfiles = zipref.namelist()
-        current_files = [s.relative_to(dest) for s in dest.glob('**/*')]
-        existing = sorted({'%s/' % s.parent for s in current_files}) + [
-            str(s) for s in current_files
-        ]
-        newfiles = sorted(set(allfiles) - set(existing))
+        if overwrite:
+            newfiles = allfiles
+        else:
+            current_files = [s.relative_to(dest) for s in dest.glob('**/*')]
+            existing = sorted({'%s/' % s.parent for s in current_files}) + [
+                str(s) for s in current_files
+            ]
+            newfiles = sorted(set(allfiles) - set(existing))
+
         if newfiles:
             if not silent:
                 print(
                     'Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s'
                     % '\n'.join(newfiles)
                 )
-            zipref.extractall(str(dest), members=newfiles)
+            for fl in newfiles:
+                localpath = dest / fl
+                if localpath.exists():
+                    continue
+                try:
+                    zipref.extract(fl, path=dest)
+                except FileExistsError:
+                    # If there is a conflict, do not clobber
+                    pass
             return True
     if not silent:
         print('TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
