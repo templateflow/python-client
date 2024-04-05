@@ -37,8 +37,8 @@ except ModuleNotFoundError:
     del version
     del PackageNotFoundError
 
-from . import api
-from .conf import update
+from templateflow import api
+from templateflow.conf import update
 
 __all__ = [
     '__copyright__',

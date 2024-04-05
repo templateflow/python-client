@@ -31,7 +31,7 @@ def _env_to_bool(envvar: str, default: bool) -> bool:
                 f'Falling back to default value <{default}>'
             )
             return default
-    return val
+    return bool(val)
 
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
