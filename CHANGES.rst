@@ -1,3 +1,9 @@
+24.2.1 (September 13, 2024)
+===========================
+Patch release containing one bugfix and updating the default skeleton.
+
+* FIX: Avoid directory clobber during zip extraction (#131)
+
 24.2.0 (March 18, 2024)
 =======================
 Minor release including a new command line interface for the Client.
