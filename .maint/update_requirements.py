@@ -16,13 +16,13 @@ min_reqs = repo_root / 'min-requirements.txt'
 reqs_dev = repo_root / 'dev-requirements.txt'
 
 requirements = [
-    Requirement(req)
-    for req in loads(pyproject.read_text())['project']['dependencies']
+    Requirement(req) for req in loads(pyproject.read_text())['project']['dependencies']
 ]
 
 requirements_dev = [
     Requirement(req)
-    for req in loads(pyproject.read_text())['project']['optional-dependencies']['test']
+    for group in ('test', 'datalad')
+    for req in loads(pyproject.read_text())['project']['optional-dependencies'][group]
 ]
 
 script_name = Path(__file__).relative_to(repo_root)
