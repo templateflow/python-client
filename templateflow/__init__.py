@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """TemplateFlow is the Zone of Templates."""
+
 from datetime import datetime as _dt
 from datetime import timezone as _tz
 
@@ -30,6 +31,7 @@ try:
     from ._version import __version__
 except ModuleNotFoundError:
     from importlib.metadata import PackageNotFoundError, version
+
     try:
         __version__ = version(__packagename__)
     except PackageNotFoundError:

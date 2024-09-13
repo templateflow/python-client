@@ -21,9 +21,11 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """Check S3-type repo tooling."""
-from pathlib import Path
-import requests
+
 from importlib import reload
+from pathlib import Path
+
+import requests
 
 from templateflow import conf as tfc
 
@@ -46,7 +48,9 @@ def test_get_skel_file(tmp_path, monkeypatch):
     assert Path(new_skel).stat().st_size > 0
 
     latest_md5 = (
-        requests.get(tfc._s3.TF_SKEL_URL(release='master', ext='md5', allow_redirects=True), timeout=10)
+        requests.get(
+            tfc._s3.TF_SKEL_URL(release='master', ext='md5', allow_redirects=True), timeout=10
+        )
         .content.decode()
         .split()[0]
     )

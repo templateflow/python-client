@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """Test version retrieval."""
+
 import sys
 from importlib import reload
 from importlib.metadata import PackageNotFoundError

@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """TemplateFlow's Python Client."""
+
 import sys
 from json import loads
 from pathlib import Path
@@ -35,9 +36,7 @@ from templateflow.conf import (
     requires_layout,
 )
 
-_layout_dir = tuple(
-    item for item in dir(TF_LAYOUT) if item.startswith('get_')
-)
+_layout_dir = tuple(item for item in dir(TF_LAYOUT) if item.startswith('get_'))
 
 
 @requires_layout
@@ -92,10 +91,9 @@ def ls(template, **kwargs):
         kwargs['extension'] = _normalize_ext(kwargs['extension'])
 
     return [
-        Path(p) for p in TF_LAYOUT.get(
-            template=Query.ANY if template is None else template,
-            return_type='file',
-            **kwargs
+        Path(p)
+        for p in TF_LAYOUT.get(
+            template=Query.ANY if template is None else template, return_type='file', **kwargs
         )
     ]
 

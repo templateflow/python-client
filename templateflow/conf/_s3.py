@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """Tooling to handle S3 downloads."""
+
 from pathlib import Path
 from tempfile import mkstemp
 
@@ -93,10 +94,7 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
 
         if newfiles:
             if not silent:
-                print(
-                    'Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s'
-                    % '\n'.join(newfiles)
-                )
+                print('Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s' % '\n'.join(newfiles))
             for fl in newfiles:
                 localpath = dest / fl
                 if localpath.exists():

@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """The TemplateFlow Python Client command-line interface (CLI)."""
+
 from __future__ import annotations
 
 import json
@@ -31,20 +32,20 @@ from click.decorators import FC, Option, _param_memo
 
 from templateflow import __package__, api
 from templateflow._loader import Loader as _Loader
-from templateflow.conf import TF_HOME, TF_USE_DATALAD, TF_AUTOUPDATE
+from templateflow.conf import TF_AUTOUPDATE, TF_HOME, TF_USE_DATALAD
 
 load_data = _Loader(__package__)
 
 ENTITY_SHORTHANDS = {
     # 'template': ('--tpl', '-t'),
-    'resolution': ('--res', ),
-    'density': ('--den', ),
-    'atlas': ('-a', ),
-    'suffix': ('-s', ),
+    'resolution': ('--res',),
+    'density': ('--den',),
+    'atlas': ('-a',),
+    'suffix': ('-s',),
     'desc': ('-d', '--description'),
     'extension': ('--ext', '-x'),
-    'label': ('-l', ),
-    'segmentation': ('--seg', ),
+    'label': ('-l',),
+    'segmentation': ('--seg',),
 }
 ENTITY_EXCLUDE = {'template', 'description'}
 TEMPLATE_LIST = api.get_templates()
@@ -57,16 +58,12 @@ def _nulls(s):
 def entity_opts():
     """Attaches all entities as options to the command."""
 
-    entities = json.loads(
-        Path(load_data('conf/config.json')).read_text()
-    )['entities']
+    entities = json.loads(Path(load_data('conf/config.json')).read_text())['entities']
 
     args = [
-        (
-            f"--{e['name']}",
-            *ENTITY_SHORTHANDS.get(e['name'], ())
-        )
-        for e in entities if e['name'] not in ENTITY_EXCLUDE
+        (f"--{e['name']}", *ENTITY_SHORTHANDS.get(e['name'], ()))
+        for e in entities
+        if e['name'] not in ENTITY_EXCLUDE
     ]
 
     def decorator(f: FC) -> FC:
@@ -135,9 +132,7 @@ def update(local, overwrite):
 def ls(template, **kwargs):
     """List the assets corresponding to template and optional filters."""
     entities = {k: _nulls(v) for k, v in kwargs.items() if v != ''}
-    click.echo(
-        '\n'.join(f'{match}' for match in api.ls(template, **entities))
-    )
+    click.echo('\n'.join(f'{match}' for match in api.ls(template, **entities)))
 
 
 @main.command()
@@ -146,9 +141,7 @@ def ls(template, **kwargs):
 def get(template, **kwargs):
     """Fetch the assets corresponding to template and optional filters."""
     entities = {k: _nulls(v) for k, v in kwargs.items() if v != ''}
-    click.echo(
-        '\n'.join(f'{match}' for match in api.get(template, **entities))
-    )
+    click.echo('\n'.join(f'{match}' for match in api.get(template, **entities)))
 
 
 if __name__ == '__main__':
