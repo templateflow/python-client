@@ -21,13 +21,12 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """Tests the config module."""
-from pathlib import Path
+
 from importlib import reload
 from shutil import rmtree
 
 import pytest
 
-from templateflow import api
 from templateflow import conf as tfc
 
 
@@ -39,6 +38,7 @@ def _find_message(lines, msg, reverse=True):
         if line.strip().startswith(msg):
             return True
     return False
+
 
 @pytest.mark.parametrize('use_datalad', ['off', 'on'])
 def test_conf_init(monkeypatch, tmp_path, use_datalad):
@@ -61,7 +61,9 @@ def test_conf_init(monkeypatch, tmp_path, use_datalad):
 def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of the installation hook."""
 
-    use_pre = tfc._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+    if use_datalad == 'on':
+        # ImportError if not installed
+        pass
 
     home = (tmp_path / f'setup-home-{use_datalad}').absolute()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
@@ -70,7 +72,6 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     use_post = tfc._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
     assert use_post is (use_datalad == 'on')
 
-    tfc._preload()
     with capsys.disabled():
         reload(tfc)
 
