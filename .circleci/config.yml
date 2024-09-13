@@ -118,7 +118,6 @@ jobs:
       - codecov/upload:
           file: ~/coverage/cov_config.xml
           flags: config
-          cli_args: "-e CIRCLE_JOB"
           upload_name: General
 
       - run:
@@ -133,7 +132,6 @@ jobs:
       - codecov/upload:
           file: ~/coverage/cov_api_dl.xml
           flags: api,datalad
-          cli_args: "-e CIRCLE_JOB"
           upload_name: Datalad tests
 
       - run:
@@ -148,7 +146,6 @@ jobs:
       - codecov/upload:
           file: ~/coverage/cov_api_s3.xml
           flags: api,s3
-          cli_args: "-e CIRCLE_JOB"
           upload_name: S3 tests
 
       - run:
@@ -164,7 +161,6 @@ jobs:
       - codecov/upload:
           file: ~/coverage/cov_api_dl_s3.xml
           flags: api,dls3
-          cli_args: "-e CIRCLE_JOB"
           upload_name: Datalad-S3-bypass
 
       - store_test_results:
