@@ -58,13 +58,20 @@ def test_conf_init(monkeypatch, tmp_path, use_datalad):
 
 
 @pytest.mark.parametrize('use_datalad', ['on', 'off'])
-def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
+def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of the installation hook."""
+
+    use_pre = tfc._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+
     home = (tmp_path / f'setup-home-{use_datalad}').absolute()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
 
-    with capfd.disabled():
+    use_post = tfc._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+    assert use_post is (use_datalad == 'on')
+
+    tfc._preload()
+    with capsys.disabled():
         reload(tfc)
 
     # Ensure mocks are up-to-date
@@ -74,14 +81,14 @@ def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
     assert tfc.TF_CACHED is False
     assert tfc.setup_home() is False
 
-    out = capfd.readouterr().out
+    out = capsys.readouterr().out
     assert _find_message(out, 'TemplateFlow was not cached')
     assert ('TEMPLATEFLOW_HOME=%s' % home) in out
     assert home.exists()
     assert len(list(home.iterdir())) > 0
 
     updated = tfc.setup_home(force=True)  # Templateflow is now cached
-    out = capfd.readouterr()[0]
+    out = capsys.readouterr()[0]
     assert _find_message(out, 'TemplateFlow was not cached') is False
 
     if use_datalad == 'on':
@@ -96,14 +103,14 @@ def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
         # Let's force an update
         rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.setup_home(force=True)
-        out = capfd.readouterr()[0]
+        out = capsys.readouterr()[0]
         assert updated is True
         assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
 
     reload(tfc)
     assert tfc.TF_CACHED is True
     updated = tfc.setup_home()  # Templateflow is now cached
-    out = capfd.readouterr()[0]
+    out = capsys.readouterr()[0]
     assert not _find_message(out, 'TemplateFlow was not cached')
 
     if use_datalad == 'on':
@@ -118,7 +125,7 @@ def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
         # Let's force an update
         rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
         updated = tfc.setup_home()
-        out = capfd.readouterr()[0]
+        out = capsys.readouterr()[0]
         assert updated is True
         assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
 

@@ -191,6 +191,12 @@ def init_layout():
         ),
     )
 
+def _preload():
+    global TF_HOME, TF_USE_DATALAD, TF_AUTOUPDATE
+    TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME))).absolute()
+    TF_USE_DATALAD = _env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+    TF_AUTOUPDATE = _env_to_bool('TEMPLATEFLOW_AUTOUPDATE', True)
+
 
 with suppress(ImportError):
     init_layout()
