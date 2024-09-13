@@ -58,12 +58,16 @@ def test_conf_init(monkeypatch, tmp_path, use_datalad):
 @pytest.mark.parametrize('use_datalad', ['off', 'on'])
 def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
     """Check the correct functioning of the installation hook."""
-    home = (tmp_path / f'setup-home-{use_datalad}').resolve()
+    home = (tmp_path / f'setup-home-{use_datalad}').absolute()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
 
     with capfd.disabled():
         reload(tfc)
+
+    # Ensure mocks are up-to-date
+    assert tfc.TF_USE_DATALAD is (use_datalad == 'on')
+    assert str(tfc.TF_HOME) == str(home)
     # First execution, the S3 stub is created (or datalad install)
     assert tfc.TF_CACHED is False
     assert tfc.setup_home() is False

@@ -35,7 +35,7 @@ def _env_to_bool(envvar: str, default: bool) -> bool:
 
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
-TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
+TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME))).absolute()
 TF_GITHUB_SOURCE = 'https://github.com/templateflow/templateflow.git'
 TF_S3_ROOT = 'https://templateflow.s3.amazonaws.com'
 TF_USE_DATALAD = _env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
