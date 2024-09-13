@@ -24,7 +24,7 @@
 
 import pytest
 
-from .. import api
+from templateflow import api
 
 
 class Bibtex:
@@ -154,9 +154,7 @@ Surface-Based Atlases},
 journal={Cerebral Cortex}
 }"""
 
-fslr_lbib = (
-    'https://github.com/Washington-University/HCPpipelines/tree/master/global/templates'
-)
+fslr_lbib = 'https://github.com/Washington-University/HCPpipelines/tree/master/global/templates'
 
 fsaverage_fbib = """\
 @article{Fischl_1999,
@@ -181,9 +179,7 @@ journal={Human Brain Mapping}
         ('fsLR', fslr_urls, fslr_fbib, fslr_lbib),
         (
             'fsaverage',
-            [
-                'https://doi.org/10.1002/(sici)1097-0193(1999)8:4%3C272::aid-hbm10%3E3.0.co;2-4'
-            ],
+            ['https://doi.org/10.1002/(sici)1097-0193(1999)8:4%3C272::aid-hbm10%3E3.0.co;2-4'],
             fsaverage_fbib,
             None,
         ),

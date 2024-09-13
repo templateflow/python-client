@@ -21,6 +21,7 @@
 #     https://www.nipreps.org/community/licensing/
 #
 """Tooling to handle S3 downloads."""
+
 from pathlib import Path
 from tempfile import mkstemp
 
@@ -86,18 +87,18 @@ def _update_skeleton(skel_file, dest, overwrite=True, silent=False):
             newfiles = allfiles
         else:
             current_files = [s.relative_to(dest) for s in dest.glob('**/*')]
-            existing = sorted({'%s/' % s.parent for s in current_files}) + [
+            existing = sorted({f'{s.parent}/' for s in current_files}) + [
                 str(s) for s in current_files
             ]
             newfiles = sorted(set(allfiles) - set(existing))
 
         if newfiles:
             if not silent:
-                print(
-                    'Updating TEMPLATEFLOW_HOME using S3. Adding:\n%s'
-                    % '\n'.join(newfiles)
-                )
+                print('Updating TEMPLATEFLOW_HOME using S3. Adding:')
+
             for fl in newfiles:
+                if not silent:
+                    print(fl)
                 localpath = dest / fl
                 if localpath.exists():
                     continue

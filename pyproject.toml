@@ -37,13 +37,15 @@ Documentation = "https://www.templateflow.org/python-client/"
 
 [project.optional-dependencies]
 test = [
+    "coverage ~= 5.0.0",
     "pytest",
+    "pytest-cov",
+    "pytest-env",
     "pytest-xdist",
-    "pytest-cov == 2.5.1",
-    "coverage",
+    "toml",
 ]
 datalad = [
-    "datalad ~= 0.19.0"
+    "datalad ~= 1.0.0"
 ]
 doc = [
     "nbsphinx",
@@ -113,7 +115,7 @@ per-file-ignores = [
 
 [tool.pytest.ini_options]
 norecursedirs = [".git"]
-addopts = "-svx --doctest-modules"
+addopts = "-svx"
 doctest_optionflags = "ALLOW_UNICODE NORMALIZE_WHITESPACE ELLIPSIS"
 env = "PYTHONHASHSEED=0"
 filterwarnings = ["ignore::DeprecationWarning"]
@@ -121,7 +123,7 @@ junit_family = "xunit2"
 
 [tool.coverage.run]
 branch = true
-concurrency = 'multiprocessing'
+concurrency = ['multiprocessing']
 omit = [
     '*/tests/*',
     '*/conftest.py',

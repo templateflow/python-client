@@ -1,4 +1,5 @@
 """Configuration and settings."""
+
 import re
 from contextlib import suppress
 from functools import wraps
@@ -35,7 +36,7 @@ def _env_to_bool(envvar: str, default: bool) -> bool:
 
 
 TF_DEFAULT_HOME = Path.home() / '.cache' / 'templateflow'
-TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME)))
+TF_HOME = Path(getenv('TEMPLATEFLOW_HOME', str(TF_DEFAULT_HOME))).absolute()
 TF_GITHUB_SOURCE = 'https://github.com/templateflow/templateflow.git'
 TF_S3_ROOT = 'https://templateflow.s3.amazonaws.com'
 TF_USE_DATALAD = _env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
@@ -43,9 +44,19 @@ TF_AUTOUPDATE = _env_to_bool('TEMPLATEFLOW_AUTOUPDATE', True)
 TF_CACHED = True
 TF_GET_TIMEOUT = 10
 
+if TF_USE_DATALAD:
+    try:
+        from datalad.api import install
+    except ImportError:
+        warn('DataLad is not installed ➔ disabled.', stacklevel=2)
+        TF_USE_DATALAD = False
+
+if not TF_USE_DATALAD:
+    from templateflow.conf._s3 import update as _update_s3
+
 
 def _init_cache():
-    global TF_HOME, TF_CACHED, TF_USE_DATALAD
+    global TF_CACHED
 
     if not TF_HOME.exists() or not list(TF_HOME.iterdir()):
         TF_CACHED = False
@@ -58,17 +69,9 @@ please set the TEMPLATEFLOW_HOME environment variable.""",
             stacklevel=2,
         )
         if TF_USE_DATALAD:
-            try:
-                from datalad.api import install
-            except ImportError:
-                TF_USE_DATALAD = False
-            else:
-                TF_HOME.parent.mkdir(exist_ok=True, parents=True)
-                install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
-
-        if not TF_USE_DATALAD:
-            from ._s3 import update as _update_s3
-
+            TF_HOME.parent.mkdir(exist_ok=True, parents=True)
+            install(path=str(TF_HOME), source=TF_GITHUB_SOURCE, recursive=True)
+        else:
             _update_s3(TF_HOME, local=True, overwrite=TF_AUTOUPDATE, silent=True)
 
 
@@ -85,9 +88,7 @@ def requires_layout(func):
         if TF_LAYOUT is None:
             from bids import __version__
 
-            raise RuntimeError(
-                f'A layout with PyBIDS <{__version__}> could not be initiated'
-            )
+            raise RuntimeError(f'A layout with PyBIDS <{__version__}> could not be initiated')
         return func(*args, **kwargs)
 
     return wrapper
@@ -95,8 +96,8 @@ def requires_layout(func):
 
 def update(local=False, overwrite=True, silent=False):
     """Update an existing DataLad or S3 home."""
-    if TF_USE_DATALAD and _update_datalad():
-        success = True
+    if TF_USE_DATALAD:
+        success = _update_datalad()
     else:
         from ._s3 import update as _update_s3
 
@@ -116,7 +117,6 @@ def update(local=False, overwrite=True, silent=False):
 
 def wipe():
     """Clear the cache if functioning in S3 mode."""
-    global TF_USE_DATALAD, TF_HOME
 
     if TF_USE_DATALAD:
         print('TemplateFlow is configured in DataLad mode, wipe() has no effect')
@@ -131,9 +131,7 @@ def wipe():
         from pathlib import Path
 
         if Path(path).exists():
-            print(
-                f'Warning: could not delete <{path}>, please clear the cache manually.'
-            )
+            print(f'Warning: could not delete <{path}>, please clear the cache manually.')
 
     rmtree(TF_HOME, onerror=_onerror)
     _init_cache()
