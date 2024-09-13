@@ -1,44 +1,85 @@
-version: 2
+version: 2.1
+orbs:
+  docker: circleci/docker@2.7.0
+  codecov: codecov/codecov@4.1.0
+  python: circleci/python@2.1.1
+
 jobs:
+  build:
+    executor:
+      name: python/default
+      tag: '3.12'
+
+    # docker:
+    #   - auth:
+    #       username: $DOCKER_USERNAME
+    #       password: $DOCKER_PASSWORD
+
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo 'build' > requirements.txt
+            echo 'wheel' >> requirements.txt
+            echo 'twine' >> requirements.txt
+      - python/install-packages:
+          pkg-manager: pip
+          cache-version: build-v1
+      - run:
+          command: |
+            python -m build
+            python -m twine check dist/*
+          name: Test packaging
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+
+  deploy_pypi:
+    executor:
+      name: python/default
+      tag: '3.12'
+
+    # docker:
+    #   - auth:
+    #       username: $DOCKER_USERNAME
+    #       password: $DOCKER_PASSWORD
+
+    steps:
+      - attach_workspace:
+          at: ~/project
+
+      - python/install-packages:
+          args: twine
+          pkg-manager: pip
+
+      - run:
+          command: python -m twine upload dist/*
+          name: Upload to Pypi
+
   tests:
-    docker:
-      - image: cimg/python:3.11
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PAT
-    working_directory: /tmp/tests
+    executor:
+      name: python/default
+      tag: '3.12'
+
+    # docker:
+    #   - auth:
+    #       username: $DOCKER_USERNAME
+    #       password: $DOCKER_PASSWORD
+
     environment:
       - OSF_MIRROR_PATH: /tmp/data/templateflow
     steps:
-      - checkout:
-          path: /tmp/src/templateflow
-
-      - run:
-          name: Generate requirements.txt
-          command: |
-            python /tmp/src/templateflow/.maint/update_requirements.py
-
       - restore_cache:
           keys:
-            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
-            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
-            - deps-v11-
-      - run:
-          name: Prepare environment
-          command: |
-            python -m venv /tmp/venv
-            source /tmp/venv/bin/activate
-            python -m pip install -U pip
-            python -m pip install -r /tmp/src/templateflow/dev-requirements.txt
-            python -m pip install -U "datalad ~= 0.19.0"
-            python -m pip install -U build hatch twine pkginfo codecov
-
+            - annex-v1-{{ epoch }}
+            - annex-v1-
       - run:
           name: Install git and git-annex
           command: |
             if [[ ! -e "/tmp/cache/git-annex-standalone.tar.gz" ]]; then
               wget -O- http://neuro.debian.net/lists/focal.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-              sudo apt-key add /tmp/src/templateflow/.neurodebian/neurodebian.gpg
+              sudo apt-key add .neurodebian/neurodebian.gpg
               sudo apt-key adv --recv-keys --keyserver hkps://keys.openpgp.org 0xA5D32F012649A5A9 || true
               sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
               mkdir -p /tmp/cache
@@ -50,83 +91,80 @@ jobs:
             git config --global user.email "email@domain.com"
 
       - save_cache:
-          key: deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
+          key: annex-v1-{{ epoch }}
           paths:
             - "/tmp/cache"
-            - "/tmp/venv"
+
+      - attach_workspace:
+          at: ~/project
 
       - run:
-          name: Test packaging
           command: |
-            source /tmp/venv/bin/activate
-            cd /tmp/src/templateflow
-            python -m build
-            python -m twine check dist/*
+            python .maint/update_requirements.py
+          name: Generate requirements.txt
+
+      - python/install-packages:
+          pip-dependency-file: dev-requirements.txt
+          pkg-manager: pip
+          cache-version: v1
 
       - run:
           name: Run tests (w/ DataLad)
           command: |
-            source /tmp/venv/bin/activate
+            mkdir -p ~/tests/ ~/coverage/
             export TEMPLATEFLOW_USE_DATALAD=on
-            pytest --junit-xml=/tmp/tests/datalad.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow
+            python -m pytest \
+                   --junit-xml=~/tests/datalad.xml --cov templateflow --cov-report xml:~/coverage/cov_api_dl.xml \
+                   --doctest-modules templateflow/
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_dl.xml --root /tmp/src/templateflow \
-                --flags api,datalad -e CIRCLE_JOB
+      - codecov/upload:
+          file: ~/coverage/cov_api_dl.xml
+          flags: api,datalad
+          cli_args: "-e CIRCLE_JOB"
 
       - run:
           name: Run tests (pulling from S3)
           command: |
-            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
-            pytest --junit-xml=/tmp/tests/s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_s3.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
+            python -m pytest \
+                   --junit-xml=~/tests/s3.xml --cov templateflow --cov-report xml:~/coverage/cov_api_s3.xml \
+                   --doctest-modules templateflow/api.py
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_s3.xml --root /tmp/src/templateflow \
-                --flags api,s3 -e CIRCLE_JOB
+      - codecov/upload:
+          file: ~/coverage/cov_api_s3.xml
+          flags: api,s3
+          cli_args: "-e CIRCLE_JOB"
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
           command: |
-            source /tmp/venv/bin/activate
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-clean
             datalad install -r -s https://github.com/templateflow/templateflow $TEMPLATEFLOW_HOME
-            pytest --junit-xml=/tmp/tests/dl+s3.xml --cov templateflow --cov-report xml:/tmp/cov_api_dl_s3.xml \
-                   --doctest-modules /tmp/src/templateflow/templateflow/api.py
+            python -m pytest \
+                   --junit-xml=~/tests/dl+s3.xml --cov templateflow --cov-report xml:~/coverage/cov_api_dl_s3.xml \
+                   --doctest-modules templateflow/api.py
 
-      - run:
-          name: Submit api test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_api_dl_s3.xml --root /tmp/src/templateflow \
-                --flags api,dls3 -e CIRCLE_JOB
+      - codecov/upload:
+          file: ~/coverage/cov_api_dl_s3.xml
+          flags: api,dls3
+          cli_args: "-e CIRCLE_JOB"
 
       - run:
           name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
           command: |
-            source /tmp/venv/bin/activate
-            pytest --junit-xml=/tmp/tests/conftests.xml --cov templateflow --cov-report xml:/tmp/cov_config.xml \
-                   /tmp/src/templateflow/templateflow/conf/tests/test_conf.py
+            python -m pytest \
+                   --junit-xml=~/tests/conftests.xml --cov templateflow --cov-report xml:~/coverage/cov_config.xml \
+                   templateflow/conf/tests/test_conf.py
 
-      - run:
-          name: Submit config test coverage
-          command: |
-            source /tmp/venv/bin/activate
-            codecov --file /tmp/cov_config.xml --root /tmp/src/templateflow \
-                --flags config -e CIRCLE_JOB
+      - codecov/upload:
+          file: ~/coverage/cov_config.xml
+          flags: config
+          cli_args: "-e CIRCLE_JOB"
 
       - store_test_results:
-          path: /tmp/tests
+          path: ~/tests
 
   build_docs:
     machine:
@@ -179,42 +217,11 @@ jobs:
       - store_artifacts:
           path: ~/html
 
-  deploy_pypi:
-    docker:
-      - image: cimg/python:3.9
-    working_directory: /tmp/src/templateflow
-    steps:
-      - attach_workspace:
-          at: /tmp
-
-      - checkout:
-          path: /tmp/src/templateflow
-
-      - run:
-          name: Generate requirements.txt
-          command: |
-            python /tmp/src/templateflow/.maint/update_requirements.py
-
-      - restore_cache:
-          keys:
-            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-{{ epoch }}
-            - deps-v11-{{ checksum "/tmp/src/templateflow/dev-requirements.txt"}}-
-            - deps-v11-
-
-      - run:
-          name: Deploy to PyPi
-          command: |
-            source /tmp/venv/bin/activate
-            python -m pip install build -U twine pkginfo
-            python -m build
-            python -m twine check dist/*
-            python -m twine upload dist/*
-
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - tests:
+      - build:
           context:
             - nipreps-common
           filters:
@@ -223,10 +230,25 @@ workflows:
                 - /docs?\/.*/
             tags:
               only: /.*/
+
+      - tests:
+          context:
+            - nipreps-common
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - /docs?\/.*/
+            tags:
+              only: /.*/
+
       - deploy_pypi:
           context:
             - nipreps-common
           requires:
+            - build
+            - tests
             - build_docs
           filters:
             branches:
