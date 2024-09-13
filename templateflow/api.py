@@ -174,25 +174,23 @@ def get(template, raise_empty=False, **kwargs):
     not_fetched = [str(p) for p in out_file if not p.is_file() or p.stat().st_size == 0]
 
     if not_fetched:
-        msg = 'Could not fetch template files: %s.' % ', '.join(not_fetched)
+        msg = 'Could not fetch template files: {}.'.format(', '.join(not_fetched))
         if dl_missing and not TF_USE_DATALAD:
             msg += (
-                """\
-The $TEMPLATEFLOW_HOME folder %s seems to contain an initiated DataLad \
+                f"""\
+The $TEMPLATEFLOW_HOME folder {TF_LAYOUT.root} seems to contain an initiated DataLad \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is not \
 set or set to one of (false, off, 0). Please set $TEMPLATEFLOW_USE_DATALAD \
 on (possible values: true, on, 1)."""
-                % TF_LAYOUT.root
             )
 
         if s3_missing and TF_USE_DATALAD:
             msg += (
-                """\
-The $TEMPLATEFLOW_HOME folder %s seems to contain an plain \
+                f"""\
+The $TEMPLATEFLOW_HOME folder {TF_LAYOUT.root} seems to contain an plain \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is \
 set to one of (true, on, 1). Please set $TEMPLATEFLOW_USE_DATALAD \
 off (possible values: false, off, 0)."""
-                % TF_LAYOUT.root
             )
 
         raise RuntimeError(msg)
@@ -249,7 +247,7 @@ def get_metadata(template):
 
     """
     tf_home = Path(TF_LAYOUT.root)
-    filepath = tf_home / ('tpl-%s' % template) / 'template_description.json'
+    filepath = tf_home / (f'tpl-{template}') / 'template_description.json'
 
     # Ensure that template is installed and file is available
     if not filepath.is_file():
@@ -322,7 +320,7 @@ def _s3_get(filepath):
     path = filepath.relative_to(TF_LAYOUT.root).as_posix()
     url = f'{TF_S3_ROOT}/{path}'
 
-    print('Downloading %s' % url, file=stderr)
+    print(f'Downloading {url}', file=stderr)
     # Streaming, so we can iterate over the response.
     r = requests.get(url, stream=True, timeout=TF_GET_TIMEOUT)
 

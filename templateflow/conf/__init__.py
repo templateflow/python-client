@@ -48,7 +48,7 @@ if TF_USE_DATALAD:
     try:
         from datalad.api import install
     except ImportError:
-        warn('DataLad is not installed ➔ disabled.')
+        warn('DataLad is not installed ➔ disabled.', stacklevel=2)
         TF_USE_DATALAD = False
 
 if not TF_USE_DATALAD:

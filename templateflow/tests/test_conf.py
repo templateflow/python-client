@@ -84,7 +84,7 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
 
     out = capsys.readouterr().out
     assert _find_message(out, 'TemplateFlow was not cached')
-    assert ('TEMPLATEFLOW_HOME=%s' % home) in out
+    assert (f'TEMPLATEFLOW_HOME={home}') in out
     assert home.exists()
     assert len(list(home.iterdir())) > 0
 
@@ -134,9 +134,9 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
 def test_layout(monkeypatch, tmp_path):
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
 
-    lines = ('%s' % tfc.TF_LAYOUT).splitlines()
+    lines = (f'{tfc.TF_LAYOUT}').splitlines()
     assert lines[0] == 'TemplateFlow Layout'
-    assert lines[1] == ' - Home: %s' % tfc.TF_HOME
+    assert lines[1] == f' - Home: {tfc.TF_HOME}'
     assert lines[2].startswith(' - Templates:')
 
 
