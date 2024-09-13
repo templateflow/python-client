@@ -121,6 +121,7 @@ jobs:
           file: ~/coverage/cov_api_dl.xml
           flags: api,datalad
           cli_args: "-e CIRCLE_JOB"
+          upload_name: Datalad tests
 
       - run:
           name: Run tests (pulling from S3)
@@ -135,6 +136,7 @@ jobs:
           file: ~/coverage/cov_api_s3.xml
           flags: api,s3
           cli_args: "-e CIRCLE_JOB"
+          upload_name: S3 tests
 
       - run:
           name: Run tests (w/ DataLad, bypassed via S3)
@@ -150,6 +152,7 @@ jobs:
           file: ~/coverage/cov_api_dl_s3.xml
           flags: api,dls3
           cli_args: "-e CIRCLE_JOB"
+          upload_name: Datalad-S3-bypass
 
       - run:
           name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
@@ -162,6 +165,7 @@ jobs:
           file: ~/coverage/cov_config.xml
           flags: config
           cli_args: "-e CIRCLE_JOB"
+          upload_name: Config
 
       - store_test_results:
           path: ~/tests
