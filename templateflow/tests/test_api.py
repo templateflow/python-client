@@ -24,7 +24,7 @@
 
 import pytest
 
-from .. import api
+from templateflow import api
 
 
 class Bibtex:

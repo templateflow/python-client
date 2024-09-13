@@ -109,13 +109,26 @@ jobs:
           cache-version: v1
 
       - run:
+          name: Run tests (config and others)
+          command: |
+            python -m pytest \
+                   --junit-xml=~/tests/conftests.xml --cov templateflow --cov-report xml:~/coverage/cov_config.xml \
+                   templateflow/tests/
+
+      - codecov/upload:
+          file: ~/coverage/cov_config.xml
+          flags: config
+          cli_args: "-e CIRCLE_JOB"
+          upload_name: General
+
+      - run:
           name: Run tests (w/ DataLad)
           command: |
             mkdir -p ~/tests/ ~/coverage/
             export TEMPLATEFLOW_USE_DATALAD=on
             python -m pytest \
                    --junit-xml=~/tests/datalad.xml --cov templateflow --cov-report xml:~/coverage/cov_api_dl.xml \
-                   --doctest-modules templateflow/
+                   --doctest-modules templateflow/api.py
 
       - codecov/upload:
           file: ~/coverage/cov_api_dl.xml
@@ -153,19 +166,6 @@ jobs:
           flags: api,dls3
           cli_args: "-e CIRCLE_JOB"
           upload_name: Datalad-S3-bypass
-
-      - run:
-          name: Run tests (config, parameterized TEMPLATEFLOW_USE_DATALAD)
-          command: |
-            python -m pytest \
-                   --junit-xml=~/tests/conftests.xml --cov templateflow --cov-report xml:~/coverage/cov_config.xml \
-                   templateflow/conf/tests/test_conf.py
-
-      - codecov/upload:
-          file: ~/coverage/cov_config.xml
-          flags: config
-          cli_args: "-e CIRCLE_JOB"
-          upload_name: Config
 
       - store_test_results:
           path: ~/tests

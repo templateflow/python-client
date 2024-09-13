@@ -22,31 +22,137 @@
 #
 """Tests the config module."""
 from pathlib import Path
+from importlib import reload
+from shutil import rmtree
 
 import pytest
 
-from .. import api, conf
+from templateflow import api
+from templateflow import conf as tfc
 
 
-@pytest.mark.skipif(conf.TF_USE_DATALAD, reason='S3 only')
-def test_update_s3(tmp_path):
-    conf.TF_HOME = tmp_path / 'templateflow'
-    conf.TF_HOME.mkdir(exist_ok=True)
+def _find_message(lines, msg, reverse=True):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
 
-    # replace TF_SKEL_URL with the path of a legacy skeleton
-    _skel_url = conf._s3.TF_SKEL_URL
-    conf._s3.TF_SKEL_URL = (
-        'https://github.com/templateflow/python-client/raw/0.5.0/'
-        'templateflow/conf/templateflow-skel.{ext}'.format
-    )
-    # initialize templateflow home, making sure to pull the legacy skeleton
-    conf.update(local=False)
-    # ensure we can grab a file
-    assert Path(api.get('MNI152NLin2009cAsym', resolution=2, desc='brain', suffix='mask')).exists()
-    # and ensure we can't fetch one that doesn't yet exist
-    assert not api.get('Fischer344', hemi='L', desc='brain', suffix='mask')
+    for line in reversed(lines):
+        if line.strip().startswith(msg):
+            return True
+    return False
 
-    # refresh the skeleton using the most recent skeleton
-    conf._s3.TF_SKEL_URL = _skel_url
-    conf.update(local=True, overwrite=True)
-    assert Path(api.get('Fischer344', hemi='L', desc='brain', suffix='mask')).exists()
+@pytest.mark.parametrize('use_datalad', ['off', 'on'])
+def test_conf_init(monkeypatch, tmp_path, use_datalad):
+    """Check the correct functioning of config set-up."""
+    home = (tmp_path / f'conf-init-{use_datalad}').resolve()
+    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
+    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
+
+    # First execution, the S3 stub is created (or datalad install)
+    reload(tfc)
+    assert tfc.TF_CACHED is False
+    assert str(tfc.TF_HOME) == str(home)
+
+    reload(tfc)
+    assert tfc.TF_CACHED is True
+    assert str(tfc.TF_HOME) == str(home)
+
+
+@pytest.mark.parametrize('use_datalad', ['on', 'off'])
+def test_setup_home(monkeypatch, tmp_path, capfd, use_datalad):
+    """Check the correct functioning of the installation hook."""
+    home = (tmp_path / f'setup-home-{use_datalad}').absolute()
+    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
+    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
+
+    with capfd.disabled():
+        reload(tfc)
+
+    # Ensure mocks are up-to-date
+    assert tfc.TF_USE_DATALAD is (use_datalad == 'on')
+    assert str(tfc.TF_HOME) == str(home)
+    # First execution, the S3 stub is created (or datalad install)
+    assert tfc.TF_CACHED is False
+    assert tfc.setup_home() is False
+
+    out = capfd.readouterr().out
+    assert _find_message(out, 'TemplateFlow was not cached')
+    assert ('TEMPLATEFLOW_HOME=%s' % home) in out
+    assert home.exists()
+    assert len(list(home.iterdir())) > 0
+
+    updated = tfc.setup_home(force=True)  # Templateflow is now cached
+    out = capfd.readouterr()[0]
+    assert _find_message(out, 'TemplateFlow was not cached') is False
+
+    if use_datalad == 'on':
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
+        assert updated is True
+
+    elif use_datalad == 'off':
+        # At this point, S3 should be up-to-date
+        assert updated is False
+        assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
+
+        # Let's force an update
+        rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
+        updated = tfc.setup_home(force=True)
+        out = capfd.readouterr()[0]
+        assert updated is True
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
+
+    reload(tfc)
+    assert tfc.TF_CACHED is True
+    updated = tfc.setup_home()  # Templateflow is now cached
+    out = capfd.readouterr()[0]
+    assert not _find_message(out, 'TemplateFlow was not cached')
+
+    if use_datalad == 'on':
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
+        assert updated is True
+
+    elif use_datalad == 'off':
+        # At this point, S3 should be up-to-date
+        assert updated is False
+        assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
+
+        # Let's force an update
+        rmtree(str(home / 'tpl-MNI152NLin2009cAsym'))
+        updated = tfc.setup_home()
+        out = capfd.readouterr()[0]
+        assert updated is True
+        assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using S3.')
+
+
+def test_layout(monkeypatch, tmp_path):
+    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
+
+    lines = ('%s' % tfc.TF_LAYOUT).splitlines()
+    assert lines[0] == 'TemplateFlow Layout'
+    assert lines[1] == ' - Home: %s' % tfc.TF_HOME
+    assert lines[2].startswith(' - Templates:')
+
+
+def test_layout_errors(monkeypatch):
+    """Check regression of #71."""
+    import builtins
+    import sys
+    from importlib import __import__ as oldimport
+
+    @tfc.requires_layout
+    def myfunc():
+        return 'okay'
+
+    def mock_import(name, globals=None, locals=None, fromlist=(), level=0):  # noqa: A002
+        if name == 'bids':
+            raise ModuleNotFoundError
+        return oldimport(name, globals=globals, locals=locals, fromlist=fromlist, level=level)
+
+    with monkeypatch.context() as m:
+        m.setattr(tfc, 'TF_LAYOUT', None)
+        with pytest.raises(RuntimeError):
+            myfunc()
+
+        m.delitem(sys.modules, 'bids')
+        m.setattr(builtins, '__import__', mock_import)
+        with pytest.raises(ImportError):
+            myfunc()
