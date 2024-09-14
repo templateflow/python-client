@@ -1,9 +1,13 @@
-24.2.1 (September 14, 2024)
+24.2.2 (September 14, 2024)
 ===========================
 Patch release containing one bugfix and updating the default skeleton.
 
 * FIX: Avoid directory clobber during zip extraction (#131)
 * MAINT: Overdue updates and revision of CircleCI (#136)
+
+24.2.1 (September 13, 2024; RECALLED)
+=====================================
+Release recalled because it was uploaded in a stale status of the client.
 
 24.2.0 (March 18, 2024)
 =======================
