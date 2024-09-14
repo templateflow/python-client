@@ -126,8 +126,14 @@ jobs:
             mkdir -p ~/tests/ ~/coverage/
             export TEMPLATEFLOW_USE_DATALAD=on
             python -m pytest \
-                   --junit-xml=~/tests/datalad.xml --cov templateflow --cov-report xml:~/coverage/cov_api_dl.xml \
-                   --doctest-modules templateflow/api.py
+                   --junit-xml=~/tests/datalad.xml --cov templateflow --doctest-modules \
+                   templateflow/api.py
+
+            coverage run --append -m templateflow.cli config
+            coverage run --append -m templateflow.cli ls MNI152NLin2009cAsym --suffix T1w
+            coverage run --append -m templateflow.cli get MNI152NLin2009cAsym --suffix mask
+            coverage run --append -m templateflow.cli update
+            coverage xml -o ~/coverage/cov_api_dl.xml
 
       - codecov/upload:
           file: ~/coverage/cov_api_dl.xml
@@ -140,8 +146,13 @@ jobs:
             export TEMPLATEFLOW_USE_DATALAD=off
             export TEMPLATEFLOW_HOME=$HOME/templateflow-s3
             python -m pytest \
-                   --junit-xml=~/tests/s3.xml --cov templateflow --cov-report xml:~/coverage/cov_api_s3.xml \
-                   --doctest-modules templateflow/api.py
+                   --junit-xml=~/tests/s3.xml --cov templateflow --doctest-modules templateflow/api.py
+
+            coverage run --append -m templateflow.cli config
+            coverage run --append -m templateflow.cli ls MNI152NLin2009cAsym --suffix T1w
+            coverage run --append -m templateflow.cli get MNI152NLin2009cAsym --suffix mask
+            coverage run --append -m templateflow.cli update
+            coverage xml -o ~/coverage/cov_api_s3.xml
 
       - codecov/upload:
           file: ~/coverage/cov_api_s3.xml
