@@ -273,6 +273,11 @@ workflows:
               only:
                 - master
     jobs:
+      - build:
+          context:
+            - nipreps-common
       - tests:
           context:
             - nipreps-common
+          requires:
+            - build
