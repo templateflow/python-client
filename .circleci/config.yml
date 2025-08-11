@@ -8,7 +8,7 @@ jobs:
   build:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
@@ -38,7 +38,7 @@ jobs:
   deploy_pypi:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
@@ -60,7 +60,7 @@ jobs:
   tests:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
