@@ -8,7 +8,7 @@ jobs:
   build:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
@@ -38,7 +38,7 @@ jobs:
   deploy_pypi:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
@@ -60,7 +60,7 @@ jobs:
   tests:
     executor:
       name: python/default
-      tag: '3.12'
+      tag: '3.13'
 
     # docker:
     #   - auth:
@@ -70,30 +70,11 @@ jobs:
     environment:
       - OSF_MIRROR_PATH: /tmp/data/templateflow
     steps:
-      - restore_cache:
-          keys:
-            - annex-v1-{{ epoch }}
-            - annex-v1-
       - run:
-          name: Install git and git-annex
+          name: Configure git
           command: |
-            if [[ ! -e "/tmp/cache/git-annex-standalone.tar.gz" ]]; then
-              wget -O- http://neuro.debian.net/lists/focal.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-              sudo apt-key add .neurodebian/neurodebian.gpg
-              sudo apt-key adv --recv-keys --keyserver hkps://keys.openpgp.org 0xA5D32F012649A5A9 || true
-              sudo apt update && sudo apt-get install -y --no-install-recommends git-annex-standalone
-              mkdir -p /tmp/cache
-              tar czvf /tmp/cache/git-annex-standalone.tar.gz /usr/bin/git-annex /usr/bin/git-annex-shell /usr/lib/git-annex.linux
-            else
-              sudo tar xzfv /tmp/cache/git-annex-standalone.tar.gz -C /
-            fi
             git config --global user.name "First Last"
             git config --global user.email "email@domain.com"
-
-      - save_cache:
-          key: annex-v1-{{ epoch }}
-          paths:
-            - "/tmp/cache"
 
       - attach_workspace:
           at: ~/project
@@ -101,6 +82,7 @@ jobs:
       - run:
           command: |
             python .maint/update_requirements.py
+            echo git-annex >> dev-requirements.txt
           name: Generate requirements.txt
 
       - python/install-packages:
