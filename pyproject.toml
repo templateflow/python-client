@@ -45,7 +45,7 @@ test = [
     "toml",
 ]
 datalad = [
-    "datalad ~= 1.0.0"
+    "datalad >= 1.0.0"
 ]
 doc = [
     "nbsphinx",
