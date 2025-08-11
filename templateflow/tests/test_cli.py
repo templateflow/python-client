@@ -11,7 +11,7 @@ def test_ls_one():
     result = runner.invoke(cli.main, ['ls', 'MNI152Lin', '--res', '1', '-s', 'T1w'])
 
     # One result
-    lines = result.output.strip().splitlines()
+    lines = result.stdout.strip().splitlines()
     assert len(lines) == 1
 
     assert 'tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz' in lines[0]
@@ -27,7 +27,7 @@ def test_ls_multi():
     result = runner.invoke(cli.main, ['ls', 'MNI152Lin', '--res', '1', '-s', 'T1w', '-s', 'T2w'])
 
     # Two results
-    lines = result.output.strip().splitlines()
+    lines = result.stdout.strip().splitlines()
     assert len(lines) == 2
 
     assert 'tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz' in lines[0]
@@ -44,10 +44,7 @@ def test_get_one():
     result = runner.invoke(cli.main, ['get', 'MNI152Lin', '--res', '1', '-s', 'T1w'])
 
     # One result, possible download status before
-    lines = result.output.strip().splitlines()[-2:]
-    if len(lines) == 2:
-        assert lines[0].startswith('100%')
-        lines.pop(0)
+    lines = result.stdout.strip().splitlines()[-2:]
 
     assert 'tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz' in lines[0]
 
@@ -63,10 +60,7 @@ def test_get_multi():
     result = runner.invoke(cli.main, ['get', 'MNI152Lin', '--res', '1', '-s', 'T1w', '-s', 'T2w'])
 
     # Two result, possible download status before
-    lines = result.output.strip().splitlines()[-3:]
-    if len(lines) == 3:
-        assert lines[0].startswith('100%')
-        lines.pop(0)
+    lines = result.stdout.strip().splitlines()[-3:]
 
     assert 'tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz' in lines[0]
     assert 'tpl-MNI152Lin/tpl-MNI152Lin_res-01_T2w.nii.gz' in lines[1]
