@@ -85,9 +85,9 @@ class Bibtex:
         assert self.citekey == other.citekey, 'Mismatched citekeys'
         for key in self.pairs.keys():
             assert key in other.pairs, f'Key ({key}) missing from other'
-            assert (
-                self.pairs[key] == other.pairs[key]
-            ), f'Key ({key}) mismatched\n\n{self.pairs[key]}\n\n{other.pairs[key]}'
+            assert self.pairs[key] == other.pairs[key], (
+                f'Key ({key}) mismatched\n\n{self.pairs[key]}\n\n{other.pairs[key]}'
+            )
 
         for key in other.pairs.keys():
             assert key in self.pairs, f'Key ({key}) missing from pairs'

@@ -61,7 +61,7 @@ def entity_opts():
     entities = json.loads(Path(load_data('conf/config.json')).read_text())['entities']
 
     args = [
-        (f"--{e['name']}", *ENTITY_SHORTHANDS.get(e['name'], ()))
+        (f'--{e["name"]}', *ENTITY_SHORTHANDS.get(e['name'], ()))
         for e in entities
         if e['name'] not in ENTITY_EXCLUDE
     ]
