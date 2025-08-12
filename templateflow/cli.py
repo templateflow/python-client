@@ -141,7 +141,9 @@ def ls(template, **kwargs):
 def get(template, **kwargs):
     """Fetch the assets corresponding to template and optional filters."""
     entities = {k: _nulls(v) for k, v in kwargs.items() if v != ''}
-    click.echo('\n'.join(f'{match}' for match in api.get(template, **entities)))
+    paths = api.get(template, **entities)
+    filenames = [str(paths)] if isinstance(paths, Path) else [str(file) for file in paths]
+    click.echo('\n'.join(filenames))
 
 
 if __name__ == '__main__':
