@@ -1,13 +1,17 @@
 from pathlib import Path
 
 import click.testing
+import pytest
 
 from .. import cli
 
 
-def test_ls_one():
-    runner = click.testing.CliRunner()
+@pytest.fixture
+def runner():
+    return click.testing.CliRunner()
 
+
+def test_ls_one(runner):
     result = runner.invoke(cli.main, ['ls', 'MNI152Lin', '--res', '1', '-s', 'T1w'])
 
     # One result
@@ -21,9 +25,7 @@ def test_ls_one():
     assert path.exists()
 
 
-def test_ls_multi():
-    runner = click.testing.CliRunner()
-
+def test_ls_multi(runner):
     result = runner.invoke(cli.main, ['ls', 'MNI152Lin', '--res', '1', '-s', 'T1w', '-s', 'T2w'])
 
     # Two results
@@ -38,9 +40,7 @@ def test_ls_multi():
     assert all(path.exists() for path in paths)
 
 
-def test_get_one():
-    runner = click.testing.CliRunner()
-
+def test_get_one(runner):
     result = runner.invoke(cli.main, ['get', 'MNI152Lin', '--res', '1', '-s', 'T1w'])
 
     # One result, possible download status before
@@ -54,9 +54,7 @@ def test_get_one():
     assert stat_res.st_size == 10669511
 
 
-def test_get_multi():
-    runner = click.testing.CliRunner()
-
+def test_get_multi(runner):
     result = runner.invoke(cli.main, ['get', 'MNI152Lin', '--res', '1', '-s', 'T1w', '-s', 'T2w'])
 
     # Two result, possible download status before
