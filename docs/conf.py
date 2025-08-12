@@ -24,8 +24,7 @@ release = __version__
 
 # The short X.Y version
 version = (
-    __version__ if Version(release).public == release
-    else f"dev ({release.partition('+')[0]})"
+    __version__ if Version(release).public == release else f'dev ({release.partition("+")[0]})'
 )
 
 # -- General configuration ---------------------------------------------------

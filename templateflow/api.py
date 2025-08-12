@@ -176,22 +176,18 @@ def get(template, raise_empty=False, **kwargs):
     if not_fetched:
         msg = 'Could not fetch template files: {}.'.format(', '.join(not_fetched))
         if dl_missing and not TF_USE_DATALAD:
-            msg += (
-                f"""\
+            msg += f"""\
 The $TEMPLATEFLOW_HOME folder {TF_LAYOUT.root} seems to contain an initiated DataLad \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is not \
 set or set to one of (false, off, 0). Please set $TEMPLATEFLOW_USE_DATALAD \
 on (possible values: true, on, 1)."""
-            )
 
         if s3_missing and TF_USE_DATALAD:
-            msg += (
-                f"""\
+            msg += f"""\
 The $TEMPLATEFLOW_HOME folder {TF_LAYOUT.root} seems to contain an plain \
 dataset, but the environment variable $TEMPLATEFLOW_USE_DATALAD is \
 set to one of (true, on, 1). Please set $TEMPLATEFLOW_USE_DATALAD \
 off (possible values: false, off, 0)."""
-            )
 
         raise RuntimeError(msg)
 
@@ -394,5 +390,5 @@ def _normalize_ext(value):
         return value
 
     if isinstance(value, str):
-        return f"{'' if value.startswith('.') else '.'}{value}"
+        return f'{"" if value.startswith(".") else "."}{value}'
     return [_normalize_ext(v) for v in value]
