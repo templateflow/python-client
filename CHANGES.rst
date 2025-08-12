@@ -1,3 +1,10 @@
+25.0.0 (August 12, 2025)
+========================
+Minor release including updated templates.
+
+* FIX: Fix crash in templateflow get when matching one file (#140)
+* MAINT: Update Python support, datalad and git-annex deps (#143)
+
 24.2.2 (September 14, 2024)
 ===========================
 Patch release containing one bugfix and updating the default skeleton.
