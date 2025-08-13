@@ -1,3 +1,7 @@
+25.0.1 (August 13, 2025)
+========================
+Patch release containing fixes to transform names in two templates.
+
 25.0.0 (August 12, 2025)
 ========================
 Minor release including updated templates.
