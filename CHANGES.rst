@@ -1,3 +1,9 @@
+25.0.2 (August 20, 2025)
+========================
+Patch release containing a fix for `get` queries including the "+" character.
+
+* FIX: Allow plus signs in 'to' and 'from' entities (#146)
+
 25.0.1 (August 13, 2025)
 ========================
 Patch release containing fixes to transform names in two templates.
