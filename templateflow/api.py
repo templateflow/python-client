@@ -309,11 +309,12 @@ def _datalad_get(filepath):
 
 def _s3_get(filepath):
     from sys import stderr
+    from urllib.parse import quote
 
     import requests
     from tqdm import tqdm
 
-    path = filepath.relative_to(TF_LAYOUT.root).as_posix()
+    path = quote(filepath.relative_to(TF_LAYOUT.root).as_posix())
     url = f'{TF_S3_ROOT}/{path}'
 
     print(f'Downloading {url}', file=stderr)
