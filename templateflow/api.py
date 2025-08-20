@@ -309,7 +309,7 @@ def _datalad_get(filepath):
 
 def _s3_get(filepath):
     from sys import stderr
-    from urllib.request import quote
+    from urllib.parse import quote
 
     import requests
     from tqdm import tqdm
