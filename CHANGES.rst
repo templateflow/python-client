@@ -1,3 +1,9 @@
+25.0.3 (August 20, 2025)
+========================
+Patch release to escape special characters when fetching data from S3.
+
+* FIX: Quote s3 path to handle special characters (#147)
+
 25.0.2 (August 20, 2025)
 ========================
 Patch release containing a fix for `get` queries including the "+" character.
