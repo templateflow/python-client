@@ -7,9 +7,9 @@ from os import getenv
 from pathlib import Path
 from warnings import warn
 
-from .._loader import Loader
+from acres import Loader
 
-load_data = Loader(__package__)
+load_data = Loader(__spec__.name)
 
 
 def _env_to_bool(envvar: str, default: bool) -> bool:

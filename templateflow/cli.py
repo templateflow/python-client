@@ -31,7 +31,7 @@ import click
 from click.decorators import FC, Option, _param_memo
 
 from templateflow import __package__, api
-from templateflow._loader import Loader as _Loader
+from acres import Loader as _Loader
 from templateflow.conf import TF_AUTOUPDATE, TF_HOME, TF_USE_DATALAD
 
 load_data = _Loader(__package__)
@@ -58,7 +58,7 @@ def _nulls(s):
 def entity_opts():
     """Attaches all entities as options to the command."""
 
-    entities = json.loads(Path(load_data('conf/config.json')).read_text())['entities']
+    entities = json.loads(load_data('conf/config.json').read_text())['entities']
 
     args = [
         (f'--{e["name"]}', *ENTITY_SHORTHANDS.get(e['name'], ()))
