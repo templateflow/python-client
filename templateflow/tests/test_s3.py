@@ -25,9 +25,13 @@
 from importlib import reload
 from pathlib import Path
 
+import pytest
 import requests
 
+from templateflow import api as tf
 from templateflow import conf as tfc
+
+from .data import load_data
 
 
 def test_get_skel_file(tmp_path, monkeypatch):
@@ -87,3 +91,66 @@ def test_update_s3(tmp_path, monkeypatch):
     for p in (newhome / 'tpl-MNI152NLin6Sym').glob('*.nii.gz'):
         p.unlink()
     assert tfc._s3.update(newhome, local=False, overwrite=False)
+
+
+def test_s3_400_error(monkeypatch):
+    """Simulate a 400 error when fetching the skeleton file."""
+
+    reload(tfc)
+
+    def mock_get(*args, **kwargs):
+        class MockResponse:
+            status_code = 400
+
+        return MockResponse()
+
+    monkeypatch.setattr(requests, 'get', mock_get)
+    with pytest.raises(RuntimeError):
+        tf._s3_get(
+            Path(tfc.TF_LAYOUT.root)
+            / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz'
+        )
+
+
+def test_bad_skeleton(tmp_path, monkeypatch):
+    newhome = (tmp_path / 's3-update').resolve()
+    monkeypatch.setattr(tfc, 'TF_USE_DATALAD', False)
+    monkeypatch.setattr(tfc, 'TF_HOME', newhome)
+    monkeypatch.setattr(tfc, 'TF_LAYOUT', None)
+
+    tfc._init_cache()
+    tfc.init_layout()
+
+    assert tfc.TF_LAYOUT is not None
+    assert tfc.TF_LAYOUT.root == str(newhome)
+
+    # Instead of reloading
+    monkeypatch.setattr(tf, 'TF_LAYOUT', tfc.TF_LAYOUT)
+
+    paths = tf.ls('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+    assert paths
+    path = Path(paths[0])
+    assert path.read_bytes() == b''
+
+    error_file = load_data.readable('error_response.xml')
+    path.write_bytes(error_file.read_bytes())
+
+    # Test directly before testing through API paths
+    tf._truncate_s3_errors(paths)
+    assert path.read_bytes() == b''
+
+    path.write_bytes(error_file.read_bytes())
+
+    # Run full get but mock 400 to avoid actual network call
+    def mock_get(*args, **kwargs):
+        class MockResponse:
+            status_code = 400
+
+        return MockResponse()
+
+    monkeypatch.setattr(requests, 'get', mock_get)
+    with pytest.raises(RuntimeError):
+        tf.get('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+
+    # Running get clears bad files before attempting to download
+    assert path.read_bytes() == b''
