@@ -320,6 +320,8 @@ def _s3_get(filepath):
     print(f'Downloading {url}', file=stderr)
     # Streaming, so we can iterate over the response.
     r = requests.get(url, stream=True, timeout=TF_GET_TIMEOUT)
+    if r.status_code != 200:
+        raise RuntimeError(f'Failed to download {url} with status code {r.status_code}')
 
     # Total size in bytes.
     total_size = int(r.headers.get('content-length', 0))
