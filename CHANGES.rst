@@ -1,3 +1,7 @@
+25.0.4 (October 1, 2025)
+========================
+Patch release to update templateflow skeleton.
+
 25.0.3 (August 20, 2025)
 ========================
 Patch release to escape special characters when fetching data from S3.
