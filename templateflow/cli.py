@@ -28,10 +28,10 @@ import json
 from pathlib import Path
 
 import click
+from acres import Loader as _Loader
 from click.decorators import FC, Option, _param_memo
 
 from templateflow import __package__, api
-from acres import Loader as _Loader
 from templateflow.conf import TF_AUTOUPDATE, TF_HOME, TF_USE_DATALAD
 
 load_data = _Loader(__package__)
