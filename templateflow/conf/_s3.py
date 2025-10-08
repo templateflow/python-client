@@ -25,34 +25,35 @@
 from pathlib import Path
 from tempfile import mkstemp
 
-from templateflow.conf import TF_GET_TIMEOUT, load_data
+from acres import Loader
+
+load_data = Loader(__spec__.parent)
 
 TF_SKEL_URL = (
     'https://raw.githubusercontent.com/templateflow/python-client/'
     '{release}/templateflow/conf/templateflow-skel.{ext}'
 ).format
-TF_SKEL_PATH = load_data('templateflow-skel.zip')
-TF_SKEL_MD5 = load_data.readable('templateflow-skel.md5').read_text()
 
 
-def update(dest, local=True, overwrite=True, silent=False):
+def update(dest, local=True, overwrite=True, silent=False, *, timeout: int):
     """Update an S3-backed TEMPLATEFLOW_HOME repository."""
-    skel_file = Path((_get_skeleton_file() if not local else None) or TF_SKEL_PATH)
+    skel_zip = load_data('templateflow-skel.zip')
+    skel_file = Path((_get_skeleton_file(timeout) if not local else None) or skel_zip)
 
     retval = _update_skeleton(skel_file, dest, overwrite=overwrite, silent=silent)
-    if skel_file != TF_SKEL_PATH:
+    if skel_file != skel_zip:
         skel_file.unlink()
     return retval
 
 
-def _get_skeleton_file():
+def _get_skeleton_file(timeout: int):
     import requests
 
     try:
         r = requests.get(
             TF_SKEL_URL(release='master', ext='md5'),
             allow_redirects=True,
-            timeout=TF_GET_TIMEOUT,
+            timeout=timeout,
         )
     except requests.exceptions.ConnectionError:
         return
@@ -60,11 +61,12 @@ def _get_skeleton_file():
     if not r.ok:
         return
 
-    if r.content.decode().split()[0] != TF_SKEL_MD5:
+    md5 = load_data.readable('templateflow-skel.md5').read_bytes()
+    if r.content != md5:
         r = requests.get(
             TF_SKEL_URL(release='master', ext='zip'),
             allow_redirects=True,
-            timeout=TF_GET_TIMEOUT,
+            timeout=timeout,
         )
         if r.ok:
             from os import close
