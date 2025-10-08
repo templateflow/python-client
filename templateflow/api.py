@@ -159,6 +159,9 @@ def get(template, raise_empty=False, **kwargs):
     if raise_empty and not out_file:
         raise Exception('No results found')
 
+    # Truncate possible S3 error files from previous attempts
+    _truncate_s3_errors(out_file)
+
     # Try DataLad first
     dl_missing = [p for p in out_file if not p.is_file()]
     if TF_USE_DATALAD and dl_missing:
@@ -320,6 +323,8 @@ def _s3_get(filepath):
     print(f'Downloading {url}', file=stderr)
     # Streaming, so we can iterate over the response.
     r = requests.get(url, stream=True, timeout=TF_GET_TIMEOUT)
+    if r.status_code != 200:
+        raise RuntimeError(f'Failed to download {url} with status code {r.status_code}')
 
     # Total size in bytes.
     total_size = int(r.headers.get('content-length', 0))
@@ -393,3 +398,20 @@ def _normalize_ext(value):
     if isinstance(value, str):
         return f'{"" if value.startswith(".") else "."}{value}'
     return [_normalize_ext(v) for v in value]
+
+
+def _truncate_s3_errors(filepaths):
+    """
+    Truncate XML error bodies saved by previous versions of TemplateFlow.
+
+    Parameters
+    ----------
+    filepaths : list of Path
+        List of file paths to check and truncate if necessary.
+    """
+    for filepath in filepaths:
+        if filepath.is_file(follow_symlinks=False) and 0 < filepath.stat().st_size < 1024:
+            with open(filepath, 'rb') as f:
+                content = f.read(100)
+            if content.startswith(b'<?xml') and b'<Error><Code>' in content:
+                filepath.write_bytes(b'')  # Truncate file to zero bytes

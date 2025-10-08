@@ -21,8 +21,8 @@ classifiers = [
 license = {file = "LICENSE"}
 requires-python = ">=3.9"
 dependencies = [
+    "acres >= 0.5.0",
     "pybids >= 0.15.2",
-    "importlib_resources >= 5.7; python_version < '3.11'",
     "requests",
     "tqdm",
 ]

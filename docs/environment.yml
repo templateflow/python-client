@@ -195,6 +195,7 @@ dependencies:
   - zlib=1.2.11=h166bdaf_1014
   - zstd=1.5.2=ha95c52a_0
   - pip:
+    - acres
     - bids-validator==1.9.3
     - docopt==0.6.2
     - formulaic==0.3.4
