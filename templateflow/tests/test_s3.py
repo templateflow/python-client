@@ -93,17 +93,18 @@ def test_update_s3(tmp_path, monkeypatch):
     assert tfc._s3.update(newhome, local=False, overwrite=False)
 
 
+def mock_get(*args, **kwargs):
+    class MockResponse:
+        status_code = 400
+
+    return MockResponse()
+
+
 def test_s3_400_error(monkeypatch):
     """Simulate a 400 error when fetching the skeleton file."""
 
     reload(tfc)
     reload(tf)
-
-    def mock_get(*args, **kwargs):
-        class MockResponse:
-            status_code = 400
-
-        return MockResponse()
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError):
@@ -141,13 +142,6 @@ def test_bad_skeleton(tmp_path, monkeypatch):
     assert path.read_bytes() == b''
 
     path.write_bytes(error_file.read_bytes())
-
-    # Run full get but mock 400 to avoid actual network call
-    def mock_get(*args, **kwargs):
-        class MockResponse:
-            status_code = 400
-
-        return MockResponse()
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError):
