@@ -107,7 +107,7 @@ def test_s3_400_error(monkeypatch):
     reload(tf)
 
     monkeypatch.setattr(requests, 'get', mock_get)
-    with pytest.raises(RuntimeError):
+    with pytest.raises(RuntimeError, match=r'Failed to download .* code 400'):
         tf._s3_get(
             Path(tfc.TF_LAYOUT.root)
             / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz'
