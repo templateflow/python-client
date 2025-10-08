@@ -156,7 +156,7 @@ def test_layout_errors(monkeypatch):
         return oldimport(name, globals=globals, locals=locals, fromlist=fromlist, level=level)
 
     with monkeypatch.context() as m:
-        m.setattr(tfc, 'TF_LAYOUT', None)
+        m.setattr(tfc._cache, 'layout', None)
         with pytest.raises(RuntimeError):
             myfunc()
 
