@@ -28,6 +28,8 @@ from pathlib import Path
 import pytest
 import requests
 
+import templateflow
+import templateflow.conf._s3
 from templateflow import api as tf
 from templateflow import conf as tfc
 
@@ -113,28 +115,25 @@ def test_s3_400_error(monkeypatch):
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError, match=r'Failed to download .* code 400'):
-        tf._s3_get(
+        templateflow.client._s3_get(
+            tfc._cache.config,
             Path(tfc.TF_LAYOUT.root)
-            / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz'
+            / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz',
         )
 
 
 def test_bad_skeleton(tmp_path, monkeypatch):
     newhome = (tmp_path / 's3-update').resolve()
-    monkeypatch.setattr(tfc, 'TF_USE_DATALAD', False)
-    monkeypatch.setattr(tfc, 'TF_HOME', newhome)
-    monkeypatch.setattr(tfc, 'TF_LAYOUT', None)
+    client = templateflow.client.TemplateFlowClient(
+        config=tfc.cache.CacheConfig(
+            root=newhome,
+            use_datalad=False,
+        )
+    )
 
-    tfc._init_cache()
-    tfc.init_layout()
+    assert client.cache.layout.root == str(newhome)
 
-    assert tfc.TF_LAYOUT is not None
-    assert tfc.TF_LAYOUT.root == str(newhome)
-
-    # Instead of reloading
-    monkeypatch.setattr(tf, 'TF_LAYOUT', tfc.TF_LAYOUT)
-
-    paths = tf.ls('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+    paths = client.ls('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
     assert paths
     path = Path(paths[0])
     assert path.read_bytes() == b''
@@ -143,14 +142,14 @@ def test_bad_skeleton(tmp_path, monkeypatch):
     path.write_bytes(error_file.read_bytes())
 
     # Test directly before testing through API paths
-    tf._truncate_s3_errors(paths)
+    templateflow.client._truncate_s3_errors(paths)
     assert path.read_bytes() == b''
 
     path.write_bytes(error_file.read_bytes())
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError):
-        tf.get('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+        client.get('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
 
     # Running get clears bad files before attempting to download
     assert path.read_bytes() == b''

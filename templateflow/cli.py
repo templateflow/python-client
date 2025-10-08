@@ -31,10 +31,9 @@ import click
 from acres import Loader as _Loader
 from click.decorators import FC, Option, _param_memo
 
-from templateflow import __package__, api
-from templateflow.conf import TF_AUTOUPDATE, TF_HOME, TF_USE_DATALAD
+from templateflow.client import TemplateFlowClient
 
-load_data = _Loader(__package__)
+load_data = _Loader(__spec__.parent)
 
 ENTITY_SHORTHANDS = {
     # 'template': ('--tpl', '-t'),
@@ -48,7 +47,13 @@ ENTITY_SHORTHANDS = {
     'segmentation': ('--seg',),
 }
 ENTITY_EXCLUDE = {'template', 'description'}
-TEMPLATE_LIST = api.get_templates()
+
+CLIENT = TemplateFlowClient()
+CACHE = CLIENT.cache
+CONFIG = CACHE.config
+CACHE.ensure()
+
+TEMPLATE_LIST = [d.name[4:] for d in CONFIG.root.iterdir() if d.name.startswith('tpl-')]
 
 
 def _nulls(s):
@@ -86,30 +91,30 @@ def config():
     """Print-out configuration."""
     click.echo(f"""Current TemplateFlow settings:
 
-    TEMPLATEFLOW_HOME={TF_HOME}
-    TEMPLATEFLOW_USE_DATALAD={'on' if TF_USE_DATALAD else 'off'}
-    TEMPLATEFLOW_AUTOUPDATE={'on' if TF_AUTOUPDATE else 'off'}
+    TEMPLATEFLOW_HOME={CONFIG.root}
+    TEMPLATEFLOW_USE_DATALAD={'on' if CONFIG.use_datalad else 'off'}
+    TEMPLATEFLOW_AUTOUPDATE={'on' if CONFIG.autoupdate else 'off'}
 """)
 
 
 @main.command()
 def wipe():
     """Wipe out a local S3 (direct-download) TemplateFlow Archive."""
-    click.echo(f'This will wipe out all data downloaded into {TF_HOME}.')
+    click.echo(f'This will wipe out all data downloaded into {CONFIG.root}.')
 
     if click.confirm('Do you want to continue?'):
         value = click.prompt(
-            f'Please write the path of your local archive ({TF_HOME})',
+            f'Please write the path of your local archive ({CONFIG.root})',
             default='(abort)',
             show_default=False,
         )
-        if value.strip() == str(TF_HOME):
+        if value.strip() == str(CONFIG.root):
             from templateflow.conf import wipe
 
             wipe()
-            click.echo(f'{TF_HOME} was wiped out.')
+            click.echo(f'{CONFIG.root} was wiped out.')
             return
-    click.echo(f'Aborted! {TF_HOME} WAS NOT wiped out.')
+    click.echo(f'Aborted! {CONFIG.root} WAS NOT wiped out.')
 
 
 @main.command()
@@ -120,7 +125,7 @@ def update(local, overwrite):
     from templateflow.conf import update as _update
 
     click.echo(
-        f'Successfully updated local TemplateFlow Archive: {TF_HOME}.'
+        f'Successfully updated local TemplateFlow Archive: {CONFIG.root}.'
         if _update(local=local, overwrite=overwrite)
         else 'TemplateFlow Archive not updated.'
     )
@@ -132,7 +137,7 @@ def update(local, overwrite):
 def ls(template, **kwargs):
     """List the assets corresponding to template and optional filters."""
     entities = {k: _nulls(v) for k, v in kwargs.items() if v != ''}
-    click.echo('\n'.join(f'{match}' for match in api.ls(template, **entities)))
+    click.echo('\n'.join(f'{match}' for match in CLIENT.ls(template, **entities)))
 
 
 @main.command()
@@ -141,7 +146,7 @@ def ls(template, **kwargs):
 def get(template, **kwargs):
     """Fetch the assets corresponding to template and optional filters."""
     entities = {k: _nulls(v) for k, v in kwargs.items() if v != ''}
-    paths = api.get(template, **entities)
+    paths = CLIENT.get(template, **entities)
     filenames = [str(paths)] if isinstance(paths, Path) else [str(file) for file in paths]
     click.echo('\n'.join(filenames))
 
