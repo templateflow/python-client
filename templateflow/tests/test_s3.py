@@ -97,6 +97,7 @@ def test_s3_400_error(monkeypatch):
     """Simulate a 400 error when fetching the skeleton file."""
 
     reload(tfc)
+    reload(tf)
 
     def mock_get(*args, **kwargs):
         class MockResponse:
