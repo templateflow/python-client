@@ -20,14 +20,30 @@
 #
 #     https://www.nipreps.org/community/licensing/
 #
-"""TemplateFlow's Python Client."""
+"""TemplateFlow's Python Client.
 
-__all__ = [
-    'get',
-    'ls',
-    'get_metadata',
-    'get_citations',
-]
+``templateflow.api`` provides a global, high-level interface to query the TemplateFlow archive.
+
+There are two methods to initialize a client:
+
+    >>> from templateflow import api as client
+
+    >>> from templateflow import TemplateFlowClient
+    >>> client = TemplateFlowClient()
+
+The latter method allows additional configuration for the client,
+while ``templateflow.api`` is only configurable through environment variables.
+
+.. autofunction:: get
+
+.. autofunction:: ls
+
+.. autofunction:: templates
+
+.. autofunction:: get_metadata
+
+.. autofunction:: get_citations
+"""
 
 from .client import TemplateFlowClient
 from .conf import _cache
