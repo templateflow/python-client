@@ -339,7 +339,7 @@ def _s3_get(config: CacheConfig, filepath: Path):
     from tqdm import tqdm
 
     path = quote(filepath.relative_to(config.root).as_posix())
-    url = f'{config.http_root}/{path}'
+    url = f'{config.s3_root}/{path}'
 
     print(f'Downloading {url}', file=stderr)
     # Streaming, so we can iterate over the response.

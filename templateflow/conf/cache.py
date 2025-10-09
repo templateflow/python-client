@@ -13,7 +13,7 @@ from .env import env_to_bool, get_templateflow_home
 class CacheConfig:
     root: Path = field(default_factory=get_templateflow_home)
     origin: str = field(default='https://github.com/templateflow/templateflow.git')
-    http_root: str = field(default='https://templateflow.s3.amazonaws.com')
+    s3_root: str = field(default='https://templateflow.s3.amazonaws.com')
     use_datalad: bool = field(default_factory=env_to_bool('TEMPLATEFLOW_USE_DATALAD', False))
     autoupdate: bool = field(default_factory=env_to_bool('TEMPLATEFLOW_AUTOUPDATE', True))
     timeout: int = field(default=10)
@@ -27,7 +27,7 @@ class CacheConfig:
 
 @dataclass
 class S3Manager:
-    http_root: str
+    s3_root: str
 
     def install(self, path: Path, overwrite: bool, timeout: int):
         from ._s3 import update
@@ -88,7 +88,7 @@ class TemplateFlowCache:
         self.manager = (
             DataladManager(self.config.origin)
             if self.config.use_datalad
-            else S3Manager(self.config.http_root)
+            else S3Manager(self.config.s3_root)
         )
         # cache.cached checks live, precached stores state at init
         self.precached = self.cached

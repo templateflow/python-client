@@ -19,7 +19,7 @@ def __getattr__(name: str):
     elif name == 'TF_GITHUB_SOURCE':
         return _cache.config.origin
     elif name == 'TF_S3_ROOT':
-        return _cache.config.http_root
+        return _cache.config.s3_root
     elif name == 'TF_USE_DATALAD':
         return _cache.config.use_datalad
     elif name == 'TF_AUTOUPDATE':
