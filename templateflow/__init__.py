@@ -40,12 +40,14 @@ except ModuleNotFoundError:
     del PackageNotFoundError
 
 from templateflow import api
+from templateflow.client import TemplateFlowClient
 from templateflow.conf import update
 
 __all__ = [
     '__copyright__',
     '__packagename__',
     '__version__',
+    'TemplateFlowClient',
     'api',
     'update',
 ]
