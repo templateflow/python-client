@@ -79,21 +79,23 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+        >>> client = TemplateFlowClient()
+
+        >>> client.ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz')]
 
-        >>> ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+        >>> client.ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-        >>> ls('MNI152Lin', suffix='T1w', desc=None)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> client.ls('MNI152Lin', suffix='T1w', desc=None)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'),
          PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-        >>> ls('fsLR', space=None, hemi='L',
-        ...    density='32k', suffix='sphere')  # doctest: +ELLIPSIS
+        >>> client.ls('fsLR', space=None, hemi='L',
+        ...           density='32k', suffix='sphere')  # doctest: +ELLIPSIS
         [PosixPath('.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii')]
 
-        >>> ls('fsLR', space='madeup')
+        >>> client.ls('fsLR', space='madeup')
         []
 
         """
@@ -138,25 +140,27 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> str(get('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
+        >>> client = TemplateFlowClient()
+
+        >>> str(client.get('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
         '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
 
-        >>> str(get('MNI152Lin', resolution=2, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
+        >>> str(client.get('MNI152Lin', resolution=2, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
         '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz'
 
-        >>> [str(p) for p in get(
+        >>> [str(p) for p in client.get(
         ...     'MNI152Lin', suffix='T1w', desc=None)]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
          '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
 
-        >>> str(get('fsLR', space=None, hemi='L',
+        >>> str(client.get('fsLR', space=None, hemi='L',
         ...         density='32k', suffix='sphere'))  # doctest: +ELLIPSIS
         '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
 
-        >>> get('fsLR', space='madeup')
+        >>> client.get('fsLR', space='madeup')
         []
 
-        >>> get('fsLR', raise_empty=True, space='madeup')  # doctest: +IGNORE_EXCEPTION_DETAIL
+        >>> client.get('fsLR', raise_empty=True, space='madeup')  # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         Exception:
         ...
@@ -218,7 +222,9 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> get_metadata('MNI152Lin')['Name']
+        >>> client = TemplateFlowClient()
+
+        >>> client.get_metadata('MNI152Lin')['Name']
         'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
 
         """
