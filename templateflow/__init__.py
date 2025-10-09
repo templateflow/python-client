@@ -41,11 +41,13 @@ except ModuleNotFoundError:
 
 from templateflow import api
 from templateflow.conf import update
+from templateflow.client import TemplateFlowClient
 
 __all__ = [
     '__copyright__',
     '__packagename__',
     '__version__',
+    'TemplateFlowClient',
     'api',
     'update',
 ]

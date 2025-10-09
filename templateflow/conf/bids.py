@@ -22,9 +22,10 @@
 #
 """Extending pyBIDS for querying TemplateFlow."""
 
+from acres import Loader
 from bids.layout import BIDSLayout, add_config_paths
 
-from templateflow.conf import load_data
+load_data = Loader(__spec__.parent)
 
 add_config_paths(templateflow=load_data('config.json'))
 
