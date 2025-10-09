@@ -23,11 +23,14 @@
 """Tests the config module."""
 
 from importlib import reload
+from importlib.util import find_spec
 from shutil import rmtree
 
 import pytest
 
 from templateflow import conf as tfc
+
+have_datalad = find_spec('datalad') is not None
 
 
 def _find_message(lines, msg, reverse=True):
@@ -61,10 +64,6 @@ def test_conf_init(monkeypatch, tmp_path, use_datalad):
 def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     """Check the correct functioning of the installation hook."""
 
-    if use_datalad == 'on':
-        # ImportError if not installed
-        pass
-
     home = (tmp_path / f'setup-home-{use_datalad}').absolute()
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
@@ -76,7 +75,7 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
         reload(tfc)
 
     # Ensure mocks are up-to-date
-    assert tfc.TF_USE_DATALAD is (use_datalad == 'on')
+    assert tfc.TF_USE_DATALAD is (use_datalad == 'on' and have_datalad)
     assert str(tfc.TF_HOME) == str(home)
     # First execution, the S3 stub is created (or datalad install)
     assert tfc.TF_CACHED is False
@@ -92,11 +91,11 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     out = capsys.readouterr()[0]
     assert _find_message(out, 'TemplateFlow was not cached') is False
 
-    if use_datalad == 'on':
+    if use_datalad == 'on' and have_datalad:
         assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
         assert updated is True
 
-    elif use_datalad == 'off':
+    else:
         # At this point, S3 should be up-to-date
         assert updated is False
         assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')
@@ -114,11 +113,11 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     out = capsys.readouterr()[0]
     assert not _find_message(out, 'TemplateFlow was not cached')
 
-    if use_datalad == 'on':
+    if use_datalad == 'on' and have_datalad:
         assert _find_message(out, 'Updating TEMPLATEFLOW_HOME using DataLad')
         assert updated is True
 
-    elif use_datalad == 'off':
+    else:
         # At this point, S3 should be up-to-date
         assert updated is False
         assert _find_message(out, 'TEMPLATEFLOW_HOME directory (S3 type) was up-to-date.')

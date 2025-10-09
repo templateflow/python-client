@@ -40,11 +40,6 @@ def test_get_skel_file(tmp_path, monkeypatch):
     """Exercise the skeleton file generation."""
 
     home = (tmp_path / 's3-skel-file').resolve()
-    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
-    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
-
-    # First execution, the S3 stub is created (or datalad install)
-    reload(tfc)
 
     md5content = b'anything'
 
@@ -82,8 +77,6 @@ def test_update_s3(tmp_path, monkeypatch):
     """Exercise updating the S3 skeleton."""
 
     newhome = (tmp_path / 's3-update').resolve()
-    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
-    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(newhome))
 
     assert tfc._s3.update(newhome, timeout=10)
     assert not tfc._s3.update(newhome, overwrite=False, timeout=10)
