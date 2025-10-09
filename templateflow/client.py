@@ -24,6 +24,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from json import loads
 from pathlib import Path
@@ -34,11 +35,21 @@ from .conf.cache import CacheConfig, TemplateFlowCache
 
 
 class TemplateFlowClient:
-    def __init__(self, cache=None, config=None):
+    def __init__(
+        self,
+        root: os.PathLike[str] | str | None = None,
+        *,
+        cache: TemplateFlowCache | None = None,
+        **config_kwargs,
+    ):
         if cache is None:
-            if config is None:
-                config = CacheConfig()
-            cache = TemplateFlowCache(config)
+            if root:
+                config_kwargs['root'] = root
+            cache = TemplateFlowCache(CacheConfig(**config_kwargs))
+        elif root or config_kwargs:
+            raise ValueError(
+                'If `cache` is provided, `root` and other config kwargs cannot be used.'
+            )
         self.cache = cache
 
     def __getattr__(self, name: str):

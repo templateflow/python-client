@@ -124,12 +124,7 @@ def test_s3_400_error(monkeypatch):
 
 def test_bad_skeleton(tmp_path, monkeypatch):
     newhome = (tmp_path / 's3-update').resolve()
-    client = templateflow.client.TemplateFlowClient(
-        config=tfc.cache.CacheConfig(
-            root=newhome,
-            use_datalad=False,
-        )
-    )
+    client = templateflow.client.TemplateFlowClient(root=newhome, use_datalad=False)
 
     assert client.cache.layout.root == str(newhome)
 
