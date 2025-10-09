@@ -79,7 +79,10 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> client = TemplateFlowClient()
+
+        .. testsetup::
+
+            >>> client = TemplateFlowClient()
 
         >>> client.ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz')]
@@ -140,7 +143,10 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> client = TemplateFlowClient()
+
+        .. testsetup::
+
+            >>> client = TemplateFlowClient()
 
         >>> str(client.get('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
         '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
@@ -211,6 +217,38 @@ class TemplateFlowClient:
             return out_file[0]
         return out_file
 
+    def templates(self, **kwargs):
+        """
+        Return a list of available templates.
+
+        Keyword Arguments
+        -----------------
+        resolution: int or None
+            Index to an specific spatial resolution of the template.
+        suffix : str or None
+            BIDS suffix
+        atlas : str
+            Name of a particular atlas
+        desc : str
+            Description field
+
+        Examples
+        --------
+
+        .. testsetup::
+
+            >>> client = TemplateFlowClient()
+
+        >>> base = ['MNI152Lin', 'MNI152NLin2009cAsym', 'NKI', 'OASIS30ANTs']
+        >>> tpls = client.templates()
+        >>> all([t in tpls for t in base])
+        True
+
+        >>> sorted(set(base).intersection(client.templates(suffix='PD')))
+        ['MNI152Lin', 'MNI152NLin2009cAsym']
+        """
+        return sorted(self.get_templates(**kwargs))
+
     def get_metadata(self, template):
         """
         Fetch one file from one template.
@@ -222,7 +260,10 @@ class TemplateFlowClient:
 
         Examples
         --------
-        >>> client = TemplateFlowClient()
+
+        .. testsetup::
+
+            >>> client = TemplateFlowClient()
 
         >>> client.get_metadata('MNI152Lin')['Name']
         'Linear ICBM Average Brain (ICBM152) Stereotaxic Registration Model'
