@@ -50,6 +50,10 @@ class TemplateFlowClient:
             )
         self.cache = cache
 
+    def __repr__(self) -> str:
+        cache_type = 'DataLad' if self.cache.config.use_datalad else 'S3'
+        return f'<{self.__class__.__name__}[{cache_type}] cache="{self.cache.config.root}">'
+
     def __getattr__(self, name: str):
         name = name.replace('ls_', 'get_')
         try:
