@@ -60,7 +60,7 @@ class TemplateFlowClient:
         msg = f"'{self.__class__.__name__}' object has no attribute '{name}'"
         raise AttributeError(msg) from None
 
-    def ls(self, template, **kwargs):
+    def ls(self, template, **kwargs) -> list[Path]:
         """
         List files pertaining to one or more templates.
 
@@ -124,7 +124,7 @@ class TemplateFlowClient:
             )
         ]
 
-    def get(self, template, raise_empty=False, **kwargs):
+    def get(self, template, raise_empty=False, **kwargs) -> list[Path]:
         """
         Pull files pertaining to one or more templates down.
 
@@ -228,7 +228,7 @@ class TemplateFlowClient:
             return out_file[0]
         return out_file
 
-    def templates(self, **kwargs):
+    def templates(self, **kwargs) -> list[str]:
         """
         Return a list of available templates.
 
@@ -260,7 +260,7 @@ class TemplateFlowClient:
         """
         return sorted(self.get_templates(**kwargs))
 
-    def get_metadata(self, template):
+    def get_metadata(self, template) -> dict[str, str]:
         """
         Fetch one file from one template.
 
@@ -288,7 +288,7 @@ class TemplateFlowClient:
             _datalad_get(filepath)
         return loads(filepath.read_text())
 
-    def get_citations(self, template, bibtex=False):
+    def get_citations(self, template, bibtex=False) -> list[str]:
         """
         Fetch template citations
 
@@ -308,13 +308,10 @@ class TemplateFlowClient:
         if not bibtex:
             return refs
 
-        return [
-            _to_bibtex(ref, template, idx, self.cache.config.timeout).rstrip()
-            for idx, ref in enumerate(refs, 1)
-        ]
+        return [_to_bibtex(ref, template, self.cache.config.timeout).rstrip() for ref in refs]
 
 
-def _datalad_get(config: CacheConfig, filepath: Path):
+def _datalad_get(config: CacheConfig, filepath: Path) -> None:
     if not filepath:
         return
 
@@ -331,7 +328,7 @@ def _datalad_get(config: CacheConfig, filepath: Path):
             raise
 
 
-def _s3_get(config: CacheConfig, filepath: Path):
+def _s3_get(config: CacheConfig, filepath: Path) -> None:
     from sys import stderr
     from urllib.parse import quote
 
@@ -365,7 +362,7 @@ def _s3_get(config: CacheConfig, filepath: Path):
         raise RuntimeError('ERROR, something went wrong')
 
 
-def _to_bibtex(doi, template, idx, timeout):
+def _to_bibtex(doi: str, template: str, timeout: float) -> str:
     if 'doi.org' not in doi:
         return doi
 

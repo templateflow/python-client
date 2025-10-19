@@ -19,7 +19,7 @@ STACKLEVEL = 6
 
 
 @cache
-def _have_datalad():
+def _have_datalad() -> bool:
     import importlib.util
 
     return importlib.util.find_spec('datalad') is not None
@@ -34,7 +34,7 @@ class CacheConfig:
     autoupdate: bool = field(default_factory=env_to_bool('TEMPLATEFLOW_AUTOUPDATE', True))
     timeout: int = field(default=10)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         global STACKLEVEL
         if self.use_datalad and not _have_datalad():
             self.use_datalad = False
@@ -46,7 +46,7 @@ class CacheConfig:
 class S3Manager:
     s3_root: str
 
-    def install(self, path: Path, overwrite: bool, timeout: int):
+    def install(self, path: Path, overwrite: bool, timeout: int) -> None:
         from ._s3 import update
 
         update(path, local=True, overwrite=overwrite, silent=True, timeout=timeout)
@@ -56,7 +56,7 @@ class S3Manager:
 
         return _update_s3(path, local=local, overwrite=overwrite, silent=silent, timeout=timeout)
 
-    def wipe(self, path: Path):
+    def wipe(self, path: Path) -> None:
         from shutil import rmtree
 
         def _onerror(func, path, excinfo):
@@ -72,7 +72,7 @@ class S3Manager:
 class DataladManager:
     source: str
 
-    def install(self, path: Path, overwrite: bool, timeout: int):
+    def install(self, path: Path, overwrite: bool, timeout: int) -> None:
         from datalad.api import install
 
         install(path=path, source=self.source, recursive=True)
@@ -91,7 +91,7 @@ class DataladManager:
             return False
         return True
 
-    def wipe(self, path: Path):
+    def wipe(self, path: Path) -> None:
         print('TemplateFlow is configured in DataLad mode, wipe() has no effect')
 
 
@@ -101,7 +101,7 @@ class TemplateFlowCache:
     precached: bool = field(init=False)
     manager: DataladManager | S3Manager = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.manager = (
             DataladManager(self.config.origin)
             if self.config.use_datalad
@@ -133,13 +133,13 @@ class TemplateFlowCache:
             ),
         )
 
-    def ensure(self):
+    def ensure(self) -> None:
         if not self.cached:
             self.manager.install(
                 self.config.root, overwrite=self.config.autoupdate, timeout=self.config.timeout
             )
 
-    def update(self, local: bool = False, overwrite: bool = True, silent: bool = False):
+    def update(self, local: bool = False, overwrite: bool = True, silent: bool = False) -> bool:
         if self.manager.update(
             self.config.root,
             local=local,
@@ -151,6 +151,6 @@ class TemplateFlowCache:
             return True
         return False
 
-    def wipe(self):
+    def wipe(self) -> None:
         self.__dict__.pop('layout', None)  # Uncache property
         self.manager.wipe(self.config.root)
