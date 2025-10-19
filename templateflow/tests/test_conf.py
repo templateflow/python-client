@@ -68,7 +68,7 @@ def test_setup_home(monkeypatch, tmp_path, capsys, use_datalad):
     monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', use_datalad)
     monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
 
-    use_post = tfc._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
+    use_post = tfc.env._env_to_bool('TEMPLATEFLOW_USE_DATALAD', False)
     assert use_post is (use_datalad == 'on')
 
     with capsys.disabled():

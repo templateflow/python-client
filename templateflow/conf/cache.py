@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cache, cached_property
 from pathlib import Path
 from warnings import warn
 
@@ -10,6 +10,19 @@ from .env import env_to_bool, get_templateflow_home
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from bids.layout import BIDSLayout
+
+
+# The first CacheConfig is initialized during import, so we need a higher
+# level of indirection for warnings to point to the user code.
+# After that, we will set the stack level to point to the CacheConfig() caller.
+STACKLEVEL = 6
+
+
+@cache
+def _have_datalad():
+    import importlib.util
+
+    return importlib.util.find_spec('datalad') is not None
 
 
 @dataclass
@@ -22,10 +35,11 @@ class CacheConfig:
     timeout: int = field(default=10)
 
     def __post_init__(self):
-        if self.use_datalad:
-            from importlib.util import find_spec
-
-            self.use_datalad = find_spec('datalad') is not None
+        global STACKLEVEL
+        if self.use_datalad and not _have_datalad():
+            self.use_datalad = False
+            warn('DataLad is not installed ➔ disabled.', stacklevel=STACKLEVEL)
+        STACKLEVEL = 3
 
 
 @dataclass

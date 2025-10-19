@@ -6,7 +6,6 @@ from warnings import warn
 from acres import Loader
 
 from .cache import CacheConfig, TemplateFlowCache
-from .env import _env_to_bool
 
 load_data = Loader(__spec__.name)
 
@@ -31,10 +30,6 @@ def __getattr__(name: str):
     elif name == 'TF_LAYOUT':
         return _cache.layout
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
-
-
-if _env_to_bool('TEMPLATEFLOW_USE_DATALAD', False) and not _cache.config.use_datalad:
-    warn('DataLad is not installed ➔ disabled.', stacklevel=2)
 
 
 if not _cache.precached:

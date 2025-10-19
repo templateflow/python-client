@@ -32,6 +32,7 @@ from acres import Loader as _Loader
 from click.decorators import FC, Option, _param_memo
 
 from templateflow.client import TemplateFlowClient
+from templateflow.conf import _cache
 
 load_data = _Loader(__spec__.parent)
 
@@ -48,7 +49,7 @@ ENTITY_SHORTHANDS = {
 }
 ENTITY_EXCLUDE = {'template', 'description'}
 
-CLIENT = TemplateFlowClient()
+CLIENT = TemplateFlowClient(cache=_cache)
 CACHE = CLIENT.cache
 CONFIG = CACHE.config
 CACHE.ensure()
