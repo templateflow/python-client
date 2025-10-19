@@ -93,18 +93,17 @@ class TemplateFlowClient:
 
             >>> client = TemplateFlowClient()
 
-        >>> client.ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+        >>> client.ls('MNI152Lin', resolution=1, suffix='T1w', desc=None)
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz')]
 
-        >>> client.ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)  # doctest: +ELLIPSIS
+        >>> client.ls('MNI152Lin', resolution=2, suffix='T1w', desc=None)
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-        >>> client.ls('MNI152Lin', suffix='T1w', desc=None)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> client.ls('MNI152Lin', suffix='T1w', desc=None)
         [PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'),
          PosixPath('.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz')]
 
-        >>> client.ls('fsLR', space=None, hemi='L',
-        ...           density='32k', suffix='sphere')  # doctest: +ELLIPSIS
+        >>> client.ls('fsLR', space=None, hemi='L', density='32k', suffix='sphere')
         [PosixPath('.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii')]
 
         >>> client.ls('fsLR', space='madeup')
@@ -159,25 +158,23 @@ class TemplateFlowClient:
 
             >>> client = TemplateFlowClient()
 
-        >>> str(client.get('MNI152Lin', resolution=1, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
+        >>> str(client.get('MNI152Lin', resolution=1, suffix='T1w', desc=None))
         '.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz'
 
-        >>> str(client.get('MNI152Lin', resolution=2, suffix='T1w', desc=None))  # doctest: +ELLIPSIS
+        >>> str(client.get('MNI152Lin', resolution=2, suffix='T1w', desc=None))
         '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz'
 
-        >>> [str(p) for p in client.get(
-        ...     'MNI152Lin', suffix='T1w', desc=None)]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> [str(p) for p in client.get('MNI152Lin', suffix='T1w', desc=None)]
         ['.../tpl-MNI152Lin/tpl-MNI152Lin_res-01_T1w.nii.gz',
          '.../tpl-MNI152Lin/tpl-MNI152Lin_res-02_T1w.nii.gz']
 
-        >>> str(client.get('fsLR', space=None, hemi='L',
-        ...         density='32k', suffix='sphere'))  # doctest: +ELLIPSIS
+        >>> str(client.get('fsLR', space=None, hemi='L', density='32k', suffix='sphere'))
         '.../tpl-fsLR_hemi-L_den-32k_sphere.surf.gii'
 
         >>> client.get('fsLR', space='madeup')
         []
 
-        >>> client.get('fsLR', raise_empty=True, space='madeup')  # doctest: +IGNORE_EXCEPTION_DETAIL
+        >>> client.get('fsLR', raise_empty=True, space='madeup')
         Traceback (most recent call last):
         Exception:
         ...

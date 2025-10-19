@@ -39,8 +39,6 @@ from .data import load_data
 def test_get_skel_file(tmp_path, monkeypatch):
     """Exercise the skeleton file generation."""
 
-    home = (tmp_path / 's3-skel-file').resolve()
-
     md5content = b'anything'
 
     def mock_get(*args, **kwargs):
