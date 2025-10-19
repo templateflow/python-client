@@ -33,6 +33,49 @@ from .conf.cache import CacheConfig, TemplateFlowCache
 
 
 class TemplateFlowClient:
+    """TemplateFlow client for querying and retrieving template files.
+
+    If instantiated without arguments, uses the default cache, which is
+    located at a platform-dependent location (e.g., ``$HOME/.cache/templateflow`` on
+    most Unix-like systems), or at the location specified by the ``TEMPLATEFLOW_HOME``
+    environment variable:
+
+    >>> client = TemplateFlowClient()
+    >>> client
+    <TemplateFlowClient[...] cache=".../templateflow">
+
+    To select a custom cache location, provide the ``root`` argument:
+
+    >>> client = TemplateFlowClient(root='/path/to/templateflow_cache')
+
+    Additional configuration options can be provided as keyword arguments.
+
+    Parameters
+    ----------
+    root: :class:`os.PathLike` or :class:`str`, optional
+        Path to the root of the TemplateFlow cache (will be created if it does not exist).
+
+    Keyword Arguments
+    -----------------
+    use_datalad: :class:`bool`, optional
+        Whether to use DataLad for managing the cache. Defaults to ``False`` or
+        the value of the ``TEMPLATEFLOW_USE_DATALAD`` environment variable
+        (1/True/on/yes to enable, 0/False/off/no to disable).
+    autoupdate: :class:`bool`, optional
+        Whether to automatically update the cache on first load.
+        Defaults to ``True`` or the value of the ``TEMPLATEFLOW_AUTOUPDATE``
+        environment variable (1/True/on/yes to enable, 0/False/off/no to disable).
+    timeout: :class:`float`, optional
+        Timeout in seconds for network operations. Default is ``10.0`` seconds.
+    origin: :class:`str`, optional
+        Git repository URL for DataLad installations. Default is
+        <https://github.com/templateflow/templateflow.git>.
+    s3_root: :class:`str`, optional
+        Base URL for S3 downloads. Default is <https://templateflow.s3.amazonaws.com>.
+    cache: :class:`TemplateFlowCache`, optional
+        A pre-configured TemplateFlowCache instance. If provided, `root` and other
+        configuration keyword arguments cannot be used.
+    """
     def __init__(
         self,
         root: os.PathLike[str] | str | None = None,
