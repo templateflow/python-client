@@ -29,8 +29,6 @@ import sys
 from json import loads
 from pathlib import Path
 
-from bids.layout import Query
-
 from .conf.cache import CacheConfig, TemplateFlowCache
 
 
@@ -113,6 +111,8 @@ class TemplateFlowClient:
         []
 
         """
+        from bids.layout import Query
+
         # Normalize extensions to always have leading dot
         if 'extension' in kwargs:
             kwargs['extension'] = _normalize_ext(kwargs['extension'])

@@ -5,8 +5,11 @@ from functools import cached_property
 from pathlib import Path
 from warnings import warn
 
-from .bids import Layout
 from .env import env_to_bool, get_templateflow_home
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from bids.layout import BIDSLayout
 
 
 @dataclass
@@ -98,10 +101,12 @@ class TemplateFlowCache:
         return self.config.root.is_dir() and any(self.config.root.iterdir())
 
     @cached_property
-    def layout(self) -> Layout:
+    def layout(self) -> BIDSLayout:
         import re
 
         from bids.layout.index import BIDSLayoutIndexer
+
+        from .bids import Layout
 
         self.ensure()
         return Layout(
