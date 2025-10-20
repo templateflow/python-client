@@ -5,7 +5,7 @@ from warnings import warn
 
 from acres import Loader
 
-from .cache import CacheConfig, TemplateFlowCache
+from templateflow.conf.cache import CacheConfig, TemplateFlowCache
 
 load_data = Loader(__spec__.name)
 

@@ -5,7 +5,7 @@ from functools import cache, cached_property
 from pathlib import Path
 from warnings import warn
 
-from .env import env_to_bool, get_templateflow_home
+from templateflow.conf.env import env_to_bool, get_templateflow_home
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:

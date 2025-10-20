@@ -29,7 +29,7 @@ import sys
 from json import loads
 from pathlib import Path
 
-from .conf.cache import CacheConfig, TemplateFlowCache
+from templateflow.conf.cache import CacheConfig, TemplateFlowCache
 
 
 class TemplateFlowClient:
