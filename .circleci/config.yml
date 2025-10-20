@@ -109,7 +109,7 @@ jobs:
             export TEMPLATEFLOW_USE_DATALAD=on
             python -m pytest \
                    --junit-xml=~/tests/datalad.xml --cov templateflow --doctest-modules \
-                   templateflow/api.py
+                   templateflow/client.py
 
             coverage run --append -m templateflow.cli config
             coverage run --append -m templateflow.cli ls MNI152NLin2009cAsym --suffix T1w

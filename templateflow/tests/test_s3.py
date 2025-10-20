@@ -28,6 +28,8 @@ from pathlib import Path
 import pytest
 import requests
 
+import templateflow
+import templateflow.conf._s3
 from templateflow import api as tf
 from templateflow import conf as tfc
 
@@ -37,60 +39,56 @@ from .data import load_data
 def test_get_skel_file(tmp_path, monkeypatch):
     """Exercise the skeleton file generation."""
 
-    home = (tmp_path / 's3-skel-file').resolve()
-    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
-    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(home))
+    md5content = b'anything'
 
-    # First execution, the S3 stub is created (or datalad install)
-    reload(tfc)
+    def mock_get(*args, **kwargs):
+        class MockResponse:
+            status_code = 200
+            ok = True
+            content = md5content
 
-    local_md5 = tfc._s3.TF_SKEL_MD5
-    monkeypatch.setattr(tfc._s3, 'TF_SKEL_MD5', 'invent')
-    new_skel = tfc._s3._get_skeleton_file()
+        return MockResponse()
+
+    monkeypatch.setattr(requests, 'get', mock_get)
+
+    # Mismatching the local MD5 causes an update
+    new_skel = tfc._s3._get_skeleton_file(timeout=10)
     assert new_skel is not None
     assert Path(new_skel).exists()
-    assert Path(new_skel).stat().st_size > 0
+    assert Path(new_skel).read_bytes() == b'anything'
 
-    latest_md5 = (
-        requests.get(
-            tfc._s3.TF_SKEL_URL(release='master', ext='md5', allow_redirects=True), timeout=10
-        )
-        .content.decode()
-        .split()[0]
-    )
-    monkeypatch.setattr(tfc._s3, 'TF_SKEL_MD5', latest_md5)
-    assert tfc._s3._get_skeleton_file() is None
+    md5content = tfc._s3.load_data.readable('templateflow-skel.md5').read_bytes()
+    # Matching the local MD5 skips the update
+    assert tfc._s3._get_skeleton_file(timeout=10) is None
 
-    monkeypatch.setattr(tfc._s3, 'TF_SKEL_MD5', local_md5)
+    # Bad URL fails to update
     monkeypatch.setattr(tfc._s3, 'TF_SKEL_URL', 'http://weird/{release}/{ext}'.format)
-    assert tfc._s3._get_skeleton_file() is None
+    assert tfc._s3._get_skeleton_file(timeout=10) is None
 
     monkeypatch.setattr(
         tfc._s3, 'TF_SKEL_URL', tfc._s3.TF_SKEL_URL(release='{release}', ext='{ext}z').format
     )
-    assert tfc._s3._get_skeleton_file() is None
+    assert tfc._s3._get_skeleton_file(timeout=10) is None
 
 
 def test_update_s3(tmp_path, monkeypatch):
     """Exercise updating the S3 skeleton."""
 
     newhome = (tmp_path / 's3-update').resolve()
-    monkeypatch.setenv('TEMPLATEFLOW_USE_DATALAD', 'off')
-    monkeypatch.setenv('TEMPLATEFLOW_HOME', str(newhome))
 
-    assert tfc._s3.update(newhome)
-    assert not tfc._s3.update(newhome, overwrite=False)
+    assert tfc._s3.update(newhome, timeout=10)
+    assert not tfc._s3.update(newhome, overwrite=False, timeout=10)
     for p in (newhome / 'tpl-MNI152NLin6Sym').glob('*.nii.gz'):
         p.unlink()
-    assert tfc._s3.update(newhome, overwrite=False)
+    assert tfc._s3.update(newhome, overwrite=False, timeout=10)
 
     # This should cover the remote zip file fetching
-    monkeypatch.setattr(tfc._s3, 'TF_SKEL_MD5', 'invent')
-    assert tfc._s3.update(newhome, local=False)
-    assert not tfc._s3.update(newhome, local=False, overwrite=False)
+    # monkeypatch.setattr(tfc._s3, 'TF_SKEL_MD5', 'invent')
+    assert tfc._s3.update(newhome, local=False, timeout=10)
+    assert not tfc._s3.update(newhome, local=False, overwrite=False, timeout=10)
     for p in (newhome / 'tpl-MNI152NLin6Sym').glob('*.nii.gz'):
         p.unlink()
-    assert tfc._s3.update(newhome, local=False, overwrite=False)
+    assert tfc._s3.update(newhome, local=False, overwrite=False, timeout=10)
 
 
 def mock_get(*args, **kwargs):
@@ -108,28 +106,20 @@ def test_s3_400_error(monkeypatch):
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError, match=r'Failed to download .* code 400'):
-        tf._s3_get(
+        templateflow.client._s3_get(
+            tfc._cache.config,
             Path(tfc.TF_LAYOUT.root)
-            / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz'
+            / 'tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-02_T1w.nii.gz',
         )
 
 
 def test_bad_skeleton(tmp_path, monkeypatch):
     newhome = (tmp_path / 's3-update').resolve()
-    monkeypatch.setattr(tfc, 'TF_USE_DATALAD', False)
-    monkeypatch.setattr(tfc, 'TF_HOME', newhome)
-    monkeypatch.setattr(tfc, 'TF_LAYOUT', None)
+    client = templateflow.client.TemplateFlowClient(root=newhome, use_datalad=False)
 
-    tfc._init_cache()
-    tfc.init_layout()
+    assert client.cache.layout.root == str(newhome)
 
-    assert tfc.TF_LAYOUT is not None
-    assert tfc.TF_LAYOUT.root == str(newhome)
-
-    # Instead of reloading
-    monkeypatch.setattr(tf, 'TF_LAYOUT', tfc.TF_LAYOUT)
-
-    paths = tf.ls('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+    paths = client.ls('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
     assert paths
     path = Path(paths[0])
     assert path.read_bytes() == b''
@@ -138,14 +128,14 @@ def test_bad_skeleton(tmp_path, monkeypatch):
     path.write_bytes(error_file.read_bytes())
 
     # Test directly before testing through API paths
-    tf._truncate_s3_errors(paths)
+    templateflow.client._truncate_s3_errors(paths)
     assert path.read_bytes() == b''
 
     path.write_bytes(error_file.read_bytes())
 
     monkeypatch.setattr(requests, 'get', mock_get)
     with pytest.raises(RuntimeError):
-        tf.get('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
+        client.get('MNI152NLin2009cAsym', resolution='02', suffix='T1w', desc=None)
 
     # Running get clears bad files before attempting to download
     assert path.read_bytes() == b''
