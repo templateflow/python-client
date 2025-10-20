@@ -85,7 +85,7 @@ class TemplateFlowClient:
     ):
         if cache is None:
             if root:
-                config_kwargs['root'] = root
+                config_kwargs['root'] = Path(root)
             cache = TemplateFlowCache(CacheConfig(**config_kwargs))
         elif root or config_kwargs:
             raise ValueError(
