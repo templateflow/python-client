@@ -472,7 +472,7 @@ def _truncate_s3_errors(filepaths):
         List of file paths to check and truncate if necessary.
     """
     for filepath in filepaths:
-        if filepath.is_file(follow_symlinks=False) and 0 < filepath.stat().st_size < 1024:
+        if filepath.is_file() and 0 < filepath.stat().st_size < 1024:
             with open(filepath, 'rb') as f:
                 content = f.read(100)
             if content.startswith(b'<?xml') and b'<Error><Code>' in content:
