@@ -1,3 +1,7 @@
+25.1.1 (October 21, 2025)
+=========================
+Patch release to remove use of Python 3.13+ parameter.
+
 25.1.0 (October 21, 2025)
 =========================
 New feature release in the 25.1 series.
