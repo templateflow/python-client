@@ -1,20 +1,42 @@
-A Python client to query TemplateFlow
-=====================================
+TemplateFlow Python Client
+==========================
 
 |Zenodo| |preprint| |CircleCI| |Build Status| |Pypi|
 
-Reference anatomies of the brain and corresponding atlases play a central role in experimental
-neuroimaging workflows and are the foundation for reporting standardized results.
-The choice of such references —i.e., templates— and atlases is one relevant source of methodological
-variability across studies, which has recently been brought to attention as an important challenge
-to reproducibility in neuroscience.
-*TemplateFlow* is a publicly available framework for human and nonhuman brain models.
-The framework combines an open database with software for access, management, and vetting,
-allowing scientists to distribute their resources under *FAIR* —findable, accessible, interoperable,
-reusable— principles.
-*TemplateFlow* supports a multifaceted insight into brains across species, and enables multiverse
-analyses testing whether results generalize across standard references, scales, and in the long term,
-species, thereby contributing to increasing the reliability of neuroimaging results.
+The TemplateFlow Python client provides a lightweight interface for working with
+the `TemplateFlow Archive <https://www.templateflow.org>`__.
+It focuses on three core features:
+
+* Discover and retrieve curated, BIDS-like template resources from Python.
+* Transparently cache data from the public S3 mirror or a local DataLad clone.
+* Share configuration with the command line interface and NiPreps' compatibility wrappers.
+
+Quickstart
+----------
+
+.. code-block:: python
+
+    >>> from templateflow import TemplateFlowClient
+    >>> client = TemplateFlowClient()
+    >>> client.get('MNI152NLin2009cAsym', atlas='HarvardOxford', suffix='probseg')
+    [PosixPath('.../tpl-MNI152NLin2009cAsym_atlas-HarvardOxford_probseg.nii.gz')]
+
+Use :mod:`templateflow.api` when you need drop-in compatibility with older
+TemplateFlow helpers that expose top-level :func:`~templateflow.api.get` or
+:func:`~templateflow.api.ls` functions.
+
+Configuration reference
+-----------------------
+
+You can configure the client via environment variables or constructor keywords.
+
+==============================  ==============================  ==============================================
+Environment variable            ``TemplateFlowClient`` keyword  Purpose
+==============================  ==============================  ==============================================
+``TEMPLATEFLOW_HOME``           ``root``                        Cache directory for downloaded templates.
+``TEMPLATEFLOW_USE_DATALAD``    ``use_datalad``                 Opt-in to DataLad-backed cache management.
+``TEMPLATEFLOW_AUTOUPDATE``     ``autoupdate``                  Allow automatic cache updates on import/use.
+==============================  ==============================  ==============================================
 
 Publishing resources in the *TemplateFlow* Archive
 --------------------------------------------------
