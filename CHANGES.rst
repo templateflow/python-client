@@ -1,3 +1,19 @@
+25.1.0 (October 21, 2025)
+=========================
+New feature release in the 25.1 series.
+
+This release introduces a new ``TemplateFlowClient`` class that provides the
+functionality previously exposed in ``templateflow.api``.
+``templateflow.api`` is now a thin wrapper around a global instance of ``TemplateFlowClient``,
+so existing code using ``templateflow.api`` should continue to work as before.
+
+These changes allow multiple independent clients to coexist in the same Python process,
+as well as defer loading of data from the filesystem until it is requested,
+significantly improving import time.
+
+* RF: Factor TemplateFlow into Cache and Client classes (#149)
+* FIX: Error on missing S3 files, do not write error data to disk (#148)
+
 25.0.4 (October 1, 2025)
 ========================
 Patch release to update templateflow skeleton.
