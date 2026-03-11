@@ -21,9 +21,9 @@
 #     https://www.nipreps.org/community/licensing/
 #
 import os
+from collections.abc import Callable
 from functools import partial
 from pathlib import Path
-from typing import Callable
 
 from platformdirs import user_cache_dir
 

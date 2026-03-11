@@ -76,6 +76,7 @@ class TemplateFlowClient:
         A pre-configured TemplateFlowCache instance. If provided, `root` and other
         configuration keyword arguments cannot be used.
     """
+
     def __init__(
         self,
         root: os.PathLike[str] | str | None = None,
