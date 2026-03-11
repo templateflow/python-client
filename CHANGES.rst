@@ -1,3 +1,7 @@
+25.1.2 (March 11, 2026)
+=======================
+Patch release to update templateflow skeleton.
+
 25.1.1 (October 21, 2025)
 =========================
 Patch release to remove use of Python 3.13+ parameter.
