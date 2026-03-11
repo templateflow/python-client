@@ -140,6 +140,9 @@ exclude_lines = [
 
 [tool.ruff]
 line-length = 99
+extend-exclude = [
+  "docs/notebooks",
+]
 
 [tool.ruff.lint]
 extend-select = [
