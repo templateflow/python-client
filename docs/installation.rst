@@ -18,38 +18,131 @@ You should see the version number.
 
 Settings
 --------
-The *TemplateFlow Client* has two modes of operation: (a) based on
-`DataLad <https://datalad.org>`__, or (b) direct downloads from Amazon S3.
+``TemplateFlowClient`` is the central entry point for configuring how the
+archive is cached and updated.  Each constructor argument mirrors an
+environment variable (when available) and exposes its live value through the
+metadata descriptors defined in :mod:`templateflow.conf`.
 
-By default, the client will operate in direct download mode (b) which is
-more lightweight and comes with some limitations, as all the advanced
-version control management afforded by DataLad will not be available.
+.. list-table:: ``TemplateFlowClient`` configuration
+   :header-rows: 1
 
-For the most part, and considering that templates/atlases do not substantially
-change over time, the direct download mode should be sufficient to anyone
-developing new pipelines and tools, as it will provided the latest version
-of any available template set.
+   * - Argument
+     - Environment variable
+     - Default
+     - Metadata descriptor
+   * - ``root``
+     - ``TEMPLATEFLOW_HOME``
+     - ``platformdirs.user_cache_dir('templateflow')`` (e.g., ``~/.cache/templateflow``)
+     - ``templateflow.conf.TF_HOME``
+   * - ``use_datalad``
+     - ``TEMPLATEFLOW_USE_DATALAD``
+     - ``False`` (automatically disabled if DataLad is not installed)
+     - ``templateflow.conf.TF_USE_DATALAD``
+   * - ``autoupdate``
+     - ``TEMPLATEFLOW_AUTOUPDATE``
+     - ``True``
+     - ``templateflow.conf.TF_AUTOUPDATE``
+   * - ``timeout``
+     - *(none)*
+     - ``10`` seconds
+     - ``templateflow.conf.TF_GET_TIMEOUT``
+   * - ``origin`` (DataLad)
+     - *(none)*
+     - ``https://github.com/templateflow/templateflow.git``
+     - ``templateflow.conf.TF_GITHUB_SOURCE``
+   * - ``s3_root`` (direct download)
+     - *(none)*
+     - ``https://templateflow.s3.amazonaws.com``
+     - ``templateflow.conf.TF_S3_ROOT``
 
-**TemplateFlow "home" folder**.
-The lazy-loading implementation of the client requires some folder on the host
-where template resources can be stored (therefore, write permissions are
-required). By default, the home folder will be ``$HOME/.cache/templateflow``.
-This setting can be overridden by defining the environment variable ``TEMPLATEFLOW_HOME``
-before running the client, for example::
+Cache location
+~~~~~~~~~~~~~~
+The client stores downloads in a writable cache that defaults to the
+platform-specific ``TEMPLATEFLOW_HOME`` directory.  You can point the CLI to a
+different location by exporting the environment variable before invoking any
+command; the current value is always available through
+``templateflow.conf.TF_HOME``.
 
-  $ export TEMPLATEFLOW_HOME=$DATA/.templateflow
+.. code-block:: console
 
-**Configuring the operation mode**.
-By default, the client will operate without DataLad (and hence, without version control).
-To set up the DataLad mode, make sure DataLad is installed and functioning on your host,
-and then::
+   $ export TEMPLATEFLOW_HOME=$DATA/.templateflow
+   $ templateflow config
 
-  $ export TEMPLATEFLOW_USE_DATALAD=on
+.. code-block:: python
 
-It is recommended that the ``$TEMPLATEFLOW_HOME`` folder is wiped out before running the
-client again, in case the tool has already been operated in direct download mode::
+   from templateflow.client import TemplateFlowClient
 
-  $ rm -r ${TEMPLATEFLOW_HOME:-$HOME/.cache/templateflow}
+   client = TemplateFlowClient(root="/data/templateflow")
+   print(client.cache.config.root)
+
+If you switch between cache locations, wipe the previous cache (``templateflow
+wipe`` or :func:`templateflow.conf.wipe`) to avoid mixing S3 and DataLad
+layouts.
+
+DataLad mode
+~~~~~~~~~~~~
+Two backends are available: a lightweight S3 mirror and a DataLad dataset.
+Setting ``TEMPLATEFLOW_USE_DATALAD=on`` switches the CLI into DataLad mode
+(automatically falling back to S3 if DataLad is missing).  The active backend
+can be inspected via ``templateflow.conf.TF_USE_DATALAD``.
+
+.. code-block:: console
+
+   $ export TEMPLATEFLOW_USE_DATALAD=on
+   $ templateflow config
+
+.. code-block:: python
+
+   from templateflow.client import TemplateFlowClient
+
+   client = TemplateFlowClient(root="/data/tf-datalad", use_datalad=True)
+   client.cache.ensure()
+   print(client.cache.config.use_datalad)
+
+When switching from the default S3 mode to DataLad, start with an empty cache
+directory (for example by deleting ``$TEMPLATEFLOW_HOME``) so that git-annex can
+initialise cleanly.
+
+S3 origins
+~~~~~~~~~~
+S3-backed installations download assets from the ``s3_root`` mirror referenced
+in the configuration.  The CLI always reports the active mirror through the
+``templateflow.conf.TF_S3_ROOT`` descriptor.
+
+.. code-block:: console
+
+   $ python - <<'PY'
+   from templateflow.conf import TF_S3_ROOT
+   print(TF_S3_ROOT)
+   PY
+
+.. code-block:: python
+
+   from templateflow.client import TemplateFlowClient
+
+   mirror = TemplateFlowClient(s3_root="https://my-mirror.s3.amazonaws.com")
+   print(mirror.cache.config.s3_root)
+
+To use a custom DataLad remote, pass ``origin=...`` when constructing the
+client and call :func:`templateflow.conf.update` to refresh the cache metadata.
+
+Autoupdates, timeouts, and cache metadata
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Automatic cache refreshes are controlled by ``autoupdate``.  Disable them for
+air-gapped deployments with ``TEMPLATEFLOW_AUTOUPDATE=off`` or by creating the
+client with ``autoupdate=False``; the current flag is exported as
+``templateflow.conf.TF_AUTOUPDATE``.
+
+Network operations time out after 10 seconds by default.  Provide a different
+``timeout`` when constructing ``TemplateFlowClient`` and inspect the value via
+``templateflow.conf.TF_GET_TIMEOUT``.
+
+Whenever the cache contents change outside the client (for example, when
+switching mirrors or pulling updates with DataLad), rebuild the BIDS layout by
+calling :func:`templateflow.conf.update` or ``TemplateFlowClient.cache.update``.
+The layout object is exposed as ``templateflow.conf.TF_LAYOUT`` and is
+invalidated automatically whenever :func:`templateflow.conf.update` succeeds,
+ensuring that new metadata descriptors are reflected in subsequent queries.
 
 **Naming conventions**.
 Naming conventions for templates and atlases are available within the
