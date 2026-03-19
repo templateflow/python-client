@@ -5,6 +5,22 @@ Therefore, it is possible (and recommended for those who want to
 leverage the power of DataLad) to access the Archive using just
 DataLad.
 
+.. tip:: Prefer the Python client for routine access
+
+   The high-level :class:`templateflow.client.TemplateFlowClient` can be
+   configured with ``use_datalad=True`` (or via ``templateflow config set
+   TEMPLATEFLOW_USE_DATALAD 1``) to transparently manage the cache with
+   DataLad.  This is a good default when you want TemplateFlow to perform
+   ``datalad get`` and ``datalad update`` commands automatically while still
+   interacting with the archive through the familiar client API.
+
+.. note:: Drop down to raw DataLad when you need full control
+
+   Advanced workflows—such as pinning remotes, creating custom siblings, or
+   operating entirely offline—are better served by running DataLad commands
+   directly.  In those scenarios leave ``use_datalad`` disabled in the client
+   and use the instructions below to operate on the repository yourself.
+
 Installing the Archive
 ----------------------
 The archive is indexed by a superdataset, which can be installed with::
